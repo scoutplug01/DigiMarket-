@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DigiMarket Pro - Premium Digital Products</title>
-    <link rel="shortcut icon" href="img/Full-featured e-commerce platform with front-end build - Claude.html" type="image/x-icon">
-    <!-- faveicion -->
     <link rel="shortcut icon" href="img/image.png" type="image/x-icon">
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
@@ -15,7 +13,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
@@ -28,6 +25,16 @@
                 <h2>Welcome Back</h2>
                 <p class="text-muted">Login to your account</p>
             </div>
+            
+            <!-- Google Sign-In Button -->
+            <button class="btn btn-google w-100 mb-3" id="googleSignInBtn">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+            
+            <div class="or-divider">
+                <span>OR</span>
+            </div>
+            
             <form id="loginForm">
                 <div class="mb-3">
                     <label class="form-label">Email Address</label>
@@ -53,6 +60,16 @@
                 <h2>Create Account</h2>
                 <p class="text-muted">Join our marketplace today</p>
             </div>
+            
+            <!-- Google Sign-In Button -->
+            <button class="btn btn-google w-100 mb-3" id="googleSignUpBtn">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+            
+            <div class="or-divider">
+                <span>OR</span>
+            </div>
+            
             <form id="registerForm">
                 <div class="mb-3">
                     <label class="form-label">Full Name</label>
@@ -106,7 +123,7 @@
                         <li class="nav-item">
                             <div class="notification-icon text-white mx-3" id="notificationIcon">
                                 <i class="fas fa-bell fa-lg"></i>
-                                <span class="notification-badge" id="notificationBadge">3</span>
+                                <span class="notification-badge" id="notificationBadge">0</span>
                             </div>
                         </li>
                         <li class="nav-item">
@@ -116,7 +133,9 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" id="dashboardLink"><i class="fas fa-chart-line"></i> Dashboard</a>
+                            <a class="nav-link" href="#" id="dashboardLink" style="position: relative;">
+                                <i class="fas fa-chart-line"></i> Dashboard
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -131,18 +150,7 @@
             <div style="padding: 1rem; border-bottom: 2px solid #e2e8f0; font-weight: bold;">
                 <i class="fas fa-bell"></i> Notifications
             </div>
-            <div class="notification-item">
-                <i class="fas fa-check-circle text-success"></i> Your order has been confirmed
-                <div style="font-size: 0.85rem; color: #64748b;">2 hours ago</div>
-            </div>
-            <div class="notification-item">
-                <i class="fas fa-star text-warning"></i> New product added to wishlist
-                <div style="font-size: 0.85rem; color: #64748b;">5 hours ago</div>
-            </div>
-            <div class="notification-item">
-                <i class="fas fa-tag text-primary"></i> Special discount available!
-                <div style="font-size: 0.85rem; color: #64748b;">1 day ago</div>
-            </div>
+            <div id="notificationsList"></div>
         </div>
 
         <!-- Home Page -->
@@ -164,78 +172,77 @@
             </section>
 
             <!-- Featured Categories -->
-              
-<section class="container my-5">
-    <h2 class="text-center mb-5" data-aos="fade-up">Featured Categories</h2>
-    <div class="row">
-        <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="category-card" data-category="websites">
-                <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80');">
-                    <div class="category-overlay">
-                        <div class="category-icon"><i class="fas fa-globe"></i></div>
-                        <h4>Websites</h4>
-                        <p>Professional website templates and themes</p>
+            <section class="container my-5">
+                <h2 class="text-center mb-5" data-aos="fade-up">Featured Categories</h2>
+                <div class="row">
+                    <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="100">
+                        <div class="category-card" data-category="websites">
+                            <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80');">
+                                <div class="category-overlay">
+                                    <div class="category-icon"><i class="fas fa-globe"></i></div>
+                                    <h4>Websites</h4>
+                                    <p>Professional website templates and themes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="200">
+                        <div class="category-card" data-category="apps">
+                            <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80');">
+                                <div class="category-overlay">
+                                    <div class="category-icon"><i class="fas fa-mobile-alt"></i></div>
+                                    <h4>Apps</h4>
+                                    <p>Mobile and web applications</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="300">
+                        <div class="category-card" data-category="apis">
+                            <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80');">
+                                <div class="category-overlay">
+                                    <div class="category-icon"><i class="fas fa-code"></i></div>
+                                    <h4>APIs</h4>
+                                    <p>Powerful APIs for integration</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="400">
+                        <div class="category-card" data-category="ai-tools">
+                            <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80');">
+                                <div class="category-overlay">
+                                    <div class="category-icon"><i class="fas fa-robot"></i></div>
+                                    <h4>AI Tools</h4>
+                                    <p>Advanced AI-powered solutions</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="500">
+                        <div class="category-card" data-category="courses">
+                            <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80');">
+                                <div class="category-overlay">
+                                    <div class="category-icon"><i class="fas fa-graduation-cap"></i></div>
+                                    <h4>Courses</h4>
+                                    <p>Professional development courses</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="600">
+                        <div class="category-card" data-category="plugins">
+                            <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80');">
+                                <div class="category-overlay">
+                                    <div class="category-icon"><i class="fas fa-puzzle-piece"></i></div>
+                                    <h4>Plugins</h4>
+                                    <p>Extend your platform capabilities</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="category-card" data-category="apps">
-                <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80');">
-                    <div class="category-overlay">
-                        <div class="category-icon"><i class="fas fa-mobile-alt"></i></div>
-                        <h4>Apps</h4>
-                        <p>Mobile and web applications</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="category-card" data-category="apis">
-                <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80');">
-                    <div class="category-overlay">
-                        <div class="category-icon"><i class="fas fa-code"></i></div>
-                        <h4>APIs</h4>
-                        <p>Powerful APIs for integration</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="400">
-            <div class="category-card" data-category="ai-tools">
-                <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80');">
-                    <div class="category-overlay">
-                        <div class="category-icon"><i class="fas fa-robot"></i></div>
-                        <h4>AI Tools</h4>
-                        <p>Advanced AI-powered solutions</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="500">
-            <div class="category-card" data-category="courses">
-                <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80');">
-                    <div class="category-overlay">
-                        <div class="category-icon"><i class="fas fa-graduation-cap"></i></div>
-                        <h4>Courses</h4>
-                        <p>Professional development courses</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="600">
-            <div class="category-card" data-category="plugins">
-                <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80');">
-                    <div class="category-overlay">
-                        <div class="category-icon"><i class="fas fa-puzzle-piece"></i></div>
-                        <h4>Plugins</h4>
-                        <p>Extend your platform capabilities</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+            </section>
 
             <!-- Featured Products Swiper -->
             <section class="container my-5">
@@ -341,24 +348,28 @@
                             <div class="dashboard-menu-item" data-section="products">
                                 <i class="fas fa-box me-2"></i> My Products
                             </div>
+                            <div class="dashboard-menu-item" data-section="purchases">
+                                <i class="fas fa-shopping-bag me-2"></i> My Purchases
+                            </div>
+                            <div class="dashboard-menu-item" data-section="payments" style="position: relative;">
+                                <i class="fas fa-credit-card me-2"></i> Payments
+                            </div>
                             <div class="dashboard-menu-item" data-section="orders">
-                                <i class="fas fa-shopping-bag me-2"></i> Orders
+                                <i class="fas fa-shopping-cart me-2"></i> Orders
                             </div>
                             <div class="dashboard-menu-item" data-section="sales">
                                 <i class="fas fa-dollar-sign me-2"></i> Sales
                             </div>
                             <div class="dashboard-menu-item" data-section="messages">
-    <i class="fas fa-envelope me-2"></i> Messages
-</div>
+                                <i class="fas fa-envelope me-2"></i> Messages
+                            </div>
                             <div class="dashboard-menu-item" data-section="settings">
                                 <i class="fas fa-cog me-2"></i> Settings
                             </div>
                         </div>
                     </div>
                     <div class="col-md-9 col-lg-10 p-4">
-                        <div id="dashboardContent">
-                            <!-- Dashboard content will be loaded here by JavaScript -->
-                        </div>
+                        <div id="dashboardContent"></div>
                     </div>
                 </div>
             </div>
@@ -391,7 +402,7 @@
                         <h5>Contact Us</h5>
                         <p><i class="fas fa-envelope me-2"></i> scottplug001@gmail.com</p>
                         <p><i class="fas fa-phone me-2"></i> +234 9133767432</p>
-                        <p><i class="fas fa-map-marker-alt me-2"></i>Enugu, nigerian</p>
+                        <p><i class="fas fa-map-marker-alt me-2"></i> Enugu, Nigeria</p>
                     </div>
                 </div>
                 <hr style="border-color: rgba(255,255,255,0.1);">
@@ -402,12 +413,132 @@
         </footer>
     </div>
 
-    <!-- Live Chat Button -->
-<button class="live-chat-btn" id="liveChatBtn">
-    <i class="fas fa-comments"></i>
-    <span class="chat-notification-badge hidden" id="chatNotificationBadge">1</span>
-</button>
+    <!-- WhatsApp Support Button -->
+    <a href="https://wa.me/2349133767432?text=Hello%2C%20I%20need%20help%20with%20my%20order" 
+       class="whatsapp-support-btn" 
+       target="_blank"
+       title="Chat with us on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
+    <!-- Live Chat Button -->
+    <button class="live-chat-btn" id="liveChatBtn">
+        <i class="fas fa-comments"></i>
+        <span class="chat-notification-badge hidden" id="chatNotificationBadge">1</span>
+    </button>
+
+    <!-- Payment Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="fas fa-credit-card"></i> Complete Your Payment</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="payment-container">
+                        <!-- Selected Product Info -->
+                        <div class="selected-product-info mb-4">
+                            <h6>Product Selected:</h6>
+                            <div class="product-summary-card">
+                                <img id="paymentProductImage" src="" alt="Product" class="payment-product-img">
+                                <div class="payment-product-details">
+                                    <h5 id="paymentProductName"></h5>
+                                    <p id="paymentProductCategory"></p>
+                                    <h4 class="text-primary" id="paymentProductPrice"></h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bank Details -->
+                        <div class="bank-details-card">
+                            <h5><i class="fas fa-university"></i> Payment Details</h5>
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle"></i> <strong>IMPORTANT:</strong> Make payment to complete your order
+                            </div>
+                            
+                            <div class="bank-option mb-3">
+                                <div class="bank-header">
+                                    <img src="https://cdn-icons-png.flaticon.com/128/6124/6124998.png" alt="OPay" class="bank-logo">
+                                    <h6>OPay</h6>
+                                </div>
+                                <div class="bank-info">
+                                    <p><strong>Account Number:</strong> <span class="copyable">9133767432</span> <button class="btn-copy" onclick="copyToClipboard('9133767432')"><i class="fas fa-copy"></i></button></p>
+                                    <p><strong>Account Name:</strong> Ometta Abraham Kenechi</p>
+                                </div>
+                            </div>
+
+                            <div class="bank-option">
+                                <div class="bank-header">
+                                    <img src="https://cdn-icons-png.flaticon.com/128/6124/6124998.png" alt="PalmPay" class="bank-logo">
+                                    <h6>PalmPay</h6>
+                                </div>
+                                <div class="bank-info">
+                                    <p><strong>Account Number:</strong> <span class="copyable">9133767432</span> <button class="btn-copy" onclick="copyToClipboard('9133767432')"><i class="fas fa-copy"></i></button></p>
+                                    <p><strong>Account Name:</strong> Ometta Abraham Kenechi</p>
+                                </div>
+                            </div>
+
+                            <div class="note-section mt-3">
+                                <p class="text-danger"><i class="fas fa-info-circle"></i> <strong>NOTE:</strong> You must pay the EXACT amount shown above to receive your product.</p>
+                            </div>
+                        </div>
+
+                        <!-- Payment Proof Form -->
+                        <form id="paymentProofForm" class="mt-4">
+                            <h5>Submit Payment Proof</h5>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Your Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="payerName" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Product <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="payerProduct" readonly>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Amount Paid <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="payerAmount" required readonly>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Payment Bank <span class="text-danger">*</span></label>
+                                <select class="form-control" id="paymentBank" required>
+                                    <option value="">Select Bank</option>
+                                    <option value="OPay">OPay</option>
+                                    <option value="PalmPay">PalmPay</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Upload Payment Screenshot <span class="text-danger">*</span></label>
+                                <input type="file" class="form-control" id="paymentScreenshot" accept="image/*" required>
+                                <small class="text-muted">Upload a clear screenshot of your payment receipt</small>
+                                <div id="screenshotPreview" class="mt-2"></div>
+                            </div>
+
+                            <div class="security-notice mb-3">
+                                <i class="fas fa-shield-alt text-success"></i> Your payment will be verified within 5-10 minutes. You'll receive a notification once confirmed.
+                            </div>
+
+                            <button type="submit" class="btn btn-success btn-lg w-100">
+                                <i class="fas fa-check-circle"></i> Payment Done - Submit Proof
+                            </button>
+                        </form>
+
+                        <div class="customer-support mt-4 text-center">
+                            <p class="text-muted">Need help? Contact us:</p>
+                            <a href="https://wa.me/2349133767432" target="_blank" class="btn btn-success">
+                                <i class="fab fa-whatsapp"></i> WhatsApp: +234 913 376 7432
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- jQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -417,7 +548,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <!-- Swiper JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"></script>
-    
     <!-- Custom JavaScript -->
     <script src="script.js"></script>
 </body>
