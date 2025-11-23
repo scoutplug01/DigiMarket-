@@ -1,6 +1,6 @@
-   // ============================================
-// PART 1 OF 2 - COPY THIS FIRST
-// NO FIREBASE - SIMPLE localStorage SYSTEM
+ // ============================================
+// COMPLETE FIXED script.js - PART 1 OF 2
+// COPY THIS ENTIRE FILE - REPLACE YOUR OLD script.js
 // ============================================
 
 // Initialize AOS
@@ -12,6 +12,7 @@ let allUsers = JSON.parse(localStorage.getItem('allUsers')) || [];
 let cart = [];
 let notifications = [];
 let allPayments = JSON.parse(localStorage.getItem('allPayments')) || [];
+let allChats = JSON.parse(localStorage.getItem('allChats')) || []; // NEW: Chat storage
 
 // Products Data
 const products = [
@@ -492,67 +493,129 @@ window.proceedToCheckout = function() {
 };
 
 // ============================================
-// END OF PART 1
-// CONTINUE WITH PART 2
-// ============================================ 
+// END OF PART 1 - CONTINUE WITH PART 2
+// ============================================  
 
 
-  // ============================================
-// PART 2 OF 2 - COPY THIS AFTER PART 1
-// PAYMENT, DASHBOARD, ADMIN & CHAT
+   // ============================================
+// COMPLETE FIXED script.js - PART 2 OF 2
+// COPY THIS AFTER PART 1
 // ============================================
 
-// PAYMENT SUBMISSION
-document.getElementById('paymentProofForm')?.addEventListener('submit', (e) => {
+// ============================================
+// PAYMENT SUBMISSION - FIXED VERSION
+// ============================================
+
+document.getElementById('paymentProofForm')?.addEventListener('submit', function(e) {
     e.preventDefault();
     
-    const payerName = document.getElementById('payerName').value;
-    const product = document.getElementById('payerProduct').value;
+    console.log('💳 Payment form submitted!');
+    
+    const payerName = document.getElementById('payerName').value.trim();
+    const product = document.getElementById('payerProduct').value.trim();
     const amount = document.getElementById('payerAmount').value;
     const bank = document.getElementById('paymentBank').value;
-    const screenshot = document.getElementById('paymentScreenshot').files[0];
+    const screenshotFile = document.getElementById('paymentScreenshot').files[0];
     
-    if (!screenshot) {
-        alert('Please upload screenshot!');
+    // Validation
+    if (!payerName || !product || !amount || !bank) {
+        alert('❌ Please fill all fields!');
         return;
     }
     
+    if (!screenshotFile) {
+        alert('❌ Please upload payment screenshot!');
+        return;
+    }
+    
+    // Show loading
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Payment...';
+    submitBtn.disabled = true;
+    
+    // Read screenshot as base64
     const reader = new FileReader();
-    reader.onload = function(e) {
-        const payment = {
-            id: 'PAY' + Date.now(),
-            userId: currentUser.email,
-            userName: currentUser.name,
-            payerName, product, amount, bank,
-            screenshot: e.target.result,
-            status: 'pending',
-            timestamp: Date.now()
-        };
-        
-        allPayments.push(payment);
-        localStorage.setItem('allPayments', JSON.stringify(allPayments));
-        
-        if (!currentUser.payments) currentUser.payments = [];
-        currentUser.payments.push(payment);
-        saveCurrentUser();
-        
-        const productInCart = cart.find(p => p.name === product);
-        if (productInCart) {
-            cart = cart.filter(p => p.id !== productInCart.id);
-            updateCartUI();
+    reader.onload = function(event) {
+        try {
+            const payment = {
+                id: 'PAY' + Date.now(),
+                userId: currentUser.email,
+                userName: currentUser.name,
+                payerName: payerName,
+                product: product,
+                amount: parseFloat(amount),
+                bank: bank,
+                screenshot: event.target.result,
+                status: 'pending',
+                timestamp: Date.now(),
+                date: new Date().toISOString()
+            };
+            
+            console.log('✅ Payment created:', payment.id);
+            
+            // Save to global payments
+            allPayments.push(payment);
+            localStorage.setItem('allPayments', JSON.stringify(allPayments));
+            console.log('✅ Saved to allPayments');
+            
+            // Save to user payments
+            if (!currentUser.payments) currentUser.payments = [];
+            currentUser.payments.push(payment);
             saveCurrentUser();
+            console.log('✅ Saved to user payments');
+            
+            // Remove from cart
+            const productInCart = cart.find(p => p.name === product);
+            if (productInCart) {
+                cart = cart.filter(p => p.id !== productInCart.id);
+                updateCartUI();
+                saveCurrentUser();
+                console.log('✅ Removed from cart');
+            }
+            
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
+            if (modal) modal.hide();
+            
+            // Success message
+            alert('✅ Payment Submitted Successfully!\n\n' +
+                  '📋 Order ID: ' + payment.id + '\n' +
+                  '💰 Amount: $' + payment.amount + '\n' +
+                  '📦 Product: ' + payment.product + '\n\n' +
+                  'Your payment is being reviewed by our team.\n' +
+                  'You will be notified once confirmed!');
+            
+            addNotification('Payment submitted! Awaiting admin confirmation.', 'info');
+            
+            // Reset form
+            document.getElementById('paymentProofForm').reset();
+            document.getElementById('screenshotPreview').innerHTML = '';
+            
+            // Restore button
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            
+            console.log('✅ Payment process completed!');
+            
+        } catch (error) {
+            console.error('❌ Payment error:', error);
+            alert('❌ Error submitting payment. Please try again.\n\nError: ' + error.message);
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
         }
-        
-        bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
-        alert('Payment submitted! Wait for confirmation.');
-        addNotification('Payment submitted! Awaiting confirmation.', 'info');
-        
-        document.getElementById('paymentProofForm').reset();
-        document.getElementById('screenshotPreview').innerHTML = '';
     };
-    reader.readAsDataURL(screenshot);
+    
+    reader.onerror = function() {
+        alert('❌ Error reading screenshot. Please try again.');
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    };
+    
+    reader.readAsDataURL(screenshotFile);
 });
 
+// Screenshot Preview
 document.getElementById('paymentScreenshot')?.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -565,7 +628,10 @@ document.getElementById('paymentScreenshot')?.addEventListener('change', (e) => 
     }
 });
 
+// ============================================
 // NOTIFICATIONS
+// ============================================
+
 function addNotification(message, type = 'info') {
     notifications.unshift({ id: Date.now(), message, type, timestamp: Date.now(), read: false });
     updateNotificationUI();
@@ -581,7 +647,146 @@ document.getElementById('notificationIcon')?.addEventListener('click', () => {
     document.getElementById('notificationDropdown').classList.toggle('hidden');
 });
 
+// ============================================
+// LIVE CHAT - FIXED VERSION
+// ============================================
+
+let chatOpen = false;
+
+document.getElementById('liveChatBtn')?.addEventListener('click', () => {
+    if (chatOpen) {
+        closeLiveChat();
+    } else {
+        openLiveChat();
+    }
+});
+
+function openLiveChat() {
+    chatOpen = true;
+    
+    const chatModal = `
+        <div class="chat-modal" id="chatModal">
+            <div class="chat-header">
+                <h5><i class="fas fa-comments"></i> Live Chat Support</h5>
+                <button class="chat-close-btn" onclick="closeLiveChat()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessagesContainer">
+                <div class="chat-empty-state">
+                    <i class="fas fa-comments"></i>
+                    <p>Start a conversation with support!</p>
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Type your message...">
+                <button class="chat-send-btn" onclick="sendChatMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', chatModal);
+    
+    // Load existing messages for this user
+    loadUserChatMessages();
+    
+    // Add enter key listener
+    document.getElementById('chatInput')?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendChatMessage();
+    });
+}
+
+function loadUserChatMessages() {
+    const container = document.getElementById('chatMessagesContainer');
+    if (!container) return;
+    
+    const userChats = allChats.filter(chat => chat.userId === currentUser.email);
+    
+    if (userChats.length === 0) {
+        container.innerHTML = `
+            <div class="chat-empty-state">
+                <i class="fas fa-comments"></i>
+                <p>Start a conversation with support!</p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = userChats.map(chat => `
+        <div class="chat-message ${chat.sender}">
+            <div class="message-sender">${chat.sender === 'user' ? 'You' : 'Support'}</div>
+            <div class="message-bubble" style="background: ${chat.sender === 'user' ? 'linear-gradient(135deg, var(--primary-color), var(--secondary-color))' : 'white'}; color: ${chat.sender === 'user' ? 'white' : '#1e293b'};">
+                ${chat.message}
+            </div>
+            <div class="message-time">${new Date(chat.timestamp).toLocaleTimeString()}</div>
+        </div>
+    `).join('');
+    
+    container.scrollTop = container.scrollHeight;
+}
+
+window.sendChatMessage = function() {
+    const input = document.getElementById('chatInput');
+    if (!input) return;
+    
+    const message = input.value.trim();
+    if (!message) return;
+    
+    console.log('💬 Sending chat message:', message);
+    
+    // Create chat message
+    const chatMessage = {
+        id: 'CHAT' + Date.now(),
+        userId: currentUser.email,
+        userName: currentUser.name,
+        message: message,
+        sender: 'user',
+        timestamp: Date.now(),
+        read: false
+    };
+    
+    // Save to global chats
+    allChats.push(chatMessage);
+    localStorage.setItem('allChats', JSON.stringify(allChats));
+    
+    console.log('✅ Chat message saved!');
+    
+    // Clear input
+    input.value = '';
+    
+    // Reload messages
+    loadUserChatMessages();
+    
+    // Auto-reply after 2 seconds
+    setTimeout(() => {
+        const autoReply = {
+            id: 'CHAT' + Date.now(),
+            userId: currentUser.email,
+            userName: 'Support',
+            message: 'Thank you for contacting us! Our support team has received your message and will respond shortly. 😊',
+            sender: 'support',
+            timestamp: Date.now(),
+            read: false
+        };
+        
+        allChats.push(autoReply);
+        localStorage.setItem('allChats', JSON.stringify(allChats));
+        
+        loadUserChatMessages();
+    }, 2000);
+};
+
+window.closeLiveChat = function() {
+    chatOpen = false;
+    document.getElementById('chatModal')?.remove();
+};
+
+// ============================================
 // DASHBOARD
+// ============================================
+
 function loadDashboardSection(section) {
     const content = document.getElementById('dashboardContent');
     if (!content) return;
@@ -801,15 +1006,18 @@ window.upgradeToSeller = function() {
 };
 
 window.makeAdmin = function() {
-    if (confirm('Make yourself an Admin?')) {
+    if (confirm('Make yourself an Admin? You will see all payments and chats.')) {
         currentUser.isAdmin = true;
         saveCurrentUser();
-        alert('You are now an Admin! Refresh to see admin features.');
+        alert('✅ You are now an Admin! Refresh the page to see admin features.');
         location.reload();
     }
 };
 
-// ADMIN PANEL
+// ============================================
+// ADMIN PANEL - PAYMENTS
+// ============================================
+
 window.viewAllPayments = function() {
     if (!currentUser.isAdmin) {
         alert('Admin access required!');
@@ -827,7 +1035,7 @@ window.viewAllPayments = function() {
                 <table class="table">
                     <thead><tr><th>Date</th><th>User</th><th>Product</th><th>Amount</th><th>Bank</th><th>Status</th><th>Screenshot</th><th>Actions</th></tr></thead>
                     <tbody>
-                        ${allPayments.map(payment => `
+                        ${allPayments.slice().reverse().map(payment => `
                             <tr>
                                 <td>${new Date(payment.timestamp).toLocaleDateString()}</td>
                                 <td>${payment.userName}<br><small>${payment.userId}</small></td>
@@ -838,8 +1046,8 @@ window.viewAllPayments = function() {
                                 <td><button class="btn btn-sm btn-info" onclick="viewScreenshot('${payment.screenshot}')"><i class="fas fa-image"></i> View</button></td>
                                 <td>
                                     ${payment.status === 'pending' ? `
-                                        <button class="btn btn-sm btn-success" onclick="confirmPayment('${payment.id}')"><i class="fas fa-check"></i></button>
-                                        <button class="btn btn-sm btn-danger" onclick="rejectPayment('${payment.id}')"><i class="fas fa-times"></i></button>
+                                        <button class="btn btn-sm btn-success" onclick="confirmPayment('${payment.id}')"><i class="fas fa-check"></i> Confirm</button>
+                                        <button class="btn btn-sm btn-danger" onclick="rejectPayment('${payment.id}')"><i class="fas fa-times"></i> Reject</button>
                                     ` : '<span class="text-muted">Processed</span>'}
                                 </td>
                             </tr>
@@ -893,7 +1101,7 @@ window.confirmPayment = function(paymentId) {
             }
         }
         
-        alert('Payment confirmed!');
+        alert('✅ Payment confirmed!');
         viewAllPayments();
     }
 };
@@ -916,114 +1124,138 @@ window.rejectPayment = function(paymentId) {
             }
         }
         
-        alert('Payment rejected!');
+        alert('❌ Payment rejected: ' + reason);
         viewAllPayments();
     }
 };
 
-// LIVE CHAT
-let chatOpen = false;
+// ============================================
+// ADMIN PANEL - CHATS
+// ============================================
 
-document.getElementById('liveChatBtn')?.addEventListener('click', () => {
-    if (chatOpen) {
-        closeLiveChat();
-    } else {
-        openLiveChat();
+window.viewAllChats = function() {
+    if (!currentUser.isAdmin) {
+        alert('Admin access required!');
+        return;
     }
-});
-
-function openLiveChat() {
-    chatOpen = true;
     
-    const chatModal = `
-        <div class="chat-modal" id="chatModal">
-            <div class="chat-header">
-                <h5><i class="fas fa-comments"></i> Live Chat</h5>
-                <button class="chat-close-btn" onclick="closeLiveChat()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="chat-messages" id="chatMessagesContainer">
-                <div class="chat-empty-state">
-                    <i class="fas fa-comments"></i>
-                    <p>Chat with support!</p>
-                </div>
-            </div>
-            <div class="chat-input-area">
-                <input type="text" class="chat-input" id="chatInput" placeholder="Type message...">
-                <button class="chat-send-btn" onclick="sendChatMessage()">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </div>
-        </div>
-    `;
+    const content = document.getElementById('dashboardContent');
     
-    document.body.insertAdjacentHTML('beforeend', chatModal);
-    
-    document.getElementById('chatInput')?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendChatMessage();
+    // Group chats by user
+    const chatsByUser = {};
+    allChats.forEach(chat => {
+        if (!chatsByUser[chat.userId]) {
+            chatsByUser[chat.userId] = [];
+        }
+        chatsByUser[chat.userId].push(chat);
     });
-}
-
-window.closeLiveChat = function() {
-    chatOpen = false;
-    document.getElementById('chatModal')?.remove();
-};
-
-window.sendChatMessage = function() {
-    const input = document.getElementById('chatInput');
-    if (!input) return;
     
-    const message = input.value.trim();
-    if (!message) return;
-    
-    const container = document.getElementById('chatMessagesContainer');
-    
-    const userMsg = `
-        <div class="chat-message user">
-            <div class="message-sender">You</div>
-            <div class="message-bubble" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white;">${message}</div>
-            <div class="message-time">${new Date().toLocaleTimeString()}</div>
+    content.innerHTML = `
+        <h2><i class="fas fa-comments"></i> All User Chats (Admin)</h2>
+        <div class="alert alert-info">
+            <i class="fas fa-shield-alt"></i> Admin View - All User Messages
         </div>
+        
+        ${Object.keys(chatsByUser).length === 0 ? 
+            '<div class="dashboard-card"><p>No chat messages yet.</p></div>' :
+            Object.keys(chatsByUser).map(userId => {
+                const userChats = chatsByUser[userId];
+                const userName = userChats[0].userName;
+                const unreadCount = userChats.filter(c => !c.read && c.sender === 'user').length;
+                
+                return `
+                    <div class="dashboard-card mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5>
+                                <i class="fas fa-user"></i> ${userName}
+                                <small class="text-muted">(${userId})</small>
+                                ${unreadCount > 0 ? `<span class="badge bg-danger ms-2">${unreadCount} new</span>` : ''}
+                            </h5>
+                            <button class="btn btn-sm btn-primary" onclick="replyToUser('${userId}', '${userName}')">
+                                <i class="fas fa-reply"></i> Reply
+                            </button>
+                        </div>
+                        
+                        <div class="chat-history" style="max-height: 400px; overflow-y: auto; background: #f8fafc; padding: 1rem; border-radius: 10px;">
+                            ${userChats.map(chat => `
+                                <div class="mb-3" style="text-align: ${chat.sender === 'user' ? 'right' : 'left'};">
+                                    <div style="display: inline-block; max-width: 70%; padding: 0.75rem; border-radius: 10px; background: ${chat.sender === 'user' ? '#6366f1' : 'white'}; color: ${chat.sender === 'user' ? 'white' : '#1e293b'}; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                        <div style="font-size: 0.75rem; opacity: 0.8; margin-bottom: 0.25rem; font-weight: 600;">
+                                            ${chat.sender === 'user' ? userName : 'Support Team'}
+                                        </div>
+                                        <div style="word-wrap: break-word;">${chat.message}</div>
+                                        <div style="font-size: 0.7rem; opacity: 0.7; margin-top: 0.25rem;">
+                                            ${new Date(chat.timestamp).toLocaleString()}
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('')
+        }
     `;
-    
-    container.innerHTML = userMsg;
-    input.value = '';
-    
-    setTimeout(() => {
-        const adminMsg = `
-            <div class="chat-message admin">
-                <div class="message-sender">Support</div>
-                <div class="message-bubble" style="background: white; color: #1e293b;">Thank you! Our team will respond shortly.</div>
-                <div class="message-time">${new Date().toLocaleTimeString()}</div>
-            </div>
-        `;
-        container.innerHTML += adminMsg;
-        container.scrollTop = container.scrollHeight;
-    }, 1000);
 };
 
+window.replyToUser = function(userId, userName) {
+    const replyMessage = prompt(`Reply to ${userName}:`);
+    if (!replyMessage || !replyMessage.trim()) return;
+    
+    const reply = {
+        id: 'CHAT' + Date.now(),
+        userId: userId,
+        userName: 'Support',
+        message: replyMessage.trim(),
+        sender: 'support',
+        timestamp: Date.now(),
+        read: false
+    };
+    
+    allChats.push(reply);
+    localStorage.setItem('allChats', JSON.stringify(allChats));
+    
+    alert('✅ Reply sent successfully to ' + userName + '!');
+    viewAllChats();
+};
+
+// ============================================
 // INITIALIZE
+// ============================================
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('✅ DigiMarket Pro Loaded!');
-    console.log('📧 Create account to get started');
+    console.log('📦 Products:', products.length);
+    console.log('👥 Users:', allUsers.length);
+    console.log('💳 Payments:', allPayments.length);
+    console.log('💬 Chats:', allChats.length);
+    
     checkAuth();
     
+    // Add admin menus if admin
     if (currentUser && currentUser.isAdmin) {
-        const sidebar = document.querySelector('.dashboard-sidebar');
-        if (sidebar) {
-            const adminMenu = document.createElement('div');
-            adminMenu.className = 'dashboard-menu-item';
-            adminMenu.innerHTML = '<i class="fas fa-shield-alt me-2"></i> Admin: Payments';
-            adminMenu.onclick = viewAllPayments;
-            sidebar.appendChild(adminMenu);
-        }
+        setTimeout(() => {
+            const sidebar = document.querySelector('.dashboard-sidebar');
+            if (sidebar && !document.querySelector('[onclick="viewAllPayments()"]')) {
+                // Payments menu
+                const adminPaymentsMenu = document.createElement('div');
+                adminPaymentsMenu.className = 'dashboard-menu-item';
+                adminPaymentsMenu.innerHTML = '<i class="fas fa-shield-alt me-2"></i> Admin: Payments';
+                adminPaymentsMenu.onclick = viewAllPayments;
+                sidebar.appendChild(adminPaymentsMenu);
+                
+                // Chats menu
+                const adminChatsMenu = document.createElement('div');
+                adminChatsMenu.className = 'dashboard-menu-item';
+                adminChatsMenu.innerHTML = '<i class="fas fa-comments me-2"></i> Admin: Chats';
+                adminChatsMenu.onclick = viewAllChats;
+                sidebar.appendChild(adminChatsMenu);
+                
+                console.log('✅ Admin menus added!');
+            }
+        }, 500);
     }
 });
 
 console.log('✅ System Ready!');
-console.log('🔑 Login or Register to start!');
-
-// ============================================
-// END OF PART 2 - ALL DONE!
-// ============================================
+console.log('🔐 Login or Register to start!');
