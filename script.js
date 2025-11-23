@@ -1,1853 +1,1029 @@
-// Initialize AOS Animation
-AOS.init({
-    duration: 1000,
-    once: true,
-    offset: 100
-});
+   // ============================================
+// PART 1 OF 2 - COPY THIS FIRST
+// NO FIREBASE - SIMPLE localStorage SYSTEM
+// ============================================
 
-// Enhanced Sample Products Data with Real Images and Videos
-const sampleProducts = [
-    {
-        id: 1,
-        name: "Social Media Automation API",
-        category: "apis",
-        price: 149,
-        description: "Powerful API for automating social media posts, scheduling, and analytics. Supports all major platforms including Facebook, Twitter, Instagram, and LinkedIn.",
-        icon: "fa-share-nodes",
-        hasDemo: true,
-        image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80&fit=crop",
-        videoUrl: "https://www.youtube.com/embed/GhQdlIFylQ8",
-        rating: 4.8,
-        reviews: 124
-    },
-    {
-        id: 2,
-        name: "AI Content Generation Tool",
-        category: "ai-tools",
-        price: 199,
-        description: "Advanced AI-powered tool that generates high-quality content for blogs, social media, and marketing materials. Uses GPT-4 technology.",
-        icon: "fa-wand-magic-sparkles",
-        hasDemo: true,
-        image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80&fit=crop",
-        videoUrl: "https://www.youtube.com/embed/aircAruvnKk",
-        rating: 4.9,
-        reviews: 342
-    },
-    {
-        id: 3,
-        name: "Ultimate React Masterclass",
-        category: "courses",
-        price: 129,
-        description: "Complete React course from beginner to advanced. Includes hooks, Redux, Next.js, and real-world projects. 40+ hours of content.",
-        icon: "fa-graduation-cap",
-        hasDemo: false,
-        image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=80&fit=crop",
-        videoUrl: null,
-        rating: 4.7,
-        reviews: 856
-    },
-    {
-        id: 4,
-        name: "E-Commerce Website Template",
-        category: "websites",
-        price: 99,
-        description: "Modern, responsive e-commerce template with shopping cart, payment integration, and admin dashboard. Built with HTML, CSS, and JavaScript.",
-        icon: "fa-store",
-        hasDemo: true,
-        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80&fit=crop",
-        videoUrl: "https://www.youtube.com/embed/UB1O30fR-EE",
-        rating: 4.6,
-        reviews: 203
-    },
-    {
-        id: 5,
-        name: "Task Management App",
-        category: "apps",
-        price: 179,
-        description: "Full-featured task management application with team collaboration, deadlines, and progress tracking. Works on web and mobile.",
-        icon: "fa-tasks",
-        hasDemo: true,
-        image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&q=80&fit=crop",
-        videoUrl: "https://www.youtube.com/embed/fis26HvvDII",
-        rating: 4.8,
-        reviews: 167
-    },
-    {
-        id: 6,
-        name: "Email Marketing API",
-        category: "apis",
-        price: 139,
-        description: "Robust email marketing API with templates, automation, analytics, and subscriber management. Easy integration.",
-        icon: "fa-envelope",
-        hasDemo: true,
-        image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80&fit=crop",
-        videoUrl: "https://www.youtube.com/embed/94gHaHKmD4Q",
-        rating: 4.7,
-        reviews: 289
-    },
-    {
-        id: 7,
-        name: "AI Image Generator",
-        category: "ai-tools",
-        price: 189,
-        description: "Create stunning images from text descriptions using advanced AI. Perfect for designers, marketers, and content creators.",
-        icon: "fa-image",
-        hasDemo: true,
-        image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80",
-        videoUrl: "https://www.youtube.com/embed/GhQdlIFylQ8",
-        rating: 4.9,
-        reviews: 512
-    },
-    {
-        id: 8,
-        name: "JavaScript Full Stack Course",
-        category: "courses",
-        price: 159,
-        description: "Master full-stack development with Node.js, Express, MongoDB, and React. Build 10 complete projects.",
-        icon: "fa-code",
-        hasDemo: false,
-        image: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800&q=80&fit=crop",
-        videoUrl: null,
-        rating: 4.8,
-        reviews: 673
-    }
+// Initialize AOS
+AOS.init({ duration: 800, once: true });
+
+// Global State
+let currentUser = null;
+let allUsers = JSON.parse(localStorage.getItem('allUsers')) || [];
+let cart = [];
+let notifications = [];
+let allPayments = JSON.parse(localStorage.getItem('allPayments')) || [];
+
+// Products Data
+const products = [
+    { id: 1, name: "E-Commerce Website Template", category: "websites", price: 149, image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80", description: "Professional e-commerce template", rating: 4.8, reviews: 124, featured: true, features: ["Responsive Design", "Shopping Cart", "Payment Integration"], downloadLink: "https://example.com/download/ecommerce" },
+    { id: 2, name: "Mobile Banking App", category: "apps", price: 199, image: "https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=800&q=80", description: "Secure mobile banking", rating: 4.9, reviews: 89, featured: true, features: ["Secure Auth", "Transactions", "Budget Tracking"], downloadLink: "https://example.com/download/banking" },
+    { id: 3, name: "Payment Gateway API", category: "apis", price: 129, image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80", description: "Robust payment API", rating: 4.7, reviews: 156, featured: true, features: ["Multiple Methods", "Secure", "Webhooks"], downloadLink: "https://example.com/download/payment" },
+    { id: 4, name: "AI Content Generator", category: "ai-tools", price: 179, image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80", description: "AI-powered content", rating: 4.9, reviews: 203, featured: true, features: ["Multiple Types", "SEO", "Languages"], downloadLink: "https://example.com/download/ai" },
+    { id: 5, name: "Web Development Course", category: "courses", price: 99, image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80", description: "Complete bootcamp", rating: 4.8, reviews: 412, featured: true, features: ["50+ Hours", "Projects", "Certificate"], downloadLink: "https://example.com/download/course" },
+    { id: 6, name: "WordPress SEO Plugin", category: "plugins", price: 89, image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&q=80", description: "Advanced SEO plugin", rating: 4.6, reviews: 278, featured: true, features: ["On-Page SEO", "Schema", "Sitemaps"], downloadLink: "https://example.com/download/seo" }
 ];
 
-// Store products in localStorage if not exists
-if (!localStorage.getItem('products')) {
-    localStorage.setItem('products', JSON.stringify(sampleProducts));
-}
+// Copy to Clipboard
+window.copyToClipboard = function(text) {
+    navigator.clipboard.writeText(text).then(() => alert('Copied!')).catch(() => alert('Copy: ' + text));
+};
 
-// Initialize storage
-if (!localStorage.getItem('cart')) {
-    localStorage.setItem('cart', JSON.stringify([]));
-}
-if (!localStorage.getItem('orders')) {
-    localStorage.setItem('orders', JSON.stringify([]));
-}
-if (!localStorage.getItem('searchTerms')) {
-    localStorage.setItem('searchTerms', JSON.stringify({}));
-}
-if (!localStorage.getItem('payments')) {
-    localStorage.setItem('payments', JSON.stringify([]));
-}
-if (!localStorage.getItem('purchases')) {
-    localStorage.setItem('purchases', JSON.stringify([]));
-}
-if (!localStorage.getItem('userNotifications')) {
-    localStorage.setItem('userNotifications', JSON.stringify({}));
-}
-if (!localStorage.getItem('chatMessages')) {
-    localStorage.setItem('chatMessages', JSON.stringify([]));
-}
+// ============================================
+// AUTHENTICATION
+// ============================================
 
-// Check authentication status
 function checkAuth() {
-    const user = localStorage.getItem('currentUser');
-    if (!user) {
-        $('#loginPage').removeClass('hidden');
-        $('#registerPage').addClass('hidden');
-        $('#mainWebsite').addClass('hidden');
+    const saved = localStorage.getItem('currentUser');
+    if (saved) {
+        currentUser = JSON.parse(saved);
+        showMainWebsite();
+        loadUserData();
     } else {
-        $('#loginPage').addClass('hidden');
-        $('#registerPage').addClass('hidden');
-        $('#mainWebsite').removeClass('hidden');
-        showPage('home');
-        updateCartCount();
-        updateDashboardStats();
-        updateUserNotificationBadge();
-        updateAdminPaymentNotifications();
+        showLoginPage();
     }
 }
 
-// ============================================
-// GOOGLE SIGN-IN FUNCTIONALITY
-// ============================================
-
-$('#googleSignInBtn, #googleSignUpBtn').on('click', function() {
-    const googleUser = {
-        name: 'Google User ' + Math.floor(Math.random() * 1000),
-        email: 'user' + Math.floor(Math.random() * 10000) + '@gmail.com',
-        password: 'google_auth_' + Date.now(),
-        accountType: 'buyer',
-        id: Date.now(),
-        isAdmin: false,
-        googleAuth: true
-    };
-    
-    let users = JSON.parse(localStorage.getItem('users') || '[]');
-    let existingUser = users.find(u => u.email === googleUser.email);
-    
-    if (!existingUser) {
-        users.push(googleUser);
-        localStorage.setItem('users', JSON.stringify(users));
-    } else {
-        googleUser.id = existingUser.id;
+function loadUserData() {
+    if (currentUser) {
+        cart = currentUser.cart || [];
+        notifications = currentUser.notifications || [];
+        updateCartUI();
+        updateNotificationUI();
+        updateUIForUser();
     }
-    
-    localStorage.setItem('currentUser', JSON.stringify(googleUser));
-    alert('✅ Signed in with Google successfully! Welcome, ' + googleUser.name);
-    checkAuth();
-});
+}
 
-// Login Form Handler
-$('#loginForm').on('submit', function(e) {
-    e.preventDefault();
-    const email = $('#loginEmail').val().trim();
-    const password = $('#loginPassword').val();
-    
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = users.find(u => u.email === email && u.password === password);
-    
-    if (user) {
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        alert('Login successful! Welcome back, ' + user.name);
-        checkAuth();
-    } else {
-        alert('Invalid email or password. Please try again.');
+function saveCurrentUser() {
+    if (currentUser) {
+        currentUser.cart = cart;
+        currentUser.notifications = notifications;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        const index = allUsers.findIndex(u => u.email === currentUser.email);
+        if (index !== -1) {
+            allUsers[index] = currentUser;
+            localStorage.setItem('allUsers', JSON.stringify(allUsers));
+        }
     }
-});
+}
 
-// Register Form Handler
-$('#registerForm').on('submit', function(e) {
+// Register
+document.getElementById('registerForm')?.addEventListener('submit', (e) => {
     e.preventDefault();
-    const name = $('#registerName').val().trim();
-    const email = $('#registerEmail').val().trim();
-    const password = $('#registerPassword').val();
-    const accountType = $('#accountType').val();
+    const name = document.getElementById('registerName').value.trim();
+    const email = document.getElementById('registerEmail').value.trim().toLowerCase();
+    const password = document.getElementById('registerPassword').value;
+    const accountType = document.getElementById('accountType').value;
     
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    
-    if (users.find(u => u.email === email)) {
-        alert('Email already registered. Please use a different email or login.');
+    if (allUsers.find(u => u.email === email)) {
+        alert('Email already registered!');
         return;
     }
     
-    const isAdmin = users.length === 0;
-    
-    const newUser = { 
-        name, 
-        email, 
-        password, 
-        accountType: isAdmin ? 'admin' : accountType, 
-        id: Date.now(),
-        isAdmin: isAdmin
+    const newUser = {
+        name, email, password, accountType,
+        isAdmin: false, cart: [], notifications: [], payments: [],
+        createdAt: Date.now()
     };
-    users.push(newUser);
-    localStorage.setItem('users', JSON.stringify(users));
     
-    if (isAdmin) {
-        alert('Registration successful! You are now the ADMIN/OWNER of this site. 🎉');
+    allUsers.push(newUser);
+    localStorage.setItem('allUsers', JSON.stringify(allUsers));
+    alert('Account created! Please login.');
+    showLoginPage();
+    document.getElementById('registerForm').reset();
+});
+
+// Login
+document.getElementById('loginForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+    const password = document.getElementById('loginPassword').value;
+    
+    const user = allUsers.find(u => u.email === email && u.password === password);
+    
+    if (user) {
+        currentUser = user;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        showMainWebsite();
+        loadUserData();
+        document.getElementById('loginForm').reset();
+        alert('Welcome, ' + user.name + '!');
     } else {
-        alert('Registration successful! Please login to continue.');
+        alert('Invalid email or password!');
     }
-    $('#showLogin').click();
 });
 
-// Show Login/Register Pages
-$('#showRegister').on('click', function(e) {
+// Logout
+document.getElementById('logoutLink')?.addEventListener('click', (e) => {
     e.preventDefault();
-    $('#loginPage').addClass('hidden');
-    $('#registerPage').removeClass('hidden');
-});
-
-$('#showLogin').on('click', function(e) {
-    e.preventDefault();
-    $('#registerPage').addClass('hidden');
-    $('#loginPage').removeClass('hidden');
-});
-
-// Logout Handler
-$('#logoutLink').on('click', function(e) {
-    e.preventDefault();
-    if (confirm('Are you sure you want to logout?')) {
+    if (confirm('Logout?')) {
+        saveCurrentUser();
+        currentUser = null;
+        cart = [];
+        notifications = [];
         localStorage.removeItem('currentUser');
-        checkAuth();
+        showLoginPage();
+        alert('Logged out!');
     }
 });
 
-// Navigation Functions
-function showPage(page) {
-    $('#homePage, #browsePage, #dashboardPage').addClass('hidden');
-    
-    switch(page) {
-        case 'home':
-            $('#homePage').removeClass('hidden');
-            loadFeaturedProducts();
-            break;
-        case 'browse':
-            $('#browsePage').removeClass('hidden');
-            loadBrowseProducts();
-            break;
-        case 'dashboard':
-            $('#dashboardPage').removeClass('hidden');
-            loadDashboardSection('overview');
-            break;
-    }
-    
-    $('html, body').animate({ scrollTop: 0 }, 300);
+// ============================================
+// PAGES & NAVIGATION
+// ============================================
+
+function showLoginPage() {
+    document.getElementById('loginPage')?.classList.remove('hidden');
+    document.getElementById('registerPage')?.classList.add('hidden');
+    document.getElementById('mainWebsite')?.classList.add('hidden');
 }
 
-// Navigation Click Handlers
-$('#logoLink, #homeLink').on('click', function(e) {
-    e.preventDefault();
-    showPage('home');
-});
+function showRegisterPage() {
+    document.getElementById('loginPage')?.classList.add('hidden');
+    document.getElementById('registerPage')?.classList.remove('hidden');
+    document.getElementById('mainWebsite')?.classList.add('hidden');
+}
 
-$('#browseLink').on('click', function(e) {
-    e.preventDefault();
-    showPage('browse');
-});
+function showMainWebsite() {
+    document.getElementById('loginPage')?.classList.add('hidden');
+    document.getElementById('registerPage')?.classList.add('hidden');
+    document.getElementById('mainWebsite')?.classList.remove('hidden');
+    showHomePage();
+    initializeSwiper();
+}
 
-$('#dashboardLink').on('click', function(e) {
-    e.preventDefault();
-    showPage('dashboard');
-});
+function showHomePage() {
+    document.getElementById('homePage')?.classList.remove('hidden');
+    document.getElementById('browsePage')?.classList.add('hidden');
+    document.getElementById('dashboardPage')?.classList.add('hidden');
+    loadFeaturedProducts();
+}
 
-$('#becomeSellerLink').on('click', function(e) {
+function showBrowsePage() {
+    document.getElementById('homePage')?.classList.add('hidden');
+    document.getElementById('browsePage')?.classList.remove('hidden');
+    document.getElementById('dashboardPage')?.classList.add('hidden');
+    loadBrowseProducts();
+}
+
+function showDashboardPage(section = 'overview') {
+    document.getElementById('homePage')?.classList.add('hidden');
+    document.getElementById('browsePage')?.classList.add('hidden');
+    document.getElementById('dashboardPage')?.classList.remove('hidden');
+    loadDashboardSection(section);
+}
+
+// Navigation Links
+document.getElementById('showRegister')?.addEventListener('click', (e) => { e.preventDefault(); showRegisterPage(); });
+document.getElementById('showLogin')?.addEventListener('click', (e) => { e.preventDefault(); showLoginPage(); });
+document.getElementById('logoLink')?.addEventListener('click', (e) => { e.preventDefault(); showHomePage(); });
+document.getElementById('homeLink')?.addEventListener('click', (e) => { e.preventDefault(); showHomePage(); });
+document.getElementById('browseLink')?.addEventListener('click', (e) => { e.preventDefault(); showBrowsePage(); });
+document.getElementById('dashboardLink')?.addEventListener('click', (e) => { e.preventDefault(); showDashboardPage('overview'); });
+
+document.getElementById('becomeSellerLink')?.addEventListener('click', (e) => {
     e.preventDefault();
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    if (user.accountType === 'seller' || user.isAdmin) {
-        showPage('dashboard');
-    } else {
-        if (confirm('Would you like to upgrade to a seller account? This will allow you to add and manage products.')) {
-            user.accountType = 'seller';
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            const users = JSON.parse(localStorage.getItem('users'));
-            const userIndex = users.findIndex(u => u.id === user.id);
-            users[userIndex] = user;
-            localStorage.setItem('users', JSON.stringify(users));
-            alert('Your account has been upgraded to seller! 🎉');
-            showPage('dashboard');
+    if (currentUser && currentUser.accountType === 'buyer') {
+        if (confirm('Upgrade to Seller?')) {
+            currentUser.accountType = 'seller';
+            saveCurrentUser();
+            alert('You are now a Seller!');
+            updateUIForUser();
+            showDashboardPage('products');
         }
     }
 });
 
-// Load Featured Products - MOBILE COMPATIBLE
+function updateUIForUser() {
+    const link = document.getElementById('becomeSellerLink');
+    if (currentUser && currentUser.accountType === 'seller') {
+        if (link) link.style.display = 'none';
+    } else {
+        if (link) link.style.display = 'block';
+    }
+}
+
+// ============================================
+// PRODUCTS & CART
+// ============================================
+
 function loadFeaturedProducts() {
-    const products = JSON.parse(localStorage.getItem('products'));
-    const container = $('#featuredProductsContainer');
-    container.empty();
+    const container = document.getElementById('featuredProductsContainer');
+    if (!container) return;
+    container.innerHTML = '';
     
-    products.forEach(product => {
-        const stars = generateStars(product.rating);
-        
-        const categoryIcons = {
-            'websites': 'fa-globe',
-            'apps': 'fa-mobile-alt',
-            'apis': 'fa-code',
-            'ai-tools': 'fa-robot',
-            'courses': 'fa-graduation-cap'
-        };
-        
-        const cardHTML = `
+    products.filter(p => p.featured).forEach(product => {
+        const slide = document.createElement('div');
+        slide.className = 'swiper-slide';
+        slide.innerHTML = `
             <div class="product-card" data-product-id="${product.id}">
-                <div class="product-image-container" style="position: relative; width: 100%; height: 200px; overflow: hidden;">
-                    ${product.image ? `
-                        <img src="${product.image}" 
-                             alt="${product.name}" 
-                             class="product-img"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                             style="display:block; width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0;">
-                        <div style="display:none; width:100%; height:100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); position:absolute; top:0; left:0; align-items:center; justify-content:center; color:white;">
-                            <i class="fas ${categoryIcons[product.category] || 'fa-box'}" style="font-size: 4rem;"></i>
-                        </div>
-                    ` : `
-                        <div style="display:flex; width:100%; height:100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); position:absolute; top:0; left:0; align-items:center; justify-content:center; color:white;">
-                            <i class="fas ${categoryIcons[product.category] || 'fa-box'}" style="font-size: 4rem;"></i>
-                        </div>
-                    `}
-                    <div class="product-badge" style="position:absolute; top:10px; right:10px; z-index:10;">${product.hasDemo ? 'Live Demo' : 'View Course'}</div>
+                <div class="product-image-container">
+                    <img src="${product.image}" alt="${product.name}" class="product-img">
+                    <span class="product-badge">Featured</span>
                 </div>
                 <div class="product-body">
-                    <span class="product-category">${product.category}</span>
                     <h5 class="product-title">${product.name}</h5>
+                    <span class="product-category">${product.category}</span>
+                    <p class="product-description">${product.description}</p>
                     <div class="product-rating">
-                        <div class="stars-display">${stars}</div>
-                        <span class="rating-text">${product.rating} (${product.reviews} reviews)</span>
+                        <span class="stars-display">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5-Math.floor(product.rating))}</span>
+                        <span class="rating-text">${product.rating} (${product.reviews})</span>
                     </div>
-                    <p class="product-description">${product.description.substring(0, 100)}...</p>
                     <div class="product-price">$${product.price}</div>
-                    <button class="btn btn-primary-custom btn-sm view-details-btn" data-product-id="${product.id}">
-                        ${product.hasDemo ? '<i class="fas fa-play"></i> Watch Demo' : '<i class="fas fa-eye"></i> View Details'}
+                    <button class="btn btn-primary-custom w-100 add-to-cart-btn" data-product-id="${product.id}">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
                     </button>
                 </div>
             </div>
         `;
-        
-        container.append(`<div class="swiper-slide">${cardHTML}</div>`);
+        container.appendChild(slide);
     });
-    
-    if (window.featuredSwiper) {
-        window.featuredSwiper.destroy(true, true);
-    }
-    
-    setTimeout(() => {
-        window.featuredSwiper = new Swiper('.productsSwiper', {
-            slidesPerView: 1,
-            spaceBetween: 20,
-            loop: false,
-            centeredSlides: false,
-            watchOverflow: true,
-            observer: true,
-            observeParents: true,
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            breakpoints: {
-                320: {
-                    slidesPerView: 1,
-                    spaceBetween: 15
-                },
-                640: {
-                    slidesPerView: 2,
-                    spaceBetween: 20
-                },
-                1024: {
-                    slidesPerView: 3,
-                    spaceBetween: 30
-                }
-            },
-            autoplay: {
-                delay: 5000,
-                disableOnInteraction: false,
-            }
-        });
-        
-        console.log('✅ Swiper initialized with', products.length, 'products');
-    }, 200);
+    attachProductListeners();
 }
 
-// Load Browse Products
-function loadBrowseProducts() {
-    const products = JSON.parse(localStorage.getItem('products'));
-    const container = $('#browseProductsContainer');
-    container.empty();
+function initializeSwiper() {
+    setTimeout(() => {
+        new Swiper('.productsSwiper', {
+            slidesPerView: 1, spaceBetween: 30, loop: true,
+            pagination: { el: '.swiper-pagination', clickable: true },
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+            breakpoints: { 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
+        });
+    }, 100);
+}
+
+document.querySelectorAll('.category-card').forEach(card => {
+    card.addEventListener('click', () => {
+        const category = card.dataset.category;
+        showBrowsePage();
+        document.getElementById('categoryFilter').value = category;
+        filterProducts();
+    });
+});
+
+document.getElementById('searchBtn')?.addEventListener('click', () => {
+    const query = document.getElementById('searchInput').value;
+    showBrowsePage();
+    filterProducts(query);
+});
+
+document.getElementById('searchInput')?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        showBrowsePage();
+        filterProducts(e.target.value);
+    }
+});
+
+function loadBrowseProducts(filter = {}) {
+    const container = document.getElementById('browseProductsContainer');
+    if (!container) return;
+    container.innerHTML = '';
     
-    if (products.length === 0) {
-        container.html('<div class="col-12 text-center"><p>No products available yet.</p></div>');
+    let filtered = [...products];
+    if (filter.category && filter.category !== 'all') filtered = filtered.filter(p => p.category === filter.category);
+    if (filter.priceRange) {
+        const [min, max] = filter.priceRange.split('-').map(Number);
+        filtered = filtered.filter(p => p.price >= min && p.price <= max);
+    }
+    if (filter.search) {
+        filtered = filtered.filter(p => 
+            p.name.toLowerCase().includes(filter.search.toLowerCase()) ||
+            p.description.toLowerCase().includes(filter.search.toLowerCase())
+        );
+    }
+    
+    if (filtered.length === 0) {
+        container.innerHTML = '<div class="col-12"><div class="alert alert-info">No products found.</div></div>';
         return;
     }
     
-    products.forEach(product => {
-        const productCard = createProductCard(product);
-        container.append(`<div class="col-md-6 col-lg-4">${productCard}</div>`);
+    filtered.forEach(product => {
+        const col = document.createElement('div');
+        col.className = 'col-md-4 col-sm-6';
+        col.innerHTML = `
+            <div class="product-card" data-product-id="${product.id}">
+                <div class="product-image-container">
+                    <img src="${product.image}" alt="${product.name}" class="product-img">
+                </div>
+                <div class="product-body">
+                    <h5 class="product-title">${product.name}</h5>
+                    <span class="product-category">${product.category}</span>
+                    <p class="product-description">${product.description}</p>
+                    <div class="product-rating">
+                        <span class="stars-display">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5-Math.floor(product.rating))}</span>
+                        <span class="rating-text">${product.rating}</span>
+                    </div>
+                    <div class="product-price">$${product.price}</div>
+                    <button class="btn btn-primary-custom w-100 add-to-cart-btn" data-product-id="${product.id}">
+                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+        `;
+        container.appendChild(col);
+    });
+    attachProductListeners();
+}
+
+function filterProducts(search = '') {
+    const category = document.getElementById('categoryFilter')?.value;
+    const priceRange = document.getElementById('priceFilter')?.value;
+    loadBrowseProducts({ category, priceRange: priceRange !== 'all' ? priceRange : null, search });
+}
+
+document.getElementById('categoryFilter')?.addEventListener('change', () => filterProducts());
+document.getElementById('priceFilter')?.addEventListener('change', () => filterProducts());
+
+function attachProductListeners() {
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            addToCart(parseInt(e.target.closest('.add-to-cart-btn').dataset.productId));
+        });
+    });
+    
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (!e.target.closest('.add-to-cart-btn')) {
+                showProductDetail(parseInt(card.dataset.productId));
+            }
+        });
     });
 }
 
-// Create Product Card
-function createProductCard(product) {
-    const stars = generateStars(product.rating);
-    
-    const categoryIcons = {
-        'websites': 'fa-globe',
-        'apps': 'fa-mobile-alt',
-        'apis': 'fa-code',
-        'ai-tools': 'fa-robot',
-        'courses': 'fa-graduation-cap'
-    };
-    
-    return `
-        <div class="product-card" data-product-id="${product.id}">
-            <div class="product-image-container" style="position: relative; width: 100%; height: 200px; overflow: hidden;">
-                ${product.image ? `
-                    <img src="${product.image}" 
-                         alt="${product.name}" 
-                         class="product-img"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                         style="display:block; width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0;">
-                    <div style="display:none; width:100%; height:100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); position:absolute; top:0; left:0; align-items:center; justify-content:center; color:white;">
-                        <i class="fas ${categoryIcons[product.category] || 'fa-box'}" style="font-size: 4rem;"></i>
-                    </div>
-                ` : `
-                    <div style="display:flex; width:100%; height:100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); position:absolute; top:0; left:0; align-items:center; justify-content:center; color:white;">
-                        <i class="fas ${categoryIcons[product.category] || 'fa-box'}" style="font-size: 4rem;"></i>
-                    </div>
-                `}
-                <div class="product-badge" style="position:absolute; top:10px; right:10px; z-index:10;">${product.hasDemo ? 'Live Demo' : 'View Course'}</div>
-            </div>
-            <div class="product-body">
-                <span class="product-category">${product.category}</span>
-                <h5 class="product-title">${product.name}</h5>
-                <div class="product-rating">
-                    ${stars}
-                    <span class="rating-text">${product.rating} (${product.reviews} reviews)</span>
-                </div>
-                <p class="product-description">${product.description.substring(0, 100)}...</p>
-                <div class="product-price">$${product.price}</div>
-                <button class="btn btn-primary-custom btn-sm view-details-btn" data-product-id="${product.id}">
-                    ${product.hasDemo ? '<i class="fas fa-play"></i> Watch Demo' : '<i class="fas fa-eye"></i> View Details'}
-                </button>
-            </div>
-        </div>
-    `;
-}
-
-// Generate Star Rating
-function generateStars(rating) {
-    let stars = '';
-    for (let i = 1; i <= 5; i++) {
-        if (i <= Math.floor(rating)) {
-            stars += '<i class="fas fa-star"></i>';
-        } else if (i - 0.5 <= rating) {
-            stars += '<i class="fas fa-star-half-alt"></i>';
-        } else {
-            stars += '<i class="far fa-star"></i>';
-        }
-    }
-    return stars;
-}
-
-// View Product Details
-$(document).on('click', '.view-details-btn', function(e) {
-    e.stopPropagation();
-    const productId = $(this).data('product-id');
-    showProductModal(productId);
-});
-
-$(document).on('click', '.product-card', function(e) {
-    if (!$(e.target).hasClass('btn') && !$(e.target).closest('button').length) {
-        const productId = $(this).data('product-id');
-        showProductModal(productId);
-    }
-});
-
-// ============================================
-// PAYMENT SYSTEM - SHOW PRODUCT MODAL WITH BUY NOW
-// ============================================
-
-function showProductModal(productId) {
-    const products = JSON.parse(localStorage.getItem('products'));
+function showProductDetail(productId) {
     const product = products.find(p => p.id === productId);
-    
     if (!product) return;
     
-    const stars = generateStars(product.rating);
-    
-    let modalContent = `
-        <div class="modal fade" id="productModal" tabindex="-1">
-            <div class="modal-dialog modal-xl">
+    const modal = `
+        <div class="modal fade show" id="productDetailModal" style="display: block;" tabindex="-1">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">${product.name}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn-close" onclick="closeProductDetail()"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6">
-                                ${product.hasDemo && product.videoUrl ? `
-                                    <div class="video-container">
-                                        <iframe src="${product.videoUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                    </div>
-                                ` : `
-                                    <img src="${product.image}" alt="${product.name}" class="img-fluid product-detail-img">
-                                `}
-                                
-                                <div class="trust-badges mt-3">
-                                    <img src="https://cdn-icons-png.flaticon.com/128/825/825561.png" alt="Secure" class="badge-img">
-                                    <img src="https://cdn-icons-png.flaticon.com/128/1705/1705471.png" alt="Money Back" class="badge-img">
-                                    <img src="https://cdn-icons-png.flaticon.com/128/2991/2991148.png" alt="24/7 Support" class="badge-img">
-                                </div>
+                                <img src="${product.image}" alt="${product.name}" class="product-detail-img">
                             </div>
                             <div class="col-md-6">
                                 <span class="product-category">${product.category}</span>
-                                <h3 class="mt-2">${product.name}</h3>
-                                <div class="product-rating mb-3">
-                                    <div class="stars-display">${stars}</div>
-                                    <span class="rating-text">${product.rating} (${product.reviews} reviews)</span>
-                                </div>
-                                <p class="product-full-description">${product.description}</p>
-                                
+                                <h3>${product.name}</h3>
+                                <p>${product.description}</p>
                                 <div class="product-features">
-                                    <h5>Key Features:</h5>
-                                    <ul>
-                                        <li><i class="fas fa-check-circle text-success"></i> Full source code included</li>
-                                        <li><i class="fas fa-check-circle text-success"></i> Lifetime updates</li>
-                                        <li><i class="fas fa-check-circle text-success"></i> 24/7 customer support</li>
-                                        <li><i class="fas fa-check-circle text-success"></i> Money-back guarantee</li>
-                                        <li><i class="fas fa-check-circle text-success"></i> Commercial license</li>
-                                    </ul>
+                                    <h6>Features:</h6>
+                                    <ul>${product.features.map(f => `<li><i class="fas fa-check text-success me-2"></i>${f}</li>`).join('')}</ul>
                                 </div>
-                                
                                 <div class="price-section">
                                     <h2 class="text-primary">$${product.price}</h2>
-                                    <p class="text-muted">One-time payment</p>
                                 </div>
-                                
-                                <button class="btn btn-success btn-lg w-100 mb-2" id="buyNowBtn" data-product-id="${product.id}">
-                                    <i class="fas fa-shopping-bag"></i> Buy Now
-                                </button>
-                                <button class="btn btn-primary-custom btn-lg w-100 mb-2" id="addToCartModalBtn" data-product-id="${product.id}">
+                                <button class="btn btn-primary-custom btn-lg w-100 mt-3" onclick="addToCart(${product.id}); closeProductDetail();">
                                     <i class="fas fa-shopping-cart"></i> Add to Cart
                                 </button>
-                                <button class="btn btn-outline-primary btn-lg w-100" onclick="addToWishlist(${product.id})">
-                                    <i class="fas fa-heart"></i> Add to Wishlist
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="row mt-4">
-                            <div class="col-12">
-                                <div class="customer-reviews">
-                                    <h4>Customer Reviews</h4>
-                                    ${generateReviews(product)}
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="modal-backdrop fade show"></div>
     `;
-    
-    $('#productModal').remove();
-    $('body').append(modalContent);
-    const modal = new bootstrap.Modal(document.getElementById('productModal'));
-    modal.show();
-    
-    $('#productModal').on('hidden.bs.modal', function () {
-        $(this).remove();
-    });
-    
-    // Buy Now Button Handler
-    $('#buyNowBtn').on('click', function() {
-        const productId = $(this).data('product-id');
-        openPaymentModal(productId);
-    });
-    
-    $('#addToCartModalBtn').on('click', function() {
-        const productId = $(this).data('product-id');
-        addToCartFunction(productId);
-    });
+    document.body.insertAdjacentHTML('beforeend', modal);
 }
 
-// Generate Customer Reviews
-function generateReviews(product) {
-    const reviews = [
-        { name: "John Smith", rating: 5, comment: "Excellent product! Exactly what I needed.", avatar: "1" },
-        { name: "Sarah Johnson", rating: 5, comment: "Great value for money. Highly recommended!", avatar: "5" },
-        { name: "Mike Davis", rating: 4, comment: "Very good quality. Fast delivery and support.", avatar: "8" }
-    ];
-    
-    return reviews.map(review => `
-        <div class="review-item">
-            <div class="review-header">
-                <img src="https://i.pravatar.cc/60?img=${review.avatar}" alt="${review.name}" class="review-avatar">
-                <div>
-                    <h6>${review.name}</h6>
-                    <div class="stars-display small">${generateStars(review.rating)}</div>
-                </div>
-            </div>
-            <p class="review-text">${review.comment}</p>
-        </div>
-    `).join('');
-}
+window.closeProductDetail = function() {
+    document.getElementById('productDetailModal')?.remove();
+    document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+};
 
-// ============================================
-// PAYMENT MODAL
-// ============================================
-
-function openPaymentModal(productId) {
-    const products = JSON.parse(localStorage.getItem('products'));
+function addToCart(productId) {
     const product = products.find(p => p.id === productId);
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    
     if (!product) return;
-    
-    const productModal = bootstrap.Modal.getInstance(document.getElementById('productModal'));
-    if (productModal) {
-        productModal.hide();
-    }
-    
-    setTimeout(() => {
-        $('#paymentProductImage').attr('src', product.image);
-        $('#paymentProductName').text(product.name);
-        $('#paymentProductCategory').text(product.category);
-        $('#paymentProductPrice').text('$' + product.price);
-        $('#payerProduct').val(product.name);
-        $('#payerAmount').val(product.price);
-        $('#payerName').val(user.name);
-        
-        $('#paymentProofForm').data('productId', productId);
-        
-        const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
-        paymentModal.show();
-    }, 500);
-}
-
-// Copy to Clipboard Function
-window.copyToClipboard = function(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        showNotification('✅ Account number copied to clipboard!', 'success');
-    }).catch(() => {
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-        showNotification('✅ Account number copied!', 'success');
-    });
-};
-
-// Screenshot Preview
-$('#paymentScreenshot').on('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            $('#screenshotPreview').html(`<img src="${e.target.result}" alt="Payment Screenshot" style="max-width: 100%; border-radius: 10px; margin-top: 1rem;">`);
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-// Submit Payment Proof
-$('#paymentProofForm').on('submit', function(e) {
-    e.preventDefault();
-    
-    const productId = $(this).data('productId');
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    const products = JSON.parse(localStorage.getItem('products'));
-    const product = products.find(p => p.id === productId);
-    
-    const payerName = $('#payerName').val().trim();
-    const payerAmount = parseFloat($('#payerAmount').val());
-    const paymentBank = $('#paymentBank').val();
-    const screenshotFile = $('#paymentScreenshot')[0].files[0];
-    
-    if (!screenshotFile) {
-        alert('Please upload payment screenshot!');
-        return;
-    }
-    
-    if (payerAmount !== product.price) {
-        alert('❌ Amount must match the product price exactly: $' + product.price);
-        return;
-    }
-    
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const payments = JSON.parse(localStorage.getItem('payments') || '[]');
-        
-        const newPayment = {
-            id: Date.now(),
-            userId: user.id,
-            userName: payerName,
-            userEmail: user.email,
-            productId: product.id,
-            productName: product.name,
-            amount: payerAmount,
-            bank: paymentBank,
-            screenshot: e.target.result,
-            status: 'pending',
-            date: new Date().toISOString(),
-            product: product
-        };
-        
-        payments.push(newPayment);
-        localStorage.setItem('payments', JSON.stringify(payments));
-        
-        sendNotificationToUser(user.id, 'Payment Submitted', `Your payment of $${payerAmount} for ${product.name} has been submitted and is being verified.`);
-        
-        const paymentModal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
-        if (paymentModal) {
-            paymentModal.hide();
-        }
-        
-        showSuccessModal('Payment Proof Submitted!', `Thank you ${payerName}! Your payment of $${payerAmount} has been submitted successfully. You will receive a confirmation within 5-10 minutes. Check your notifications.`);
-        
-        $('#paymentProofForm')[0].reset();
-        $('#screenshotPreview').empty();
-        
-        updateAdminPaymentNotifications();
-    };
-    reader.readAsDataURL(screenshotFile);
-});
-
-// Show Success Modal
-function showSuccessModal(title, message) {
-    const modalHTML = `
-        <div class="modal fade" id="successModal" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body text-center p-5">
-                        <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
-                        <h3 class="mt-3">${title}</h3>
-                        <p class="text-muted">${message}</p>
-                        <button class="btn btn-primary-custom mt-3" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    $('#successModal').remove();
-    $('body').append(modalHTML);
-    const modal = new bootstrap.Modal(document.getElementById('successModal'));
-    modal.show();
-    
-    $('#successModal').on('hidden.bs.modal', function () {
-        $(this).remove();
-    });
-}
-
-// Show Notification
-function showNotification(message, type = 'info') {
-    const bgColor = type === 'success' ? 'var(--success-color)' : type === 'error' ? '#ef4444' : 'var(--primary-color)';
-    const notification = $(`
-        <div style="position: fixed; top: 80px; right: 20px; background: ${bgColor}; color: white; padding: 1rem 1.5rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 9999; animation: fadeIn 0.3s; max-width: 350px;">
-            ${message}
-        </div>
-    `);
-    
-    $('body').append(notification);
-    
-    setTimeout(() => {
-        notification.fadeOut(300, function() {
-            $(this).remove();
-        });
-    }, 4000);
-}
-
-// Send Notification to User
-function sendNotificationToUser(userId, title, message) {
-    const userNotifications = JSON.parse(localStorage.getItem('userNotifications') || '{}');
-    
-    if (!userNotifications[userId]) {
-        userNotifications[userId] = [];
-    }
-    
-    userNotifications[userId].push({
-        id: Date.now(),
-        title: title,
-        message: message,
-        date: new Date().toISOString(),
-        read: false
-    });
-    
-    localStorage.setItem('userNotifications', JSON.stringify(userNotifications));
-    updateUserNotificationBadge();
-}
-
-// Update User Notification Badge
-function updateUserNotificationBadge() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    if (!user) return;
-    
-    const userNotifications = JSON.parse(localStorage.getItem('userNotifications') || '{}');
-    const notifications = userNotifications[user.id] || [];
-    const unreadCount = notifications.filter(n => !n.read).length;
-    
-    if (unreadCount > 0) {
-        $('#notificationBadge').text(unreadCount).show();
-    } else {
-        $('#notificationBadge').text('0').hide();
-    }
-}
-
-// Update Admin Payment Notifications
-function updateAdminPaymentNotifications() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    if (!user || !user.isAdmin) return;
-    
-    const payments = JSON.parse(localStorage.getItem('payments') || '[]');
-    const pendingPayments = payments.filter(p => p.status === 'pending').length;
-    
-    if (pendingPayments > 0) {
-        if ($('#dashboardLink').find('.payment-notification-badge').length === 0) {
-            $('#dashboardLink').css('position', 'relative').append(`<span class="payment-notification-badge">${pendingPayments}</span>`);
-        } else {
-            $('#dashboardLink .payment-notification-badge').text(pendingPayments);
-        }
-    } else {
-        $('#dashboardLink .payment-notification-badge').remove();
-    }
-}
-
-// ============================================
-// CART FUNCTIONS
-// ============================================
-
-function addToCartFunction(productId) {
-    const products = JSON.parse(localStorage.getItem('products'));
-    const product = products.find(p => p.id === productId);
-    
-    if (!product) {
-        alert('Product not found!');
-        return;
-    }
-    
-    const cart = JSON.parse(localStorage.getItem('cart'));
-    
     if (cart.find(item => item.id === productId)) {
-        alert('This product is already in your cart!');
+        alert('Already in cart!');
         return;
     }
-    
-    cart.push(product);
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartCount();
-    alert('Product added to cart successfully! 🛒');
+    cart.push({...product, quantity: 1});
+    updateCartUI();
+    saveCurrentUser();
+    addNotification(`Added "${product.name}" to cart`, 'success');
 }
 
-window.addToWishlist = function(productId) {
-    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    if (!wishlist.includes(productId)) {
-        wishlist.push(productId);
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
-        alert('Added to wishlist! ❤️');
-    } else {
-        alert('Already in wishlist!');
-    }
-};
-
-function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem('cart'));
-    $('#cartCount').text(cart.length);
+function updateCartUI() {
+    const count = document.getElementById('cartCount');
+    if (count) count.textContent = cart.length;
 }
 
-$('#cartIcon').on('click', function() {
-    const cart = JSON.parse(localStorage.getItem('cart'));
-    
+document.getElementById('cartIcon')?.addEventListener('click', () => {
     if (cart.length === 0) {
-        alert('Your cart is empty! Browse products to add items.');
+        alert('Cart is empty!');
         return;
     }
     
-    let cartHTML = `
-        <div class="modal fade" id="cartModal" tabindex="-1">
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    const modal = `
+        <div class="modal fade show" id="cartModal" style="display: block;">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title"><i class="fas fa-shopping-cart"></i> Shopping Cart (${cart.length} items)</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="modal-header bg-primary text-white">
+                        <h5><i class="fas fa-shopping-cart"></i> Your Cart</h5>
+                        <button class="btn-close btn-close-white" onclick="closeCartModal()"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="checkout-progress">
-                            <div class="progress-step active">
-                                <div class="step-number">1</div>
-                                <div class="step-label">Cart</div>
-                            </div>
-                            <div class="progress-line"></div>
-                            <div class="progress-step">
-                                <div class="step-number">2</div>
-                                <div class="step-label">Checkout</div>
-                            </div>
-                            <div class="progress-line"></div>
-                            <div class="progress-step">
-                                <div class="step-number">3</div>
-                                <div class="step-label">Complete</div>
-                            </div>
-                        </div>
-                        
                         <div class="cart-items">
                             ${cart.map(item => `
-                                <div class="cart-item" data-item-id="${item.id}">
+                                <div class="cart-item">
                                     <img src="${item.image}" alt="${item.name}" class="cart-item-img">
                                     <div class="cart-item-details">
                                         <h6>${item.name}</h6>
                                         <p class="text-muted">${item.category}</p>
                                     </div>
-                                    <div class="cart-item-price">
-                                        <strong>$${item.price}</strong>
-                                    </div>
-                                    <button class="btn btn-sm btn-danger remove-from-cart" data-product-id="${item.id}">
+                                    <div class="cart-item-price">$${item.price}</div>
+                                    <button class="btn btn-sm btn-danger" onclick="removeFromCart(${item.id})">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
                             `).join('')}
                         </div>
-                        
                         <div class="cart-summary">
-                            <div class="summary-row">
-                                <span>Subtotal:</span>
-                                <span>$${cart.reduce((sum, item) => sum + item.price, 0)}</span>
-                            </div>
-                            <div class="summary-row">
-                                <span>Tax:</span>
-                                <span>$0</span>
-                            </div>
                             <div class="summary-row total">
                                 <span>Total:</span>
-                                <span>$${cart.reduce((sum, item) => sum + item.price, 0)}</span>
+                                <span>$${total}</span>
                             </div>
                         </div>
-                        
-                        <button class="btn btn-primary-custom btn-lg w-100" onclick="proceedToCheckout()">
-                            <i class="fas fa-lock"></i> Proceed to Secure Checkout
+                        <button class="btn btn-primary-custom btn-lg w-100 mt-3" onclick="proceedToCheckout()">
+                            <i class="fas fa-lock"></i> Checkout
                         </button>
-                        
-                        <div class="security-info mt-3">
-                            <i class="fas fa-shield-alt text-success"></i>
-                            <small class="text-muted">Secure SSL encrypted payment</small>
-                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade show"></div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modal);
+});
+
+window.closeCartModal = function() {
+    document.getElementById('cartModal')?.remove();
+    document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+};
+
+window.removeFromCart = function(productId) {
+    cart = cart.filter(item => item.id !== productId);
+    updateCartUI();
+    saveCurrentUser();
+    closeCartModal();
+    if (cart.length > 0) document.getElementById('cartIcon').click();
+};
+
+window.proceedToCheckout = function() {
+    closeCartModal();
+    if (cart.length === 0) return;
+    
+    const product = cart[0];
+    const modal = new bootstrap.Modal(document.getElementById('paymentModal'));
+    document.getElementById('paymentProductImage').src = product.image;
+    document.getElementById('paymentProductName').textContent = product.name;
+    document.getElementById('paymentProductCategory').textContent = product.category;
+    document.getElementById('paymentProductPrice').textContent = `$${product.price}`;
+    document.getElementById('payerProduct').value = product.name;
+    document.getElementById('payerAmount').value = product.price;
+    modal.show();
+};
+
+// ============================================
+// END OF PART 1
+// CONTINUE WITH PART 2
+// ============================================ 
+
+
+  // ============================================
+// PART 2 OF 2 - COPY THIS AFTER PART 1
+// PAYMENT, DASHBOARD, ADMIN & CHAT
+// ============================================
+
+// PAYMENT SUBMISSION
+document.getElementById('paymentProofForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const payerName = document.getElementById('payerName').value;
+    const product = document.getElementById('payerProduct').value;
+    const amount = document.getElementById('payerAmount').value;
+    const bank = document.getElementById('paymentBank').value;
+    const screenshot = document.getElementById('paymentScreenshot').files[0];
+    
+    if (!screenshot) {
+        alert('Please upload screenshot!');
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const payment = {
+            id: 'PAY' + Date.now(),
+            userId: currentUser.email,
+            userName: currentUser.name,
+            payerName, product, amount, bank,
+            screenshot: e.target.result,
+            status: 'pending',
+            timestamp: Date.now()
+        };
+        
+        allPayments.push(payment);
+        localStorage.setItem('allPayments', JSON.stringify(allPayments));
+        
+        if (!currentUser.payments) currentUser.payments = [];
+        currentUser.payments.push(payment);
+        saveCurrentUser();
+        
+        const productInCart = cart.find(p => p.name === product);
+        if (productInCart) {
+            cart = cart.filter(p => p.id !== productInCart.id);
+            updateCartUI();
+            saveCurrentUser();
+        }
+        
+        bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
+        alert('Payment submitted! Wait for confirmation.');
+        addNotification('Payment submitted! Awaiting confirmation.', 'info');
+        
+        document.getElementById('paymentProofForm').reset();
+        document.getElementById('screenshotPreview').innerHTML = '';
+    };
+    reader.readAsDataURL(screenshot);
+});
+
+document.getElementById('paymentScreenshot')?.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            document.getElementById('screenshotPreview').innerHTML = 
+                `<img src="${e.target.result}" style="max-width: 100%; border-radius: 10px; margin-top: 1rem;">`;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// NOTIFICATIONS
+function addNotification(message, type = 'info') {
+    notifications.unshift({ id: Date.now(), message, type, timestamp: Date.now(), read: false });
+    updateNotificationUI();
+    saveCurrentUser();
+}
+
+function updateNotificationUI() {
+    const badge = document.getElementById('notificationBadge');
+    if (badge) badge.textContent = notifications.filter(n => !n.read).length;
+}
+
+document.getElementById('notificationIcon')?.addEventListener('click', () => {
+    document.getElementById('notificationDropdown').classList.toggle('hidden');
+});
+
+// DASHBOARD
+function loadDashboardSection(section) {
+    const content = document.getElementById('dashboardContent');
+    if (!content) return;
+    
+    document.querySelectorAll('.dashboard-menu-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.section === section) item.classList.add('active');
+    });
+    
+    switch(section) {
+        case 'overview': loadOverview(content); break;
+        case 'products': loadMyProducts(content); break;
+        case 'purchases': loadMyPurchases(content); break;
+        case 'orders': loadOrders(content); break;
+        case 'sales': loadSales(content); break;
+        case 'messages': loadMessages(content); break;
+        case 'settings': loadSettings(content); break;
+    }
+}
+
+document.querySelectorAll('.dashboard-menu-item').forEach(item => {
+    item.addEventListener('click', () => loadDashboardSection(item.dataset.section));
+});
+
+function loadOverview(content) {
+    const payments = currentUser.payments || [];
+    const confirmed = payments.filter(p => p.status === 'confirmed').length;
+    const pending = payments.filter(p => p.status === 'pending').length;
+    const spent = payments.filter(p => p.status === 'confirmed').reduce((sum, p) => sum + parseFloat(p.amount), 0);
+    
+    content.innerHTML = `
+        <h2><i class="fas fa-chart-line"></i> Dashboard</h2>
+        <div class="row mt-4">
+            <div class="col-md-4 mb-3">
+                <div class="stat-card">
+                    <i class="fas fa-shopping-bag fa-2x mb-3"></i>
+                    <div class="stat-value">${confirmed}</div>
+                    <div>Purchases</div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="stat-card">
+                    <i class="fas fa-clock fa-2x mb-3"></i>
+                    <div class="stat-value">${pending}</div>
+                    <div>Pending</div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="stat-card">
+                    <i class="fas fa-dollar-sign fa-2x mb-3"></i>
+                    <div class="stat-value">$${spent}</div>
+                    <div>Total Spent</div>
                 </div>
             </div>
         </div>
     `;
-    
-    $('#cartModal').remove();
-    $('body').append(cartHTML);
-    const modal = new bootstrap.Modal(document.getElementById('cartModal'));
-    modal.show();
-    
-    $('#cartModal').on('hidden.bs.modal', function () {
-        $(this).remove();
-    });
-});
+}
 
-$(document).on('click', '.remove-from-cart', function() {
-    const productId = $(this).data('product-id');
-    let cart = JSON.parse(localStorage.getItem('cart'));
-    cart = cart.filter(item => item.id !== productId);
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartCount();
-    
-    $(this).closest('.cart-item').fadeOut(300, function() { 
-        $(this).remove(); 
-        
-        const remainingCart = JSON.parse(localStorage.getItem('cart'));
-        if (remainingCart.length === 0) {
-            const modalInstance = bootstrap.Modal.getInstance(document.getElementById('cartModal'));
-            if (modalInstance) {
-                modalInstance.hide();
-            }
-        } else {
-            const newTotal = remainingCart.reduce((sum, item) => sum + item.price, 0);
-            $('.cart-summary .summary-row').eq(0).find('span:last').text('$' + newTotal);
-            $('.cart-summary .summary-row.total').find('span:last').text('$' + newTotal);
-            $('.modal-title').html(`<i class="fas fa-shopping-cart"></i> Shopping Cart (${remainingCart.length} items)`);
-        }
-    });
-});
-
-window.proceedToCheckout = function() {
-    const modalInstance = bootstrap.Modal.getInstance(document.getElementById('cartModal'));
-    if (modalInstance) {
-        modalInstance.hide();
-    }
-    checkout();
-};
-
-window.checkout = function() {
-    const cart = JSON.parse(localStorage.getItem('cart'));
-    const total = cart.reduce((sum, item) => sum + item.price, 0);
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    
-    const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-    const newOrder = {
-        id: Date.now(),
-        items: cart,
-        total: total,
-        date: new Date().toISOString(),
-        status: 'Completed',
-        customer: user.name,
-        customerEmail: user.email
-    };
-    orders.push(newOrder);
-    localStorage.setItem('orders', JSON.stringify(orders));
-    
-    localStorage.setItem('cart', JSON.stringify([]));
-    updateCartCount();
-    
-    alert(`✅ Order placed successfully!\n\nOrder ID: #${newOrder.id}\nTotal: $${total}\n\nThank you for your purchase, ${user.name}!`);
-    updateDashboardStats();
-};
-
-// ============================================
-// SEARCH & FILTER
-// ============================================
-
-$('#searchBtn').on('click', function(e) {
-    e.preventDefault();
-    performSearch();
-});
-
-$('#searchInput').on('keypress', function(e) {
-    if (e.which === 13) {
-        e.preventDefault();
-        performSearch();
-    }
-});
-
-function performSearch() {
-    const searchTerm = $('#searchInput').val().toLowerCase().trim();
-    if (!searchTerm) {
-        alert('Please enter a search term');
+function loadMyProducts(content) {
+    if (currentUser.accountType !== 'seller') {
+        content.innerHTML = `
+            <div class="dashboard-card">
+                <h4>Seller Account Required</h4>
+                <button class="btn btn-primary-custom" onclick="upgradeToSeller()">Become Seller</button>
+            </div>
+        `;
         return;
     }
-    
-    const searchTerms = JSON.parse(localStorage.getItem('searchTerms') || '{}');
-    searchTerms[searchTerm] = (searchTerms[searchTerm] || 0) + 1;
-    localStorage.setItem('searchTerms', JSON.stringify(searchTerms));
-    
-    const products = JSON.parse(localStorage.getItem('products'));
-    const filteredProducts = products.filter(p => 
-        p.name.toLowerCase().includes(searchTerm) || 
-        p.description.toLowerCase().includes(searchTerm) ||
-        p.category.toLowerCase().includes(searchTerm)
-    );
-    
-    showPage('browse');
-    
-    setTimeout(() => {
-        const container = $('#browseProductsContainer');
-        container.empty();
-        
-        if (filteredProducts.length === 0) {
-            container.html(`
-                <div class="col-12 text-center">
-                    <i class="fas fa-search fa-4x text-muted mb-3"></i>
-                    <h4>No products found for "${searchTerm}"</h4>
-                    <p>Try different keywords or browse all products</p>
-                </div>
-            `);
-        } else {
-            filteredProducts.forEach(product => {
-                const productCard = createProductCard(product);
-                container.append(`<div class="col-md-6 col-lg-4">${productCard}</div>`);
-            });
-        }
-    }, 100);
+    content.innerHTML = `<h2><i class="fas fa-box"></i> My Products</h2><div class="dashboard-card"><p>Add products feature coming soon!</p></div>`;
 }
 
-$('#categoryFilter').on('change', function() {
-    filterProducts();
-});
-
-$('#priceFilter').on('change', function() {
-    filterProducts();
-});
-
-function filterProducts() {
-    const category = $('#categoryFilter').val();
-    const priceRange = $('#priceFilter').val();
-    
-    let products = JSON.parse(localStorage.getItem('products'));
-    
-    if (category !== 'all') {
-        products = products.filter(p => p.category === category);
-    }
-    
-    if (priceRange !== 'all') {
-        const [min, max] = priceRange.split('-').map(Number);
-        products = products.filter(p => p.price >= min && p.price <= max);
-    }
-    
-    const container = $('#browseProductsContainer');
-    container.empty();
-    
-    if (products.length === 0) {
-        container.html('<div class="col-12 text-center"><p>No products match your filters</p></div>');
-    } else {
-        products.forEach(product => {
-            const productCard = createProductCard(product);
-            container.append(`<div class="col-md-6 col-lg-4">${productCard}</div>`);
-        });
-    }
-}
-
-$(document).on('click', '.category-card', function() {
-    const category = $(this).data('category');
-    showPage('browse');
-    
-    setTimeout(() => {
-        $('#categoryFilter').val(category).trigger('change');
-    }, 100);
-});
-
-// Notification Icon Click
-$('#notificationIcon').on('click', function(e) {
-    e.stopPropagation();
-    $('#notificationDropdown').toggleClass('hidden');
-    
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    const userNotifications = JSON.parse(localStorage.getItem('userNotifications') || '{}');
-    const notifications = userNotifications[user.id] || [];
-    
-    const container = $('#notificationsList');
-    container.empty();
-    
-    if (notifications.length === 0) {
-        container.html('<div class="notification-item">No notifications</div>');
-    } else {
-        notifications.reverse().forEach(notif => {
-            container.append(`
-                <div class="notification-item">
-                    <i class="fas fa-info-circle text-primary"></i> <strong>${notif.title}</strong>
-                    <div style="font-size: 0.9rem; margin-top: 0.5rem;">${notif.message}</div>
-                    <div style="font-size: 0.85rem; color: #64748b; margin-top: 0.25rem;">${new Date(notif.date).toLocaleString()}</div>
-                </div>
-            `);
-        });
-        
-        // Mark as read
-        notifications.forEach(n => n.read = true);
-        userNotifications[user.id] = notifications;
-        localStorage.setItem('userNotifications', JSON.stringify(userNotifications));
-        updateUserNotificationBadge();
-    }
-});
-
-$(document).on('click', function(e) {
-    if (!$(e.target).closest('#notificationIcon, #notificationDropdown').length) {
-        $('#notificationDropdown').addClass('hidden');
-    }
-});
-
-// ============================================
-// DASHBOARD SECTIONS
-// ============================================
-
-$(document).on('click', '.dashboard-menu-item', function() {
-    $('.dashboard-menu-item').removeClass('active');
-    $(this).addClass('active');
-    
-    const section = $(this).data('section');
-    loadDashboardSection(section);
-});
-
-function loadDashboardSection(section) {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    const content = $('#dashboardContent');
-    
-    switch(section) {
-        case 'overview':
-            loadOverviewSection(content, user);
-            break;
-        case 'products':
-            loadProductsSection(content, user);
-            break;
-        case 'purchases':
-            loadPurchasesSection(content, user);
-            break;
-        case 'payments':
-            if (user.isAdmin) {
-                loadPaymentsSection(content);
-            } else {
-                content.html('<div class="alert alert-warning">Access denied. Admin only.</div>');
-            }
-            break;
-        case 'orders':
-            loadOrdersSection(content, user);
-            break;
-        case 'sales':
-            loadSalesSection(content, user);
-            break;
-        case 'messages':
-            if (user.isAdmin) {
-                loadMessagesSection(content, user);
-            } else {
-                content.html('<div class="alert alert-warning">Access denied. Admin only.</div>');
-            }
-            break;
-        case 'settings':
-            loadSettingsSection(content, user);
-            break;
-    }
-}
-
-// Overview Section
-function loadOverviewSection(content, user) {
-    const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-    const products = JSON.parse(localStorage.getItem('products'));
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const searchTerms = JSON.parse(localStorage.getItem('searchTerms') || '{}');
-    
-    const totalSales = orders.reduce((sum, order) => sum + order.total, 0);
-    const totalOrders = orders.length;
-    const totalProducts = products.length;
-    const totalCustomers = users.length;
-    
-    const topSearches = Object.entries(searchTerms)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 5);
-    
-    content.html(`
-        <h2 class="mb-4">${user.isAdmin ? '🔒 Admin' : ''} Dashboard Overview</h2>
-        ${user.isAdmin ? '<div class="alert alert-warning"><strong>ADMIN MODE:</strong> You have full control over the entire platform</div>' : ''}
-        
-        <div class="row">
-            <div class="col-md-3 mb-4">
-                <div class="stat-card">
-                    <div class="stat-value">$${totalSales}</div>
-                    <div>Total Sales</div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="stat-card">
-                    <div class="stat-value">${totalProducts}</div>
-                    <div>Products</div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="stat-card">
-                    <div class="stat-value">${totalOrders}</div>
-                    <div>Orders</div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="stat-card">
-                    <div class="stat-value">${totalCustomers}</div>
-                    <div>Users</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-8">
-                <div class="dashboard-card">
-                    <h4>Quick Actions</h4>
-                    <button class="btn btn-primary-custom me-2 mb-2" onclick="$('.dashboard-menu-item[data-section=products]').click()">
-                        <i class="fas fa-plus"></i> Add Product
-                    </button>
-                    <button class="btn btn-primary-custom me-2 mb-2" onclick="$('.dashboard-menu-item[data-section=orders]').click()">
-                        <i class="fas fa-list"></i> View Orders
-                    </button>
-                    <button class="btn btn-primary-custom mb-2" onclick="$('.dashboard-menu-item[data-section=sales]').click()">
-                        <i class="fas fa-chart-bar"></i> Sales Report
-                    </button>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="dashboard-card">
-                    <h4>Top Searches</h4>
-                    ${topSearches.length > 0 ? `
-                        <ul class="list-unstyled">
-                            ${topSearches.map(([term, count]) => `
-                                <li class="mb-2"><i class="fas fa-search text-primary"></i> ${term} <span class="badge badge-primary">${count}</span></li>
-                            `).join('')}
-                        </ul>
-                    ` : '<p class="text-muted">No search data yet</p>'}
-                </div>
-            </div>
-        </div>
-        
-        <div class="dashboard-card mt-4">
-            <h4>Recent Activity</h4>
-            <div class="table-responsive">
+function loadMyPurchases(content) {
+    const purchases = (currentUser.payments || []).filter(p => p.status === 'confirmed');
+    content.innerHTML = `
+        <h2><i class="fas fa-shopping-bag"></i> My Purchases</h2>
+        ${purchases.length === 0 ? '<div class="dashboard-card"><p>No confirmed purchases yet.</p></div>' :
+            `<div class="table-responsive mt-4">
                 <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Activity</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody id="activityTable">
-                        ${orders.length > 0 ? orders.slice(-5).reverse().map(order => `
+                    <thead><tr><th>Date</th><th>Product</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody>
+                        ${purchases.map(p => `
                             <tr>
-                                <td>${new Date(order.date).toLocaleDateString()}</td>
-                                <td><i class="fas fa-shopping-bag text-success"></i> New Order</td>
-                                <td>Order #${order.id} - $${order.total}</td>
+                                <td>${new Date(p.timestamp).toLocaleDateString()}</td>
+                                <td>${p.product}</td>
+                                <td>$${p.amount}</td>
+                                <td><span class="status-confirmed">Confirmed</span></td>
+                                <td><button class="btn btn-download btn-sm" onclick="downloadProduct('${p.product}')">
+                                    <i class="fas fa-download"></i> Download
+                                </button></td>
                             </tr>
-                        `).join('') : '<tr><td colspan="3" class="text-center">No activity yet</td></tr>'}
+                        `).join('')}
                     </tbody>
                 </table>
-            </div>
-        </div>
-    `);
+            </div>`
+        }
+    `;
 }
 
-// Load Products Section - I'll abbreviate these since they're in your original code
-function loadProductsSection(content, user) {
-    const products = JSON.parse(localStorage.getItem('products'));
-    // Your existing products section code goes here - keeping it short for space
-    content.html(`
-        <h2 class="mb-4">Manage Products</h2>
+window.downloadProduct = function(productName) {
+    const product = products.find(p => p.name === productName);
+    if (product && product.downloadLink) {
+        window.open(product.downloadLink, '_blank');
+        addNotification(`Downloading: ${productName}`, 'success');
+    } else {
+        alert('Download link not available.');
+    }
+};
+
+function loadOrders(content) {
+    const orders = currentUser.payments || [];
+    content.innerHTML = `
+        <h2><i class="fas fa-shopping-cart"></i> My Orders</h2>
+        ${orders.length === 0 ? '<div class="dashboard-card"><p>No orders yet.</p></div>' :
+            `<div class="table-responsive mt-4">
+                <table class="table">
+                    <thead><tr><th>Order ID</th><th>Date</th><th>Product</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody>
+                        ${orders.map(order => `
+                            <tr>
+                                <td>#${order.id}</td>
+                                <td>${new Date(order.timestamp).toLocaleDateString()}</td>
+                                <td>${order.product}</td>
+                                <td>$${order.amount}</td>
+                                <td><span class="status-${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span></td>
+                                <td>
+                                    ${order.status === 'confirmed' ? `<button class="btn btn-sm btn-download" onclick="downloadProduct('${order.product}')"><i class="fas fa-download"></i> Download</button>` :
+                                      order.status === 'pending' ? '<span class="text-muted">Awaiting confirmation</span>' :
+                                      '<span class="text-danger">Rejected</span>'}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>`
+        }
+    `;
+}
+
+function loadSales(content) {
+    if (currentUser.accountType !== 'seller') {
+        content.innerHTML = `<div class="dashboard-card"><h4>Seller Account Required</h4></div>`;
+        return;
+    }
+    content.innerHTML = `<h2><i class="fas fa-dollar-sign"></i> Sales</h2><div class="dashboard-card"><p>No sales data yet.</p></div>`;
+}
+
+function loadMessages(content) {
+    content.innerHTML = `
+        <h2><i class="fas fa-envelope"></i> Messages</h2>
         <div class="dashboard-card">
-            <h4>Add New Product</h4>
-            <form id="addProductForm">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Product Name</label>
-                        <input type="text" class="form-control" id="productName" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Category</label>
-                        <select class="form-control" id="productCategory" required>
-                            <option value="websites">Websites</option>
-                            <option value="apps">Apps</option>
-                            <option value="apis">APIs</option>
-                            <option value="ai-tools">AI Tools</option>
-                            <option value="courses">Courses</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Price ($)</label>
-                        <input type="number" class="form-control" id="productPrice" min="1" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Has Live Demo?</label>
-                        <select class="form-control" id="productHasDemo">
-                            <option value="true">Yes</option>
-                            <option value="false">No</option>
-                        </select>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label">Image URL</label>
-                        <input type="url" class="form-control" id="productImage" placeholder="https://example.com/image.jpg">
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label">Video URL (YouTube embed)</label>
-                        <input type="url" class="form-control" id="productVideo" placeholder="https://www.youtube.com/embed/...">
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label">Description</label>
-                        <textarea class="form-control" id="productDescription" rows="3" required></textarea>
-                    </div>
+            <p>Messages feature coming soon!</p>
+            <button class="btn btn-primary-custom" onclick="openLiveChat()">
+                <i class="fas fa-comments"></i> Start Chat
+            </button>
+        </div>
+    `;
+}
+
+function loadSettings(content) {
+    content.innerHTML = `
+        <h2><i class="fas fa-cog"></i> Settings</h2>
+        <div class="dashboard-card">
+            <h4>Account Information</h4>
+            <form id="settingsForm">
+                <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-control" id="settingsName" value="${currentUser.name}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" value="${currentUser.email}" disabled>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Account Type</label>
+                    <input type="text" class="form-control" value="${currentUser.accountType}" disabled>
                 </div>
                 <button type="submit" class="btn btn-primary-custom">
-                    <i class="fas fa-plus"></i> Add Product
+                    <i class="fas fa-save"></i> Save Changes
                 </button>
             </form>
         </div>
-    `);
-    
-    attachProductFormHandler();
-}
-
-function attachProductFormHandler() {
-    $('#addProductForm').off('submit').on('submit', function(e) {
-        e.preventDefault();
         
-        const name = $('#productName').val().trim();
-        const category = $('#productCategory').val();
-        const price = parseInt($('#productPrice').val());
-        const description = $('#productDescription').val().trim();
-        const hasDemo = $('#productHasDemo').val() === 'true';
-        const image = $('#productImage').val().trim() || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80';
-        const videoUrl = $('#productVideo').val().trim() || null;
-        
-        const products = JSON.parse(localStorage.getItem('products'));
-        
-        const icons = {
-            'websites': 'fa-globe',
-            'apps': 'fa-mobile-alt',
-            'apis': 'fa-code',
-            'ai-tools': 'fa-robot',
-            'courses': 'fa-graduation-cap'
-        };
-        
-        const newProduct = {
-            id: Date.now(),
-            name,
-            category,
-            price,
-            description,
-            icon: icons[category],
-            hasDemo: hasDemo,
-            image: image,
-            videoUrl: videoUrl,
-            rating: 4.5,
-            reviews: 0
-        };
-        
-        products.push(newProduct);
-        localStorage.setItem('products', JSON.stringify(products));
-        
-        alert('Product added successfully! 🎉');
-        loadDashboardSection('products');
-    });
-}
-
-// My Purchases Section
-function loadPurchasesSection(content, user) {
-    const purchases = JSON.parse(localStorage.getItem('purchases') || '[]');
-    const userPurchases = purchases.filter(p => p.userId === user.id);
-    
-    content.html(`
-        <h2 class="mb-4">📦 My Purchases</h2>
-        
-        ${userPurchases.length === 0 ? `
-            <div class="text-center py-5">
-                <i class="fas fa-shopping-bag fa-4x text-muted mb-3"></i>
-                <h4>No purchases yet</h4>
-                <p class="text-muted">Browse our marketplace to find amazing products!</p>
-                <button class="btn btn-primary-custom" onclick="showPage('browse')">Browse Products</button>
-            </div>
-        ` : `
-            <div class="row">
-                ${userPurchases.reverse().map(purchase => `
-                    <div class="col-md-6 mb-4">
-                        <div class="dashboard-card">
-                            <div class="d-flex align-items-center gap-3 mb-3">
-                                <img src="${purchase.product.image}" alt="${purchase.product.name}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
-                                <div>
-                                    <h5>${purchase.product.name}</h5>
-                                    <p class="text-muted mb-0">${new Date(purchase.date).toLocaleDateString()}</p>
-                                </div>
-                            </div>
-                            <button class="btn btn-download w-100" onclick="downloadProduct(${purchase.product.id})">
-                                <i class="fas fa-download"></i> Download Product
-                            </button>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        `}
-    `);
-}
-
-window.downloadProduct = function(productId) {
-    const products = JSON.parse(localStorage.getItem('products'));
-    const product = products.find(p => p.id === productId);
-    
-    if (!product) return;
-    
-    showNotification('📥 Downloading ' + product.name + '...', 'success');
-    
-    setTimeout(() => {
-        alert(`✅ ${product.name} has been downloaded successfully!\n\nThe product files will be sent to your email within 5 minutes.\n\nFor immediate access, contact us on WhatsApp: +234 913 376 7432`);
-    }, 2000);
-};
-
-// Admin Payments Section
-function loadPaymentsSection(content) {
-    const payments = JSON.parse(localStorage.getItem('payments') || '[]');
-    const pendingPayments = payments.filter(p => p.status === 'pending');
-    const confirmedPayments = payments.filter(p => p.status === 'confirmed');
-    const rejectedPayments = payments.filter(p => p.status === 'rejected');
-    
-    content.html(`
-        <h2 class="mb-4">💳 Payment Management</h2>
-        
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="stat-card" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);">
-                    <div class="stat-value">${pendingPayments.length}</div>
-                    <div>Pending Payments</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stat-card">
-                    <div class="stat-value">${confirmedPayments.length}</div>
-                    <div>Confirmed</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stat-card" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
-                    <div class="stat-value">${rejectedPayments.length}</div>
-                    <div>Rejected</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="dashboard-card">
-            <h4>Pending Payments (${pendingPayments.length})</h4>
-            ${pendingPayments.length === 0 ? '<p class="text-muted">No pending payments</p>' : `
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Customer</th>
-                                <th>Product</th>
-                                <th>Amount</th>
-                                <th>Bank</th>
-                                <th>Screenshot</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${pendingPayments.reverse().map(payment => `
-                                <tr>
-                                    <td>${new Date(payment.date).toLocaleString()}</td>
-                                    <td>${payment.userName}<br><small>${payment.userEmail}</small></td>
-                                    <td>${payment.productName}</td>
-                                    <td><strong>$${payment.amount}</strong></td>
-                                    <td>${payment.bank}</td>
-                                    <td><button class="btn btn-sm btn-info view-screenshot-btn" data-screenshot="${payment.screenshot}"><i class="fas fa-image"></i> View</button></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-success confirm-payment-btn" data-payment-id="${payment.id}">
-                                            <i class="fas fa-check"></i> Confirm
-                                        </button>
-                                        <button class="btn btn-sm btn-danger reject-payment-btn" data-payment-id="${payment.id}">
-                                            <i class="fas fa-times"></i> Reject
-                                        </button>
-                                    </td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
+        <div class="dashboard-card mt-4">
+            <h4>Account Actions</h4>
+            ${currentUser.accountType === 'buyer' ? `
+                <button class="btn btn-primary-custom" onclick="upgradeToSeller()">
+                    <i class="fas fa-user-tie"></i> Upgrade to Seller
+                </button>
+            ` : '<p class="text-muted">You are a seller.</p>'}
+            
+            ${currentUser.isAdmin ? '' : `
+                <button class="btn btn-warning mt-2" onclick="makeAdmin()">
+                    <i class="fas fa-user-shield"></i> Make Me Admin
+                </button>
             `}
-        </div>
-    `);
-}
-
-$(document).on('click', '.view-screenshot-btn', function() {
-    const screenshot = $(this).data('screenshot');
-    
-    const modalHTML = `
-        <div class="modal fade" id="screenshotModal" tabindex="-1">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Payment Screenshot</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <img src="${screenshot}" class="screenshot-modal-img" alt="Payment Proof">
-                    </div>
-                </div>
-            </div>
         </div>
     `;
     
-    $('#screenshotModal').remove();
-    $('body').append(modalHTML);
-    const modal = new bootstrap.Modal(document.getElementById('screenshotModal'));
-    modal.show();
-    
-    $('#screenshotModal').on('hidden.bs.modal', function () {
-        $(this).remove();
-    });
-});
-
-$(document).on('click', '.confirm-payment-btn', function() {
-    if (!confirm('Confirm this payment? The customer will be notified and will receive their product.')) return;
-    
-    const paymentId = $(this).data('payment-id');
-    const payments = JSON.parse(localStorage.getItem('payments'));
-    const payment = payments.find(p => p.id === paymentId);
-    
-    if (!payment) return;
-    
-    payment.status = 'confirmed';
-    localStorage.setItem('payments', JSON.stringify(payments));
-    
-    const purchases = JSON.parse(localStorage.getItem('purchases') || '[]');
-    purchases.push({
-        id: Date.now(),
-        userId: payment.userId,
-        product: payment.product,
-        paymentId: paymentId,
-        date: new Date().toISOString()
-    });
-    localStorage.setItem('purchases', JSON.stringify(purchases));
-    
-    sendNotificationToUser(payment.userId, 'Payment Confirmed ✅', `Your payment of $${payment.amount} for ${payment.productName} has been confirmed! Your product is ready for download. Check "My Purchases" section.`);
-    
-    showNotification('✅ Payment confirmed! Customer has been notified.', 'success');
-    loadDashboardSection('payments');
-    updateAdminPaymentNotifications();
-});
-
-$(document).on('click', '.reject-payment-btn', function() {
-    const reason = prompt('Enter reason for rejection:');
-    if (!reason) return;
-    
-    const paymentId = $(this).data('payment-id');
-    const payments = JSON.parse(localStorage.getItem('payments'));
-    const payment = payments.find(p => p.id === paymentId);
-    
-    if (!payment) return;
-    
-    payment.status = 'rejected';
-    payment.rejectionReason = reason;
-    localStorage.setItem('payments', JSON.stringify(payments));
-    
-    sendNotificationToUser(payment.userId, 'Payment Rejected ❌', `Your payment for ${payment.productName} was rejected. Reason: ${reason}. Please contact support on WhatsApp: +234 913 376 7432`);
-    
-    showNotification('Payment rejected. Customer has been notified.', 'error');
-    loadDashboardSection('payments');
-    updateAdminPaymentNotifications();
-});
-
-// Orders, Sales, Messages, Settings sections are in your original code
-// Keep them as they are - just make sure they're included
-function loadOrdersSection(content, user) {
-    // Your existing orders code
+    setTimeout(() => {
+        document.getElementById('settingsForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            currentUser.name = document.getElementById('settingsName').value;
+            saveCurrentUser();
+            alert('Settings saved!');
+        });
+    }, 100);
 }
 
-function loadSalesSection(content, user) {
-    // Your existing sales code
-}
-
-function loadMessagesSection(content, user) {
-    // Your existing messages code
-}
-
-function loadSettingsSection(content, user) {
-    // Your existing settings code
-}
-
-function updateDashboardStats() {
-    const currentSection = $('.dashboard-menu-item.active').data('section');
-    if (currentSection) {
-        loadDashboardSection(currentSection);
+window.upgradeToSeller = function() {
+    if (confirm('Upgrade to Seller?')) {
+        currentUser.accountType = 'seller';
+        saveCurrentUser();
+        alert('You are now a Seller!');
+        updateUIForUser();
+        loadDashboardSection('products');
     }
-}
+};
 
-// Live Chat (existing code)
-$('#liveChatBtn').on('click', function() {
-    openChatModal();
-});
+window.makeAdmin = function() {
+    if (confirm('Make yourself an Admin?')) {
+        currentUser.isAdmin = true;
+        saveCurrentUser();
+        alert('You are now an Admin! Refresh to see admin features.');
+        location.reload();
+    }
+};
 
-function openChatModal() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    
-    if (!user) {
-        alert('Please login to use live chat!');
+// ADMIN PANEL
+window.viewAllPayments = function() {
+    if (!currentUser.isAdmin) {
+        alert('Admin access required!');
         return;
     }
     
-    const chatHTML = `
+    const content = document.getElementById('dashboardContent');
+    content.innerHTML = `
+        <h2><i class="fas fa-credit-card"></i> All Payments (Admin)</h2>
+        <div class="alert alert-info">
+            <i class="fas fa-shield-alt"></i> Admin View - All User Payments
+        </div>
+        ${allPayments.length === 0 ? '<div class="dashboard-card"><p>No payments yet.</p></div>' :
+            `<div class="table-responsive mt-4">
+                <table class="table">
+                    <thead><tr><th>Date</th><th>User</th><th>Product</th><th>Amount</th><th>Bank</th><th>Status</th><th>Screenshot</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        ${allPayments.map(payment => `
+                            <tr>
+                                <td>${new Date(payment.timestamp).toLocaleDateString()}</td>
+                                <td>${payment.userName}<br><small>${payment.userId}</small></td>
+                                <td>${payment.product}</td>
+                                <td>$${payment.amount}</td>
+                                <td>${payment.bank}</td>
+                                <td><span class="status-${payment.status}">${payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}</span></td>
+                                <td><button class="btn btn-sm btn-info" onclick="viewScreenshot('${payment.screenshot}')"><i class="fas fa-image"></i> View</button></td>
+                                <td>
+                                    ${payment.status === 'pending' ? `
+                                        <button class="btn btn-sm btn-success" onclick="confirmPayment('${payment.id}')"><i class="fas fa-check"></i></button>
+                                        <button class="btn btn-sm btn-danger" onclick="rejectPayment('${payment.id}')"><i class="fas fa-times"></i></button>
+                                    ` : '<span class="text-muted">Processed</span>'}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>`
+        }
+    `;
+};
+
+window.viewScreenshot = function(screenshot) {
+    const modal = `
+        <div class="modal fade show" id="screenshotModal" style="display: block;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Payment Screenshot</h5>
+                        <button class="btn-close" onclick="closeScreenshotModal()"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img src="${screenshot}" class="screenshot-modal-img" alt="Payment Screenshot">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade show"></div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modal);
+};
+
+window.closeScreenshotModal = function() {
+    document.getElementById('screenshotModal')?.remove();
+    document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+};
+
+window.confirmPayment = function(paymentId) {
+    if (!confirm('Confirm this payment?')) return;
+    
+    const payment = allPayments.find(p => p.id === paymentId);
+    if (payment) {
+        payment.status = 'confirmed';
+        localStorage.setItem('allPayments', JSON.stringify(allPayments));
+        
+        const user = allUsers.find(u => u.email === payment.userId);
+        if (user) {
+            const userPayment = user.payments.find(p => p.id === paymentId);
+            if (userPayment) {
+                userPayment.status = 'confirmed';
+                localStorage.setItem('allUsers', JSON.stringify(allUsers));
+            }
+        }
+        
+        alert('Payment confirmed!');
+        viewAllPayments();
+    }
+};
+
+window.rejectPayment = function(paymentId) {
+    const reason = prompt('Rejection reason:');
+    if (!reason) return;
+    
+    const payment = allPayments.find(p => p.id === paymentId);
+    if (payment) {
+        payment.status = 'rejected';
+        localStorage.setItem('allPayments', JSON.stringify(allPayments));
+        
+        const user = allUsers.find(u => u.email === payment.userId);
+        if (user) {
+            const userPayment = user.payments.find(p => p.id === paymentId);
+            if (userPayment) {
+                userPayment.status = 'rejected';
+                localStorage.setItem('allUsers', JSON.stringify(allUsers));
+            }
+        }
+        
+        alert('Payment rejected!');
+        viewAllPayments();
+    }
+};
+
+// LIVE CHAT
+let chatOpen = false;
+
+document.getElementById('liveChatBtn')?.addEventListener('click', () => {
+    if (chatOpen) {
+        closeLiveChat();
+    } else {
+        openLiveChat();
+    }
+});
+
+function openLiveChat() {
+    chatOpen = true;
+    
+    const chatModal = `
         <div class="chat-modal" id="chatModal">
             <div class="chat-header">
-                <h5><i class="fas fa-comments"></i> Live Chat Support</h5>
-                <button class="chat-close-btn" id="closeChatBtn">
+                <h5><i class="fas fa-comments"></i> Live Chat</h5>
+                <button class="chat-close-btn" onclick="closeLiveChat()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-messages" id="chatMessagesContainer">
+                <div class="chat-empty-state">
+                    <i class="fas fa-comments"></i>
+                    <p>Chat with support!</p>
+                </div>
+            </div>
             <div class="chat-input-area">
-                <input type="text" class="chat-input" id="chatInput" placeholder="Type your message...">
-                <button class="chat-send-btn" id="chatSendBtn">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Type message...">
+                <button class="chat-send-btn" onclick="sendChatMessage()">
                     <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
         </div>
     `;
     
-    $('#chatModal').remove();
-    $('body').append(chatHTML);
-    loadChatMessages();
+    document.body.insertAdjacentHTML('beforeend', chatModal);
     
-    $('#closeChatBtn').on('click', function() {
-        $('#chatModal').remove();
+    document.getElementById('chatInput')?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendChatMessage();
     });
-    
-    $('#chatSendBtn').on('click', function() {
-        sendChatMessage();
-    });
-    
-    $('#chatInput').on('keypress', function(e) {
-        if (e.which === 13) {
-            sendChatMessage();
-        }
-    });
-    
-    $('#chatInput').focus();
 }
 
-function loadChatMessages() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    const messages = JSON.parse(localStorage.getItem('chatMessages') || '[]');
-    const container = $('#chatMessages');
-    
-    const userMessages = messages.filter(msg => 
-        msg.userId === user.id || msg.sender === 'admin'
-    );
-    
-    container.empty();
-    
-    if (userMessages.length === 0) {
-        container.html(`
-            <div class="chat-empty-state">
-                <i class="fas fa-comments"></i>
-                <p>Start a conversation with our support team!</p>
-            </div>
-        `);
-    } else {
-        userMessages.forEach(msg => {
-            const messageClass = msg.sender === 'user' ? 'user' : 'admin';
-            const senderName = msg.sender === 'user' ? 'You' : 'Support Team';
-            
-            container.append(`
-                <div class="chat-message ${messageClass}">
-                    <div class="message-sender">${senderName}</div>
-                    <div class="message-bubble">${escapeHtml(msg.message)}</div>
-                    <div class="message-time">${formatChatTime(msg.timestamp)}</div>
-                </div>
-            `);
-        });
-        
-        container.scrollTop(container[0].scrollHeight);
-    }
-}
+window.closeLiveChat = function() {
+    chatOpen = false;
+    document.getElementById('chatModal')?.remove();
+};
 
-function sendChatMessage() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    const input = $('#chatInput');
-    const message = input.val().trim();
+window.sendChatMessage = function() {
+    const input = document.getElementById('chatInput');
+    if (!input) return;
     
+    const message = input.value.trim();
     if (!message) return;
     
-    const messages = JSON.parse(localStorage.getItem('chatMessages') || '[]');
+    const container = document.getElementById('chatMessagesContainer');
     
-    const newMessage = {
-        id: Date.now(),
-        userId: user.id,
-        userName: user.name,
-        userEmail: user.email,
-        sender: 'user',
-        message: message,
-        timestamp: new Date().toISOString(),
-        read: false
-    };
+    const userMsg = `
+        <div class="chat-message user">
+            <div class="message-sender">You</div>
+            <div class="message-bubble" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white;">${message}</div>
+            <div class="message-time">${new Date().toLocaleTimeString()}</div>
+        </div>
+    `;
     
-    messages.push(newMessage);
-    localStorage.setItem('chatMessages', JSON.stringify(messages));
+    container.innerHTML = userMsg;
+    input.value = '';
     
-    input.val('');
-    loadChatMessages();
-    
-    showNotification('Message sent! Our team will respond soon.', 'success');
-}
+    setTimeout(() => {
+        const adminMsg = `
+            <div class="chat-message admin">
+                <div class="message-sender">Support</div>
+                <div class="message-bubble" style="background: white; color: #1e293b;">Thank you! Our team will respond shortly.</div>
+                <div class="message-time">${new Date().toLocaleTimeString()}</div>
+            </div>
+        `;
+        container.innerHTML += adminMsg;
+        container.scrollTop = container.scrollHeight;
+    }, 1000);
+};
 
-function formatChatTime(timestamp) {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diff = now - date;
-    
-    if (diff < 60000) {
-        return 'Just now';
-    }
-    
-    if (diff < 3600000) {
-        const minutes = Math.floor(diff / 60000);
-        return `${minutes} min ago`;
-    }
-    
-    if (diff < 86400000) {
-        const hours = Math.floor(diff / 3600000);
-        return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-    }
-    
-    return date.toLocaleString();
-}
-
-function escapeHtml(text) {
-    const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
-    };
-    return text.replace(/[&<>"']/g, m => map[m]);
-}
-
-// Initialize everything when document is ready
-$(document).ready(function() {
+// INITIALIZE
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('✅ DigiMarket Pro Loaded!');
+    console.log('📧 Create account to get started');
     checkAuth();
     
-    if (localStorage.getItem('currentUser')) {
-        updateUserNotificationBadge();
-        updateAdminPaymentNotifications();
-        
-        setInterval(() => {
-            updateUserNotificationBadge();
-            updateAdminPaymentNotifications();
-        }, 10000);
+    if (currentUser && currentUser.isAdmin) {
+        const sidebar = document.querySelector('.dashboard-sidebar');
+        if (sidebar) {
+            const adminMenu = document.createElement('div');
+            adminMenu.className = 'dashboard-menu-item';
+            adminMenu.innerHTML = '<i class="fas fa-shield-alt me-2"></i> Admin: Payments';
+            adminMenu.onclick = viewAllPayments;
+            sidebar.appendChild(adminMenu);
+        }
     }
 });
+
+console.log('✅ System Ready!');
+console.log('🔑 Login or Register to start!');
+
+// ============================================
+// END OF PART 2 - ALL DONE!
+// ============================================

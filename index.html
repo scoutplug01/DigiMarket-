@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+      <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,23 +18,13 @@
 </head>
 <body>
     <!-- Login Page -->
-    <div id="loginPage" class="auth-container hidden">
+    <div id="loginPage" class="auth-container">
         <div class="auth-card" data-aos="zoom-in">
             <div class="text-center mb-4">
                 <i class="fas fa-store fa-3x text-primary mb-3"></i>
                 <h2>Welcome Back</h2>
                 <p class="text-muted">Login to your account</p>
             </div>
-            
-            <!-- Google Sign-In Button -->
-            <button class="btn btn-google w-100 mb-3" id="googleSignInBtn">
-                <i class="fab fa-google"></i> Continue with Google
-            </button>
-            
-            <div class="or-divider">
-                <span>OR</span>
-            </div>
-            
             <form id="loginForm">
                 <div class="mb-3">
                     <label class="form-label">Email Address</label>
@@ -60,16 +50,6 @@
                 <h2>Create Account</h2>
                 <p class="text-muted">Join our marketplace today</p>
             </div>
-            
-            <!-- Google Sign-In Button -->
-            <button class="btn btn-google w-100 mb-3" id="googleSignUpBtn">
-                <i class="fab fa-google"></i> Continue with Google
-            </button>
-            
-            <div class="or-divider">
-                <span>OR</span>
-            </div>
-            
             <form id="registerForm">
                 <div class="mb-3">
                     <label class="form-label">Full Name</label>
@@ -133,9 +113,7 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" id="dashboardLink" style="position: relative;">
-                                <i class="fas fa-chart-line"></i> Dashboard
-                            </a>
+                            <a class="nav-link" href="#" id="dashboardLink"><i class="fas fa-chart-line"></i> Dashboard</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -351,9 +329,6 @@
                             <div class="dashboard-menu-item" data-section="purchases">
                                 <i class="fas fa-shopping-bag me-2"></i> My Purchases
                             </div>
-                            <div class="dashboard-menu-item" data-section="payments" style="position: relative;">
-                                <i class="fas fa-credit-card me-2"></i> Payments
-                            </div>
                             <div class="dashboard-menu-item" data-section="orders">
                                 <i class="fas fa-shopping-cart me-2"></i> Orders
                             </div>
@@ -413,18 +388,9 @@
         </footer>
     </div>
 
-    <!-- WhatsApp Support Button -->
-    <a href="https://wa.me/2349133767432?text=Hello%2C%20I%20need%20help%20with%20my%20order" 
-       class="whatsapp-support-btn" 
-       target="_blank"
-       title="Chat with us on WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
     <!-- Live Chat Button -->
     <button class="live-chat-btn" id="liveChatBtn">
         <i class="fas fa-comments"></i>
-        <span class="chat-notification-badge hidden" id="chatNotificationBadge">1</span>
     </button>
 
     <!-- Payment Modal -->
@@ -437,7 +403,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="payment-container">
-                        <!-- Selected Product Info -->
                         <div class="selected-product-info mb-4">
                             <h6>Product Selected:</h6>
                             <div class="product-summary-card">
@@ -450,7 +415,6 @@
                             </div>
                         </div>
 
-                        <!-- Bank Details -->
                         <div class="bank-details-card">
                             <h5><i class="fas fa-university"></i> Payment Details</h5>
                             <div class="alert alert-warning">
@@ -478,13 +442,8 @@
                                     <p><strong>Account Name:</strong> Ometta Abraham Kenechi</p>
                                 </div>
                             </div>
-
-                            <div class="note-section mt-3">
-                                <p class="text-danger"><i class="fas fa-info-circle"></i> <strong>NOTE:</strong> You must pay the EXACT amount shown above to receive your product.</p>
-                            </div>
                         </div>
 
-                        <!-- Payment Proof Form -->
                         <form id="paymentProofForm" class="mt-4">
                             <h5>Submit Payment Proof</h5>
                             
@@ -519,21 +478,10 @@
                                 <div id="screenshotPreview" class="mt-2"></div>
                             </div>
 
-                            <div class="security-notice mb-3">
-                                <i class="fas fa-shield-alt text-success"></i> Your payment will be verified within 5-10 minutes. You'll receive a notification once confirmed.
-                            </div>
-
                             <button type="submit" class="btn btn-success btn-lg w-100">
-                                <i class="fas fa-check-circle"></i> Payment Done - Submit Proof
+                                <i class="fas fa-check-circle"></i> Submit Payment Proof
                             </button>
                         </form>
-
-                        <div class="customer-support mt-4 text-center">
-                            <p class="text-muted">Need help? Contact us:</p>
-                            <a href="https://wa.me/2349133767432" target="_blank" class="btn btn-success">
-                                <i class="fab fa-whatsapp"></i> WhatsApp: +234 913 376 7432
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -548,6 +496,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <!-- Swiper JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"></script>
+    
     <!-- Custom JavaScript -->
     <script src="script.js"></script>
 </body>
