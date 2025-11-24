@@ -1,6 +1,6 @@
 // ============================================
 // PART 1 OF 2 - COPY THIS FIRST
-// NO FIREBASE - SIMPLE localStorage SYSTEM
+// FIXED VERSION - All Issues Resolved
 // ============================================
 
 // Initialize AOS
@@ -82,6 +82,7 @@ document.getElementById('registerForm')?.addEventListener('submit', (e) => {
     const newUser = {
         name, email, password, accountType,
         isAdmin: false, cart: [], notifications: [], payments: [],
+        sellerProducts: [],
         createdAt: Date.now()
     };
     
@@ -493,65 +494,98 @@ window.proceedToCheckout = function() {
 
 // ============================================
 // END OF PART 1
-// CONTINUE WITH PART 2
+// NOW COPY PART 2
 // ============================================
 
 // ============================================
 // PART 2 OF 2 - COPY THIS AFTER PART 1
-// PAYMENT, DASHBOARD, ADMIN & CHAT
+// PAYMENT, DASHBOARD, ADMIN & CHAT - FIXED
 // ============================================
 
-// PAYMENT SUBMISSION
-document.getElementById('paymentProofForm')?.addEventListener('submit', (e) => {
+// PAYMENT HANDLER FUNCTION
+function handlePaymentSubmit(e) {
     e.preventDefault();
+    console.log('Payment form submitted');
     
-    const payerName = document.getElementById('payerName').value;
-    const product = document.getElementById('payerProduct').value;
-    const amount = document.getElementById('payerAmount').value;
+    const payerName = document.getElementById('payerName').value.trim();
+    const product = document.getElementById('payerProduct').value.trim();
+    const amount = document.getElementById('payerAmount').value.trim();
     const bank = document.getElementById('paymentBank').value;
     const screenshot = document.getElementById('paymentScreenshot').files[0];
     
-    if (!screenshot) {
-        alert('Please upload screenshot!');
+    if (!payerName || !product || !amount || !bank) {
+        alert('Please fill all fields!');
         return;
     }
     
+    if (!screenshot) {
+        alert('Please upload payment screenshot!');
+        return;
+    }
+    
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+    submitBtn.disabled = true;
+    
     const reader = new FileReader();
-    reader.onload = function(e) {
-        const payment = {
-            id: 'PAY' + Date.now(),
-            userId: currentUser.email,
-            userName: currentUser.name,
-            payerName, product, amount, bank,
-            screenshot: e.target.result,
-            status: 'pending',
-            timestamp: Date.now()
-        };
-        
-        allPayments.push(payment);
-        localStorage.setItem('allPayments', JSON.stringify(allPayments));
-        
-        if (!currentUser.payments) currentUser.payments = [];
-        currentUser.payments.push(payment);
-        saveCurrentUser();
-        
-        const productInCart = cart.find(p => p.name === product);
-        if (productInCart) {
-            cart = cart.filter(p => p.id !== productInCart.id);
-            updateCartUI();
+    reader.onload = function(event) {
+        try {
+            const payment = {
+                id: 'PAY' + Date.now(),
+                userId: currentUser.email,
+                userName: currentUser.name,
+                payerName, product, amount, bank,
+                screenshot: event.target.result,
+                status: 'pending',
+                timestamp: Date.now()
+            };
+            
+            allPayments.push(payment);
+            localStorage.setItem('allPayments', JSON.stringify(allPayments));
+            
+            if (!currentUser.payments) currentUser.payments = [];
+            currentUser.payments.push(payment);
             saveCurrentUser();
+            
+            const productInCart = cart.find(p => p.name === product);
+            if (productInCart) {
+                cart = cart.filter(p => p.id !== productInCart.id);
+                updateCartUI();
+                saveCurrentUser();
+            }
+            
+            const modalElement = document.getElementById('paymentModal');
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            if (modalInstance) modalInstance.hide();
+            
+            document.getElementById('paymentProofForm').reset();
+            document.getElementById('screenshotPreview').innerHTML = '';
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            
+            alert('✅ Payment submitted successfully! Wait for admin confirmation.');
+            addNotification('Payment submitted! Awaiting confirmation.', 'info');
+            
+            console.log('Payment saved successfully');
+        } catch (error) {
+            console.error('Payment error:', error);
+            alert('Error submitting payment. Please try again.');
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
         }
-        
-        bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
-        alert('Payment submitted! Wait for confirmation.');
-        addNotification('Payment submitted! Awaiting confirmation.', 'info');
-        
-        document.getElementById('paymentProofForm').reset();
-        document.getElementById('screenshotPreview').innerHTML = '';
     };
+    
+    reader.onerror = function() {
+        alert('Error reading screenshot file!');
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    };
+    
     reader.readAsDataURL(screenshot);
-});
+}
 
+// PAYMENT SCREENSHOT PREVIEW
 document.getElementById('paymentScreenshot')?.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -564,7 +598,10 @@ document.getElementById('paymentScreenshot')?.addEventListener('change', (e) => 
     }
 });
 
-// NOTIFICATIONS
+// ============================================
+// NOTIFICATIONS - FIXED
+// ============================================
+
 function addNotification(message, type = 'info') {
     notifications.unshift({ id: Date.now(), message, type, timestamp: Date.now(), read: false });
     updateNotificationUI();
@@ -576,11 +613,42 @@ function updateNotificationUI() {
     if (badge) badge.textContent = notifications.filter(n => !n.read).length;
 }
 
-document.getElementById('notificationIcon')?.addEventListener('click', () => {
-    document.getElementById('notificationDropdown').classList.toggle('hidden');
+document.getElementById('notificationIcon')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const dropdown = document.getElementById('notificationDropdown');
+    if (!dropdown) return;
+    
+    dropdown.classList.toggle('hidden');
+    
+    notifications.forEach(n => n.read = true);
+    updateNotificationUI();
+    saveCurrentUser();
+    
+    const container = dropdown.querySelector('.notification-list') || dropdown;
+    if (notifications.length === 0) {
+        container.innerHTML = '<div class="notification-item"><p class="text-muted">No notifications</p></div>';
+    } else {
+        container.innerHTML = notifications.map(n => `
+            <div class="notification-item notification-${n.type}">
+                <div class="notification-message">${n.message}</div>
+                <div class="notification-time">${new Date(n.timestamp).toLocaleString()}</div>
+            </div>
+        `).join('');
+    }
 });
 
+document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('notificationDropdown');
+    const icon = document.getElementById('notificationIcon');
+    if (dropdown && icon && !dropdown.contains(e.target) && !icon.contains(e.target)) {
+        dropdown.classList.add('hidden');
+    }
+});
+
+// ============================================
 // DASHBOARD
+// ============================================
+
 function loadDashboardSection(section) {
     const content = document.getElementById('dashboardContent');
     if (!content) return;
@@ -639,6 +707,10 @@ function loadOverview(content) {
     `;
 }
 
+// ============================================
+// MY PRODUCTS - FIXED (SELLERS CAN ADD PRODUCTS)
+// ============================================
+
 function loadMyProducts(content) {
     if (currentUser.accountType !== 'seller') {
         content.innerHTML = `
@@ -649,8 +721,153 @@ function loadMyProducts(content) {
         `;
         return;
     }
-    content.innerHTML = `<h2><i class="fas fa-box"></i> My Products</h2><div class="dashboard-card"><p>Add products feature coming soon!</p></div>`;
+    
+    if (!currentUser.sellerProducts) currentUser.sellerProducts = [];
+    
+    content.innerHTML = `
+        <h2><i class="fas fa-box"></i> My Products</h2>
+        <button class="btn btn-primary-custom mb-3" onclick="showAddProductForm()">
+            <i class="fas fa-plus"></i> Add New Product
+        </button>
+        
+        <div id="addProductFormContainer"></div>
+        
+        ${currentUser.sellerProducts.length === 0 ? 
+            '<div class="dashboard-card"><p>No products yet. Add your first product!</p></div>' :
+            `<div class="row">
+                ${currentUser.sellerProducts.map(product => `
+                    <div class="col-md-4 mb-3">
+                        <div class="product-card">
+                            <div class="product-image-container">
+                                <img src="${product.image}" alt="${product.name}" class="product-img">
+                            </div>
+                            <div class="product-body">
+                                <h5 class="product-title">${product.name}</h5>
+                                <span class="product-category">${product.category}</span>
+                                <p class="product-description">${product.description}</p>
+                                <div class="product-price">$${product.price}</div>
+                                <button class="btn btn-danger btn-sm w-100 mt-2" onclick="deleteProduct(${product.id})">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>`
+        }
+    `;
 }
+
+window.showAddProductForm = function() {
+    const container = document.getElementById('addProductFormContainer');
+    container.innerHTML = `
+        <div class="dashboard-card mb-4">
+            <h4>Add New Product</h4>
+            <form id="addProductForm">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Product Name *</label>
+                        <input type="text" class="form-control" id="productName" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Category *</label>
+                        <select class="form-select" id="productCategory" required>
+                            <option value="websites">Websites</option>
+                            <option value="apps">Apps</option>
+                            <option value="apis">APIs</option>
+                            <option value="ai-tools">AI Tools</option>
+                            <option value="courses">Courses</option>
+                            <option value="plugins">Plugins</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Price ($) *</label>
+                        <input type="number" class="form-control" id="productPrice" required min="1">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Image URL *</label>
+                        <input type="url" class="form-control" id="productImage" required 
+                               placeholder="https://example.com/image.jpg">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description *</label>
+                    <textarea class="form-control" id="productDescription" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Download Link *</label>
+                    <input type="url" class="form-control" id="productDownloadLink" required
+                           placeholder="https://example.com/download">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Features (one per line)</label>
+                    <textarea class="form-control" id="productFeatures" rows="3" 
+                              placeholder="Feature 1&#10;Feature 2&#10;Feature 3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary-custom">
+                    <i class="fas fa-plus"></i> Add Product
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="hideAddProductForm()">
+                    Cancel
+                </button>
+            </form>
+        </div>
+    `;
+    
+    setTimeout(() => {
+        document.getElementById('addProductForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const newProduct = {
+                id: Date.now(),
+                name: document.getElementById('productName').value.trim(),
+                category: document.getElementById('productCategory').value,
+                price: parseFloat(document.getElementById('productPrice').value),
+                image: document.getElementById('productImage').value.trim(),
+                description: document.getElementById('productDescription').value.trim(),
+                downloadLink: document.getElementById('productDownloadLink').value.trim(),
+                features: document.getElementById('productFeatures').value.split('\n').filter(f => f.trim()),
+                rating: 0,
+                reviews: 0,
+                sellerId: currentUser.email,
+                sellerName: currentUser.name,
+                createdAt: Date.now()
+            };
+            
+            if (!currentUser.sellerProducts) currentUser.sellerProducts = [];
+            currentUser.sellerProducts.push(newProduct);
+            
+            products.push(newProduct);
+            
+            saveCurrentUser();
+            alert('✅ Product added successfully!');
+            loadMyProducts(document.getElementById('dashboardContent'));
+        });
+    }, 100);
+};
+
+window.hideAddProductForm = function() {
+    document.getElementById('addProductFormContainer').innerHTML = '';
+};
+
+window.deleteProduct = function(productId) {
+    if (!confirm('Delete this product?')) return;
+    
+    currentUser.sellerProducts = currentUser.sellerProducts.filter(p => p.id !== productId);
+    
+    const index = products.findIndex(p => p.id === productId);
+    if (index !== -1) products.splice(index, 1);
+    
+    saveCurrentUser();
+    alert('Product deleted!');
+    loadMyProducts(document.getElementById('dashboardContent'));
+};
+
+// ============================================
+// OTHER DASHBOARD SECTIONS
+// ============================================
 
 function loadMyPurchases(content) {
     const purchases = (currentUser.payments || []).filter(p => p.status === 'confirmed');
@@ -808,7 +1025,10 @@ window.makeAdmin = function() {
     }
 };
 
+// ============================================
 // ADMIN PANEL
+// ============================================
+
 window.viewAllPayments = function() {
     if (!currentUser.isAdmin) {
         alert('Admin access required!');
@@ -920,7 +1140,10 @@ window.rejectPayment = function(paymentId) {
     }
 };
 
+// ============================================
 // LIVE CHAT
+// ============================================
+
 let chatOpen = false;
 
 document.getElementById('liveChatBtn')?.addEventListener('click', () => {
@@ -1002,11 +1225,23 @@ window.sendChatMessage = function() {
     }, 1000);
 };
 
-// INITIALIZE
+// ============================================
+// INITIALIZE - FIXED
+// ============================================
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('✅ DigiMarket Pro Loaded!');
-    console.log('📧 Create account to get started');
+    console.log('🔧 Create account to get started');
     checkAuth();
+    
+    // Re-attach payment form listener after DOM loads
+    setTimeout(() => {
+        const paymentForm = document.getElementById('paymentProofForm');
+        if (paymentForm && !paymentForm.dataset.listenerAttached) {
+            paymentForm.dataset.listenerAttached = 'true';
+            paymentForm.addEventListener('submit', handlePaymentSubmit);
+        }
+    }, 500);
     
     if (currentUser && currentUser.isAdmin) {
         const sidebar = document.querySelector('.dashboard-sidebar');
@@ -1021,7 +1256,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 console.log('✅ System Ready!');
-console.log('🔑 Login or Register to start!');
+console.log('🔒 Login or Register to start!');
 
 // ============================================
 // END OF PART 2 - ALL DONE!

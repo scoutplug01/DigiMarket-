@@ -837,3 +837,244 @@ footer {
         font-size: 1.2rem;
     }
 }
+
+/* ===================================
+   NOTIFICATION DROPDOWN - MOBILE FIX
+   Copy this to your CSS file
+   =================================== */
+
+/* Notification Dropdown Base Styles */
+#notificationDropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 320px;
+    max-width: 380px;
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 10px;
+}
+
+/* Hide by default */
+#notificationDropdown.hidden {
+    display: none;
+}
+
+/* Notification List Container */
+.notification-list {
+    padding: 0;
+    margin: 0;
+}
+
+/* Individual Notification Item */
+.notification-item {
+    padding: 15px;
+    border-bottom: 1px solid #f3f4f6;
+    transition: background 0.2s;
+}
+
+.notification-item:hover {
+    background: #f9fafb;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+/* Notification Message */
+.notification-message {
+    font-size: 14px;
+    color: #1f2937;
+    line-height: 1.5;
+    margin-bottom: 5px;
+}
+
+/* Notification Time */
+.notification-time {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+/* Notification Types */
+.notification-success {
+    border-left: 3px solid #10b981;
+}
+
+.notification-info {
+    border-left: 3px solid #3b82f6;
+}
+
+.notification-warning {
+    border-left: 3px solid #f59e0b;
+}
+
+.notification-error {
+    border-left: 3px solid #ef4444;
+}
+
+/* Empty State */
+.notification-item .text-muted {
+    color: #9ca3af;
+    font-style: italic;
+}
+
+/* ===================================
+   MOBILE RESPONSIVE STYLES
+   =================================== */
+
+/* Tablets and smaller (below 768px) */
+@media (max-width: 768px) {
+    #notificationDropdown {
+        position: fixed;
+        top: auto !important;
+        right: 10px;
+        left: 10px;
+        bottom: 10px;
+        min-width: auto;
+        max-width: none;
+        max-height: 60vh;
+        margin-top: 0;
+        border-radius: 16px;
+        animation: slideUp 0.3s ease-out;
+    }
+    
+    .notification-item {
+        padding: 12px;
+    }
+    
+    .notification-message {
+        font-size: 13px;
+    }
+    
+    .notification-time {
+        font-size: 11px;
+    }
+}
+
+/* Small phones (below 480px) */
+@media (max-width: 480px) {
+    #notificationDropdown {
+        position: fixed;
+        top: auto !important;
+        right: 5px;
+        left: 5px;
+        bottom: 5px;
+        max-height: 70vh;
+        border-radius: 12px;
+    }
+    
+    .notification-item {
+        padding: 10px;
+    }
+    
+    .notification-message {
+        font-size: 12px;
+        line-height: 1.4;
+    }
+    
+    .notification-time {
+        font-size: 10px;
+    }
+}
+
+/* Slide up animation for mobile */
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Scrollbar styling for notification dropdown */
+#notificationDropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+#notificationDropdown::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+#notificationDropdown::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+#notificationDropdown::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Modal backdrop for mobile */
+.notification-backdrop {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .notification-backdrop {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        animation: fadeIn 0.3s ease-out;
+    }
+    
+    .notification-backdrop.hidden {
+        display: none;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Close button for mobile */
+.notification-close-btn {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .notification-close-btn {
+        display: block;
+        position: sticky;
+        top: 0;
+        background: white;
+        padding: 12px 15px;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: right;
+        z-index: 10;
+    }
+    
+    .notification-close-btn button {
+        background: #f3f4f6;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #6b7280;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .notification-close-btn button:hover {
+        background: #e5e7eb;
+        color: #374151;
+    }
+}
