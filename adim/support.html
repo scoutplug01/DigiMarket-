@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Support - Admin</title>
+    <link rel="shortcut icon" href="/my img/logo 2.png" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/adim-style.css">
+    <link rel="stylesheet" href="/adim-style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/project-root/index.html">
+                <i class="fas fa-store"></i> DigiMarket Pro - Admin
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <span class="badge bg-danger" id="unreadCount">0</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 p-0">
+                <div class="dashboard-sidebar">
+                    <h5 class="mb-4"><i class="fas fa-user-shield"></i> Admin Panel</h5>
+                    <a href="dashboard.html" class="dashboard-menu-item">
+                        <i class="fas fa-chart-line me-2"></i> Dashboard
+                    </a>
+                    <a href="product.html" class="dashboard-menu-item">
+                        <i class="fas fa-box me-2"></i> Products
+                    </a>
+                    <a href="orders.html" class="dashboard-menu-item">
+                        <i class="fas fa-shopping-cart me-2"></i> Orders
+                    </a>
+                    <a href="cusmtors.html" class="dashboard-menu-item">
+                        <i class="fas fa-users me-2"></i> Customers
+                    </a>
+                    <a href="support.html" class="dashboard-menu-item active">
+                        <i class="fas fa-headset me-2"></i> Support
+                        <span class="badge bg-danger ms-2" id="sidebarUnreadCount">0</span>
+                    </a>
+                    <a href="create-product.html" class="dashboard-menu-item">
+                        <i class="fas fa-plus me-2"></i> Create Product
+                    </a>
+                    <a href="/user/setting.html" class="dashboard-menu-item">
+                        <i class="fas fa-cog me-2"></i> Settings
+                    </a>
+                </div>
+            </div>
+
+            <!-- Support Content -->
+            <div class="col-md-9 col-lg-10 p-4">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h2><i class="fas fa-headset"></i> Customer Support Center</h2>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body text-center">
+                                <h3 id="totalChats">0</h3>
+                                <p class="mb-0">Total Conversations</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body text-center">
+                                <h3 id="unreadChats">0</h3>
+                                <p class="mb-0">Unread Messages</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body text-center">
+                                <h3 id="activeChats">0</h3>
+                                <p class="mb-0">Active Now</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body text-center">
+                                <h3 id="avgResponseTime">2m</h3>
+                                <p class="mb-0">Avg Response Time</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support Interface -->
+                <div class="row">
+                    <!-- Chat List -->
+                    <div class="col-md-4 mb-3">
+                        <div class="card support-chat-list">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0"><i class="fas fa-comments"></i> Conversations</h5>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-sm btn-outline-primary filter-btn active" data-filter="all">All</button>
+                                        <button class="btn btn-sm btn-outline-danger filter-btn" data-filter="unread">Unread</button>
+                                        <button class="btn btn-sm btn-outline-success filter-btn" data-filter="active">Active</button>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control form-control-sm mt-2" id="searchChats" placeholder="Search conversations...">
+                            </div>
+                            <div class="card-body p-0 chat-list-container" id="chatListContainer">
+                                <!-- Chat items will be loaded here -->
+                                <div class="text-center py-5 text-muted">
+                                    <i class="fas fa-inbox fa-3x mb-3"></i>
+                                    <p>No conversations yet</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Window -->
+                    <div class="col-md-8 mb-3">
+                        <div class="card support-chat-window">
+                            <div class="card-header" id="chatHeader">
+                                <div id="chatHeaderEmpty" class="text-center text-muted">
+                                    <i class="fas fa-comments fa-2x mb-2"></i>
+                                    <p class="mb-0">Select a conversation to start</p>
+                                </div>
+                                <div id="chatHeaderActive" class="d-none">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <img src="" alt="User" class="rounded-circle me-2" width="40" height="40" id="currentUserAvatar">
+                                            <div>
+                                                <h6 class="mb-0" id="currentUserName">User Name</h6>
+                                                <small class="text-muted" id="currentUserStatus">Online</small>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary" id="viewUserProfile">
+                                                <i class="fas fa-user"></i> Profile
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" id="closeConversation">
+                                                <i class="fas fa-times"></i> Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body chat-messages-container" id="chatMessagesContainer">
+                                <!-- Messages will appear here -->
+                            </div>
+                            <div class="card-footer" id="chatFooter">
+                                <form id="replyForm" class="d-none">
+                                    <div class="input-group">
+                                        <button class="btn btn-outline-secondary" type="button" id="attachFile">
+                                            <i class="fas fa-paperclip"></i>
+                                        </button>
+                                        <input type="text" class="form-control" id="messageInput" placeholder="Type your reply..." autocomplete="off">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <i class="fas fa-smile"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end quick-replies">
+                                            <li><a class="dropdown-item" href="#" data-reply="Thank you for contacting us!">Thank you for contacting us!</a></li>
+                                            <li><a class="dropdown-item" href="#" data-reply="We're looking into this for you.">We're looking into this for you.</a></li>
+                                            <li><a class="dropdown-item" href="#" data-reply="Is there anything else I can help you with?">Is there anything else I can help?</a></li>
+                                            <li><a class="dropdown-item" href="#" data-reply="Have a great day!">Have a great day!</a></li>
+                                        </ul>
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="fas fa-paper-plane"></i> Send
+                                        </button>
+                                    </div>
+                                </form>
+                                <div id="footerEmpty" class="text-center text-muted py-2">
+                                    Select a conversation to reply
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="/adim.js"></script>
+    <script src="/adim.js"></script>
+</body>
+</html>

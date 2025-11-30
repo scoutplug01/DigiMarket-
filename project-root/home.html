@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - DigiMarket Pro</title>
+    <link rel="shortcut icon" href="assets/images/logo.png" type="image/x-icon">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS Animation -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/project.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-store"></i> DigiMarket Pro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="home.html">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="market.html">
+                            <i class="fas fa-th"></i> Browse
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="becomeSellerLink">
+                            <i class="fas fa-user-tie"></i> Become Seller
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="notification-icon text-white mx-3" id="notificationIcon">
+                            <i class="fas fa-bell fa-lg"></i>
+                            <span class="notification-badge" id="notificationBadge">0</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a href="cart.html" class="nav-link">
+                            <div class="cart-icon text-white">
+                                <i class="fas fa-shopping-cart fa-lg"></i>
+                                <span class="cart-count" id="cartCount">0</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/dashboard.html">
+                            <i class="fas fa-chart-line"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i> <span id="userName">User</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/user/dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                            <li><a class="dropdown-item" href="/user/orders-history.html"><i class="fas fa-shopping-bag"></i> Orders</a></li>
+                            <li><a class="dropdown-item" href="/user/downloads.html"><i class="fas fa-download"></i> Downloads</a></li>
+                            <li><a class="dropdown-item" href="/user/setting.html"><i class="fas fa-cog"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Notification Dropdown -->
+    <div id="notificationDropdown" class="notification-dropdown hidden">
+        <div style="padding: 1rem; border-bottom: 2px solid #e2e8f0; font-weight: bold;">
+            <i class="fas fa-bell"></i> Notifications
+        </div>
+        <div id="notificationsList" class="notification-list"></div>
+    </div>
+
+    <!-- Welcome Banner -->
+    <section class="welcome-banner py-4 bg-gradient">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2 class="text-white mb-2">
+                        <i class="fas fa-hand-wave"></i> Welcome back, <span id="welcomeUserName">User</span>!
+                    </h2>
+                    <p class="text-white-50 mb-0">
+                        Discover amazing digital products today
+                    </p>
+
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <a href="market.html" class="btn btn-light btn-lg">
+                        <i class="fas fa-search"></i> Browse Products
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Bar -->
+    <section class="container my-4">
+        <div class="search-bar mx-auto">
+            <div class="input-group input-group-lg">
+                <input type="text" class="form-control" id="searchInput" 
+                       placeholder="Search for products, tools, courses...">
+                <button class="btn btn-primary" id="searchBtn">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Stats -->
+    <section class="container my-5">
+        <div class="row g-4">
+            <div class="col-md-3 col-sm-6" data-aos="fade-up">
+                <div class="stat-card-small bg-primary text-white">
+                    <div class="stat-icon"><i class="fas fa-shopping-cart"></i></div>
+                    <div class="stat-details">
+                        <h4 id="cartItemsCount">0</h4>
+                        <p>Items in Cart</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-card-small bg-success text-white">
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-details">
+                        <h4 id="totalPurchases">0</h4>
+                        <p>Total Purchases</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="stat-card-small bg-warning text-white">
+                    <div class="stat-icon"><i class="fas fa-download"></i></div>
+                    <div class="stat-details">
+                        <h4 id="totalDownloads">0</h4>
+                        <p>Downloads</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="stat-card-small bg-info text-white">
+                    <div class="stat-icon"><i class="fas fa-heart"></i></div>
+                    <div class="stat-details">
+                        <h4 id="wishlistCount">0</h4>
+                        <p>Wishlist</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section class="container my-5">
+        <h2 class="text-center mb-5" data-aos="fade-up">
+            <i class="fas fa-star"></i> Featured Categories
+        </h2>
+        <div class="row g-4">
+            <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="100">
+                <a href="market.html?category=websites" class="text-decoration-none">
+                    <div class="category-card">
+                        <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80');">
+                            <div class="category-overlay">
+                                <div class="category-icon"><i class="fas fa-globe"></i></div>
+                                <h4>Websites</h4>
+                                <p>Professional website templates</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="200">
+                <a href="market.html?category=apps" class="text-decoration-none">
+                    <div class="category-card">
+                        <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80');">
+                            <div class="category-overlay">
+                                <div class="category-icon"><i class="fas fa-mobile-alt"></i></div>
+                                <h4>Apps</h4>
+                                <p>Mobile and web applications</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="300">
+                <a href="market.html?category=apis" class="text-decoration-none">
+                    <div class="category-card">
+                        <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80');">
+                            <div class="category-overlay">
+                                <div class="category-icon"><i class="fas fa-code"></i></div>
+                                <h4>APIs</h4>
+                                <p>Powerful integration APIs</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="400">
+                <a href="market.html?category=ai-tools" class="text-decoration-none">
+                    <div class="category-card">
+                        <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80');">
+                            <div class="category-overlay">
+                                <div class="category-icon"><i class="fas fa-robot"></i></div>
+                                <h4>AI Tools</h4>
+                                <p>Advanced AI solutions</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="500">
+                <a href="market.html?category=courses" class="text-decoration-none">
+                    <div class="category-card">
+                        <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80');">
+                            <div class="category-overlay">
+                                <div class="category-icon"><i class="fas fa-graduation-cap"></i></div>
+                                <h4>Courses</h4>
+                                <p>Professional courses</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="600">
+                <a href="market.html?category=plugins" class="text-decoration-none">
+                    <div class="category-card">
+                        <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80');">
+                            <div class="category-overlay">
+                                <div class="category-icon"><i class="fas fa-puzzle-piece"></i></div>
+                                <h4>Plugins</h4>
+                                <p>Extend capabilities</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Swiper -->
+    <section class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 data-aos="fade-up">
+                <i class="fas fa-fire"></i> Featured Products
+            </h2>
+            <a href="market.html" class="btn btn-outline-primary">
+                View All <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        <div class="swiper productsSwiper">
+            <div class="swiper-wrapper" id="featuredProductsContainer">
+                <!-- Products will be loaded here by JavaScript -->
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </section>
+
+    <!-- Recent Purchases -->
+    <section class="container my-5">
+        <h2 class="mb-4" data-aos="fade-up">
+            <i class="fas fa-history"></i> Your Recent Activity
+        </h2>
+        <div id="recentActivityContainer" class="row g-4">
+            <!-- Recent activity will be loaded here -->
+            <div class="col-12 text-center text-muted py-5">
+                <i class="fas fa-shopping-bag fa-3x mb-3"></i>
+                <p>No recent activity yet. Start shopping to see your history!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5><i class="fas fa-store"></i> DigiMarket Pro</h5>
+                    <p>Your trusted marketplace for premium digital products</p>
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-linkedin fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50">About Us</a></li>
+                        <li><a href="#" class="text-white-50">Contact</a></li>
+                        <li><a href="#" class="text-white-50">Terms of Service</a></li>
+                        <li><a href="#" class="text-white-50">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="fas fa-envelope me-2"></i> scottplug001@gmail.com</p>
+                    <p><i class="fas fa-phone me-2"></i> +234 9133767432</p>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> Enugu, Nigeria</p>
+                </div>
+            </div>
+            <hr style="border-color: rgba(255,255,255,0.1);">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 DigiMarket Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Live Chat Button -->
+    <button class="live-chat-btn" id="liveChatBtn">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"></script>
+    <script src="/project.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+    </script>
+</body>
+</html>

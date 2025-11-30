@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downloads - DigiMarket Pro</title>
+    <link rel="shortcut icon" href="../img/image.png" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/user-style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/project-root/index.html">
+                <i class="fas fa-store"></i> DigiMarket Pro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/project-root/home.html"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/project-root/market.html"><i class="fas fa-th"></i> Marketplace</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 p-0">
+                <div class="dashboard-sidebar">
+                    <h5 class="mb-4"><i class="fas fa-tachometer-alt"></i> Dashboard</h5>
+                    <a href="dashboard.html" class="dashboard-menu-item">
+                        <i class="fas fa-chart-line me-2"></i> Overview
+                    </a>
+                    <a href="orders.html" class="dashboard-menu-item">
+                        <i class="fas fa-shopping-bag me-2"></i> My Orders
+                    </a>
+                    <a href="orders-history.html" class="dashboard-menu-item">
+                        <i class="fas fa-history me-2"></i> Order History
+                    </a>
+                    <a href="downloads.html" class="dashboard-menu-item active">
+                        <i class="fas fa-download me-2"></i> Downloads
+                    </a>
+                    <a href="coures.html" class="dashboard-menu-item">
+                        <i class="fas fa-graduation-cap me-2"></i> My Courses
+                    </a>
+                    <a href="wishlist.html" class="dashboard-menu-item">
+                        <i class="fas fa-heart me-2"></i> Wishlist
+                    </a>
+                    <a href="massage.html" class="dashboard-menu-item">
+                        <i class="fas fa-envelope me-2"></i> Messages
+                    </a>
+                    <a href="setting.html" class="dashboard-menu-item">
+                        <i class="fas fa-cog me-2"></i> Settings
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 p-4">
+                <h2 class="mb-4"><i class="fas fa-download"></i> My Downloads</h2>
+                
+                <!-- Search Downloads -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" placeholder="Search your downloads...">
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control">
+                            <option>All Products</option>
+                            <option>Websites</option>
+                            <option>Apps</option>
+                            <option>APIs</option>
+                            <option>AI Tools</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Downloads Grid -->
+                <div class="row">
+                    <!-- Download Item 1 -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-3">
+                                        <img src="/my img/ist img.jpg" alt="Product" class="img-fluid rounded">
+                                    </div>
+                                    <div class="col-6">
+                                        <h5>E-commerce Template</h5>
+                                        <p class="text-muted mb-1">Order: #ORD-001</p>
+                                        <p class="text-muted mb-0"><small>Purchased: Nov 20, 2024</small></p>
+                                        <span class="badge bg-success mt-2">Active License</span>
+                                    </div>
+                                    <div class="col-3 text-end">
+                                        <button class="btn btn-primary btn-sm mb-2">
+                                            <i class="fas fa-download"></i> Download
+                                        </button>
+                                        <p class="text-muted mb-0"><small>v2.5.0</small></p>
+                                        <p class="text-muted mb-0"><small>45 MB</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Download Item 2 -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-3">
+                                        <img src="/my img/4th img.jpg" alt="Product" class="img-fluid rounded">
+                                    </div>
+                                    <div class="col-6">
+                                        <h5>AI Content Generator</h5>
+                                        <p class="text-muted mb-1">Order: #ORD-002</p>
+                                        <p class="text-muted mb-0"><small>Purchased: Nov 18, 2024</small></p>
+                                        <span class="badge bg-success mt-2">Active License</span>
+                                    </div>
+                                    <div class="col-3 text-end">
+                                        <button class="btn btn-primary btn-sm mb-2">
+                                            <i class="fas fa-download"></i> Download
+                                        </button>
+                                        <p class="text-muted mb-0"><small>v1.2.0</small></p>
+                                        <p class="text-muted mb-0"><small>12 MB</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Download Item 3 -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-3">
+                                        <img src="/my img/3rd img.jpg" alt="Product" class="img-fluid rounded">
+                                    </div>
+                                    <div class="col-6">
+                                        <h5>Mobile App UI Kit</h5>
+                                        <p class="text-muted mb-1">Order: #ORD-005</p>
+                                        <p class="text-muted mb-0"><small>Purchased: Nov 10, 2024</small></p>
+                                        <span class="badge bg-success mt-2">Active License</span>
+                                    </div>
+                                    <div class="col-3 text-end">
+                                        <button class="btn btn-primary btn-sm mb-2">
+                                            <i class="fas fa-download"></i> Download
+                                        </button>
+                                        <p class="text-muted mb-0"><small>v3.1.5</small></p>
+                                        <p class="text-muted mb-0"><small>89 MB</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Download Item 4 -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-3">
+                                        <img src="/my img/img7.jpg" alt="Product" class="img-fluid rounded">
+                                    </div>
+                                    <div class="col-6">
+                                        <h5>SEO Optimization Tools</h5>
+                                        <p class="text-muted mb-1">Order: #ORD-007</p>
+                                        <p class="text-muted mb-0"><small>Purchased: Nov 5, 2024</small></p>
+                                        <span class="badge bg-success mt-2">Active License</span>
+                                    </div>
+                                    <div class="col-3 text-end">
+                                        <button class="btn btn-primary btn-sm mb-2">
+                                            <i class="fas fa-download"></i> Download
+                                        </button>
+                                        <p class="text-muted mb-0"><small>v1.0.8</small></p>
+                                        <p class="text-muted mb-0"><small>23 MB</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Download Instructions -->
+                <div class="alert alert-info mt-4">
+                    <h5><i class="fas fa-info-circle"></i> Download Instructions</h5>
+                    <ul class="mb-0">
+                        <li>All downloads include the latest version of the product</li>
+                        <li>You can re-download products anytime from this page</li>
+                        <li>Updates are free for lifetime on all purchases</li>
+                        <li>Check the documentation included in each download for setup instructions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="/user-script.js"></script>
+</body>
+</html>

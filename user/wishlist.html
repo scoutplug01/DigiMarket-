@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist - DigiMarket Pro</title>
+    <link rel="shortcut icon" href="/my img/logo 2.png" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/user-style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/project-root/index.html">
+                <i class="fas fa-store"></i> DigiMarket Pro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/project-root/home.html"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/project-root/market.html"><i class="fas fa-th"></i> Marketplace</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 p-0">
+                <div class="dashboard-sidebar">
+                    <h5 class="mb-4"><i class="fas fa-tachometer-alt"></i> Dashboard</h5>
+                    <a href="dashboard.html" class="dashboard-menu-item">
+                        <i class="fas fa-chart-line me-2"></i> Overview
+                    </a>
+                    <a href="orders.html" class="dashboard-menu-item">
+                        <i class="fas fa-shopping-bag me-2"></i> My Orders
+                    </a>
+                    <a href="orders-history.html" class="dashboard-menu-item">
+                        <i class="fas fa-history me-2"></i> Order History
+                    </a>
+                    <a href="downloads.html" class="dashboard-menu-item">
+                        <i class="fas fa-download me-2"></i> Downloads
+                    </a>
+                    <a href="coures.html" class="dashboard-menu-item">
+                        <i class="fas fa-graduation-cap me-2"></i> My Courses
+                    </a>
+                    <a href="wishlist.html" class="dashboard-menu-item active">
+                        <i class="fas fa-heart me-2"></i> Wishlist
+                    </a>
+                    <a href="massage.html" class="dashboard-menu-item">
+                        <i class="fas fa-envelope me-2"></i> Messages
+                    </a>
+                    <a href="setting.html" class="dashboard-menu-item">
+                        <i class="fas fa-cog me-2"></i> Settings
+                    </a>
+                </div>
+            </div>
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fas fa-heart"></i> My Wishlist</h2>
+                    <button class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Clear All
+                    </button>
+                </div>
+                
+                <!-- Wishlist Items -->
+                <div class="row">
+                    <!-- Wishlist Item 1 -->
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="position-relative">
+                                <img src="/my img/ist img.jpg" class="card-img-top" alt="Product">
+                                <button class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <span class="badge bg-primary mb-2">Website</span>
+                                <h5 class="card-title">Premium E-commerce Template</h5>
+                                <p class="card-text text-muted">Complete e-commerce solution with admin panel</p>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h4 class="text-primary mb-0">$149</h4>
+                                    <div class="text-warning">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                        <small class="text-muted">(4.5)</small>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary w-100">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wishlist Item 2 -->
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="position-relative">
+                                <img src="/my img/4th img.jpg" class="card-img-top" alt="Product">
+                                <button class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <span class="badge bg-success mb-2">API</span>
+                                <h5 class="card-title">AI Content Generator</h5>
+                                <p class="card-text text-muted">Generate high-quality content with AI</p>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h4 class="text-primary mb-0">$199</h4>
+                                    <div class="text-warning">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <small class="text-muted">(5.0)</small>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary w-100">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wishlist Item 3 -->
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="position-relative">
+                                <img src="/my img/3rd img.jpg" class="card-img-top" alt="Product">
+                                <button class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <span class="badge bg-warning mb-2">Course</span>
+                                <h5 class="card-title">Advanced React Development</h5>
+                                <p class="card-text text-muted">Master React with this comprehensive course</p>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h4 class="text-primary mb-0">$99</h4>
+                                    <div class="text-warning">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <small class="text-muted">(4.0)</small>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary w-100">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wishlist Item 4 -->
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="position-relative">
+                                <img src="/my img/6th img.jpg" class="card-img-top" alt="Product">
+                                <button class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <span class="badge bg-info mb-2">App</span>
+                                <h5 class="card-title">Mobile Fitness Tracker</h5>
+                                <p class="card-text text-muted">Complete fitness tracking application</p>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h4 class="text-primary mb-0">$129</h4>
+                                    <div class="text-warning">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                        <small class="text-muted">(4.7)</small>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary w-100">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wishlist Item 5 -->
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="position-relative">
+                                <img src="/my img/5th img.jpg" class="card-img-top" alt="Product">
+                                <button class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <span class="badge bg-danger mb-2">AI Tool</span>
+                                <h5 class="card-title">Image Enhancement AI</h5>
+                                <p class="card-text text-muted">AI-powered image enhancement tool</p>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h4 class="text-primary mb-0">$179</h4>
+                                    <div class="text-warning">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <small class="text-muted">(5.0)</small>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary w-100">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty Wishlist Message (Hidden by default) -->
+                <div class="text-center d-none" id="emptyWishlist">
+                    <i class="fas fa-heart-broken fa-5x text-muted mb-3"></i>
+                    <h3>Your wishlist is empty</h3>
+                    <p class="text-muted">Start adding products you love!</p>
+                    <a href="/project-root/market.html" class="btn btn-primary">
+                        <i class="fas fa-shopping-bag"></i> Browse Products
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="/user-script.js"></script>
+</body>
+</html>

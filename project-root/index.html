@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigiMarket Pro - Premium Digital Products Marketplace</title>
+    <link rel="shortcut icon" href="assets/images/logo.png" type="image/x-icon">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS Animation -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/project.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-store"></i> DigiMarket Pro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="market.html">Marketplace</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/coures.html">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-light ms-2" href="/auth/login.html">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-light text-primary ms-2" href="/auth/singnup.html">
+                            <i class="fas fa-user-plus"></i> Sign Up
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section landing" data-aos="fade-up">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 text-center text-lg-start">
+                    <h1 class="display-3 fw-bold mb-4">Premium Digital Products</h1>
+                    <p class="lead mb-4">
+                        Discover the best websites, apps, APIs, AI tools, and courses. 
+                        Everything you need to build and grow your digital business.
+                    </p>
+                    <div class="d-flex gap-3 justify-content-center justify-content-lg-start flex-wrap">
+                        <a href="/auth/login.html" class="btn btn-primary-custom btn-lg">
+                            <i class="fas fa-rocket"></i> Get Started
+                        </a>
+                        <a href="market.html" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-search"></i> Browse Products
+                        </a>
+                    </div>
+                    <div class="mt-4">
+                        <small class="text-white">
+                            <i class="fas fa-check-circle"></i> 10,000+ Products
+                            <i class="fas fa-check-circle ms-3"></i> Trusted by 50,000+ Users
+                            <i class="fas fa-check-circle ms-3"></i> Secure Payments
+                        </small>
+                    </div>
+                </div>
+                <div class="col-lg-6 mt-5 mt-lg-0" data-aos="fade-left">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80" 
+                         alt="Digital Products" class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="container my-5 py-5">
+        <h2 class="text-center mb-5" data-aos="fade-up">Why Choose DigiMarket Pro?</h2>
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-card text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-shield-alt fa-3x text-primary"></i>
+                    </div>
+                    <h4>Secure Transactions</h4>
+                    <p class="text-muted">
+                        Every transaction is protected with industry-standard security protocols.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-card text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-star fa-3x text-warning"></i>
+                    </div>
+                    <h4>Quality Products</h4>
+                    <p class="text-muted">
+                        All products are carefully vetted to ensure the highest quality standards.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-card text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-headset fa-3x text-success"></i>
+                    </div>
+                    <h4>24/7 Support</h4>
+                    <p class="text-muted">
+                        Our dedicated support team is always here to help you succeed.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="feature-card text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-download fa-3x text-info"></i>
+                    </div>
+                    <h4>Instant Downloads</h4>
+                    <p class="text-muted">
+                        Get immediate access to your purchased products after payment confirmation.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="500">
+                <div class="feature-card text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-sync-alt fa-3x text-danger"></i>
+                    </div>
+                    <h4>Lifetime Updates</h4>
+                    <p class="text-muted">
+                        Receive free updates for all your purchased products, forever.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="600">
+                <div class="feature-card text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-users fa-3x text-secondary"></i>
+                    </div>
+                    <h4>Vibrant Community</h4>
+                    <p class="text-muted">
+                        Join thousands of developers, creators, and entrepreneurs.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="bg-light py-5">
+        <div class="container">
+            <h2 class="text-center mb-5" data-aos="fade-up">Explore Categories</h2>
+            <div class="row g-4">
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <a href="market.html?category=websites" class="text-decoration-none">
+                        <div class="category-card">
+                            <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80');">
+                                <div class="category-overlay">
+                                    <div class="category-icon"><i class="fas fa-globe"></i></div>
+                                    <h4>Websites</h4>
+                                    <p>Professional templates & themes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <a href="market.html?category=apps" class="text-decoration-none">
+                        <div class="category-card">
+                            <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80');">
+                                <div class="category-overlay">
+                                    <div class="category-icon"><i class="fas fa-mobile-alt"></i></div>
+                                    <h4>Apps</h4>
+                                    <p>Mobile & web applications</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                    <a href="market.html?category=apis" class="text-decoration-none">
+                        <div class="category-card">
+                            <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80');">
+                                <div class="category-overlay">
+                                    <div class="category-icon"><i class="fas fa-code"></i></div>
+                                    <h4>APIs</h4>
+                                    <p>Powerful integration solutions</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
+                    <a href="market.html?category=ai-tools" class="text-decoration-none">
+                        <div class="category-card">
+                            <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80');">
+                                <div class="category-overlay">
+                                    <div class="category-icon"><i class="fas fa-robot"></i></div>
+                                    <h4>AI Tools</h4>
+                                    <p>Advanced AI-powered solutions</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="500">
+                    <a href="market.html?category=courses" class="text-decoration-none">
+                        <div class="category-card">
+                            <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80');">
+                                <div class="category-overlay">
+                                    <div class="category-icon"><i class="fas fa-graduation-cap"></i></div>
+                                    <h4>Courses</h4>
+                                    <p>Professional development</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="600">
+                    <a href="market.html?category=plugins" class="text-decoration-none">
+                        <div class="category-card">
+                            <div class="category-bg" style="background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80');">
+                                <div class="category-overlay">
+                                    <div class="category-icon"><i class="fas fa-puzzle-piece"></i></div>
+                                    <h4>Plugins</h4>
+                                    <p>Extend your capabilities</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container">
+            <div class="row text-center g-4">
+                <div class="col-md-3" data-aos="zoom-in">
+                    <h2 class="display-4 fw-bold">10K+</h2>
+                    <p class="mb-0">Digital Products</p>
+                </div>
+                <div class="col-md-3" data-aos="zoom-in" data-aos-delay="100">
+                    <h2 class="display-4 fw-bold">50K+</h2>
+                    <p class="mb-0">Happy Customers</p>
+                </div>
+                <div class="col-md-3" data-aos="zoom-in" data-aos-delay="200">
+                    <h2 class="display-4 fw-bold">5K+</h2>
+                    <p class="mb-0">Verified Sellers</p>
+                </div>
+                <div class="col-md-3" data-aos="zoom-in" data-aos-delay="300">
+                    <h2 class="display-4 fw-bold">24/7</h2>
+                    <p class="mb-0">Customer Support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-5" data-aos="fade-up">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="display-5 fw-bold mb-4">Ready to Get Started?</h2>
+                    <p class="lead mb-4">
+                        Join thousands of satisfied customers and start building your digital empire today!
+                    </p>
+                    <a href="/auth/singnup.html" class="btn btn-primary-custom btn-lg">
+                        <i class="fas fa-rocket"></i> Create Free Account
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5><i class="fas fa-store"></i> DigiMarket Pro</h5>
+                    <p>Your trusted marketplace for premium digital products</p>
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-linkedin fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50">About Us</a></li>
+                        <li><a href="#" class="text-white-50">Contact</a></li>
+                        <li><a href="#" class="text-white-50">Terms of Service</a></li>
+                        <li><a href="#" class="text-white-50">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="fas fa-envelope me-2"></i> scottplug001@gmail.com</p>
+                    <p><i class="fas fa-phone me-2"></i> +234 9133767432</p>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> Enugu, Nigeria</p>
+                </div>
+            </div>
+            <hr style="border-color: rgba(255,255,255,0.1);">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 DigiMarket Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+    </script>
+    <script src="/project.js"></script>
+</body>
+</html>

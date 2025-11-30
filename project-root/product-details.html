@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - DigiMarket Pro</title>
+    <link rel="shortcut icon" href="assets/images/logo.png" type="image/x-icon">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/project.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-store"></i> DigiMarket Pro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.html">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="market.html">
+                            <i class="fas fa-th"></i> Browse
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="cart.html" class="nav-link">
+                            <div class="cart-icon text-white">
+                                <i class="fas fa-shopping-cart fa-lg"></i>
+                                <span class="cart-count" id="cartCount">0</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i> <span id="userName">User</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/user/dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="home.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="market.html">Marketplace</a></li>
+                <li class="breadcrumb-item active" id="breadcrumbCategory">Product</li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Product Details -->
+    <div class="container my-5">
+        <div class="row">
+            <!-- Product Images -->
+            <div class="col-lg-6 mb-4">
+                <div class="product-detail-image-container">
+                    <img id="productMainImage" src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80" alt="Product" class="product-detail-img img-fluid rounded shadow">
+                    <div class="product-badges" id="productBadges"></div>
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="col-lg-6">
+                <div class="product-detail-info">
+                    <!-- Category Badge -->
+                    <span class="product-category mb-2" id="productCategory">Category</span>
+                    
+                    <!-- Product Title -->
+                    <h1 class="product-detail-title mb-3" id="productName">Product Name</h1>
+                    
+                    <!-- Rating -->
+                    <div class="product-rating mb-3" id="productRating">
+                        <span class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </span>
+                        <span class="text-muted">(4.5 / 100 reviews)</span>
+                    </div>
+                    
+                    <!-- Description -->
+                    <p class="product-detail-description mb-4" id="productDescription">
+                        Loading product description...
+                    </p>
+                    
+                    <!-- Price -->
+                    <div class="price-section mb-4">
+                        <h2 class="product-detail-price text-primary mb-0" id="productPrice">$0.00</h2>
+                        <small class="text-muted">One-time payment • Lifetime access</small>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="d-flex gap-3 mb-4 flex-wrap">
+                        <button class="btn btn-primary-custom btn-lg flex-fill" id="addToCartBtn">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                        <button class="btn btn-outline-primary btn-lg" id="addToWishlistBtn">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+
+                    <!-- Quick Info -->
+                    <div class="quick-info-grid">
+                        <div class="quick-info-item">
+                            <i class="fas fa-download text-primary"></i>
+                            <div>
+                                <strong>Instant Download</strong>
+                                <p class="mb-0 text-muted">Access immediately</p>
+                            </div>
+                        </div>
+                        <div class="quick-info-item">
+                            <i class="fas fa-sync-alt text-success"></i>
+                            <div>
+                                <strong>Free Updates</strong>
+                                <p class="mb-0 text-muted">Lifetime updates</p>
+                            </div>
+                        </div>
+                        <div class="quick-info-item">
+                            <i class="fas fa-headset text-info"></i>
+                            <div>
+                                <strong>24/7 Support</strong>
+                                <p class="mb-0 text-muted">Always available</p>
+                            </div>
+                        </div>
+                        <div class="quick-info-item">
+                            <i class="fas fa-shield-alt text-warning"></i>
+                            <div>
+                                <strong>Secure Payment</strong>
+                                <p class="mb-0 text-muted">Protected checkout</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seller Info -->
+                    <div class="seller-info-card mt-4" id="sellerInfo">
+                        <div class="seller-avatar">S</div>
+                        <div>
+                            <strong>Seller Name</strong>
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Details Tabs -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#features">
+                            <i class="fas fa-list"></i> Features
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#description">
+                            <i class="fas fa-info-circle"></i> Description
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#reviews">
+                            <i class="fas fa-star"></i> Reviews
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content p-4 bg-white rounded-bottom shadow-sm">
+                    <!-- Features Tab -->
+                    <div class="tab-pane fade show active" id="features">
+                        <h4 class="mb-4">Product Features</h4>
+                        <ul class="product-features-list" id="productFeaturesList">
+                            <li><i class="fas fa-check text-success"></i> Lifetime updates included</li>
+                            <li><i class="fas fa-check text-success"></i> Premium support 24/7</li>
+                            <li><i class="fas fa-check text-success"></i> Easy customization</li>
+                            <li><i class="fas fa-check text-success"></i> Well documented</li>
+                            <li><i class="fas fa-check text-success"></i> Mobile responsive</li>
+                        </ul>
+                    </div>
+
+                    <!-- Description Tab -->
+                    <div class="tab-pane fade" id="description">
+                        <h4 class="mb-4">Full Description</h4>
+                        <div id="productFullDescription">
+                            <p>This is a premium digital product designed to help you achieve your goals. It comes with all the features you need and more.</p>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Tab -->
+                    <div class="tab-pane fade" id="reviews">
+                        <h4 class="mb-4">Customer Reviews</h4>
+                        <div id="productReviews">
+                            <div class="text-center text-muted py-5">
+                                <i class="fas fa-star fa-3x mb-3"></i>
+                                <p>Reviews coming soon!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Products -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="mb-4"><i class="fas fa-layer-group"></i> Related Products</h3>
+                <div class="row g-4" id="relatedProductsContainer">
+                    <!-- Related products will be loaded here -->
+                    <div class="col-12 text-center text-muted py-3">
+                        <p>Loading related products...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5><i class="fas fa-store"></i> DigiMarket Pro</h5>
+                    <p>Your trusted marketplace for premium digital products</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="fas fa-envelope me-2"></i> scottplug001@gmail.com</p>
+                    <p><i class="fas fa-phone me-2"></i> +234 9133767432</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50">Terms of Service</a></li>
+                        <li><a href="#" class="text-white-50">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="/project.js"></script>
+</body>
+</html>

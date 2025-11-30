@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - DigiMarket Pro</title>
+    <link rel="shortcut icon" href="assets/images/logo.png" type="image/x-icon">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/project.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="home.html">
+                <i class="fas fa-store"></i> DigiMarket Pro
+            </a>
+            <div class="navbar-text text-white ms-auto d-none d-md-block">
+                <i class="fas fa-lock"></i> Secure Checkout
+            </div>
+        </div>
+    </nav>
+
+    <!-- Checkout Steps -->
+    <div class="container my-4">
+        <div class="checkout-steps">
+            <div class="step active">
+                <div class="step-number">1</div>
+                <div class="step-label">Cart</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step active">
+                <div class="step-number">2</div>
+                <div class="step-label">Checkout</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-label">Payment</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-label">Complete</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <div class="row">
+            <!-- Checkout Form -->
+            <div class="col-lg-7 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-user-circle"></i> Billing Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="checkoutForm">
+                            <!-- Personal Information -->
+                            <h6 class="mb-3">Personal Details</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="fullName" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email Address <span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                    <input type="tel" class="form-control" id="phone" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Country <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="country" required>
+                                        <option value="">Select Country</option>
+                                        <option value="Nigeria">Nigeria</option>
+                                        <option value="Ghana">Ghana</option>
+                                        <option value="Kenya">Kenya</option>
+                                        <option value="South Africa">South Africa</option>
+                                        <option value="USA">United States</option>
+                                        <option value="UK">United Kingdom</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Address -->
+                            <h6 class="mt-4 mb-3">Address Information</h6>
+                            <div class="mb-3">
+                                <label class="form-label">Street Address</label>
+                                <input type="text" class="form-control" id="address" placeholder="123 Main Street">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">City</label>
+                                    <input type="text" class="form-control" id="city">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">State/Province</label>
+                                    <input type="text" class="form-control" id="state">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Postal Code</label>
+                                <input type="text" class="form-control" id="postalCode">
+                            </div>
+
+                            <!-- Additional Notes -->
+                            <h6 class="mt-4 mb-3">Order Notes (Optional)</h6>
+                            <div class="mb-3">
+                                <textarea class="form-control" id="orderNotes" rows="3" 
+                                          placeholder="Any special instructions for your order..."></textarea>
+                            </div>
+
+                            <!-- Terms and Conditions -->
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                                <label class="form-check-label" for="agreeTerms">
+                                    I agree to the <a href="#" class="text-primary">Terms & Conditions</a> and 
+                                    <a href="#" class="text-primary">Privacy Policy</a> <span class="text-danger">*</span>
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-4">
+                                <input class="form-check-input" type="checkbox" id="newsletter">
+                                <label class="form-check-label" for="newsletter">
+                                    Subscribe to our newsletter for updates and exclusive offers
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-5">
+                <div class="card shadow-sm sticky-top" style="top: 100px;">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-receipt"></i> Order Summary
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Order Items -->
+                        <h6 class="mb-3">Items (<span id="itemsCount">0</span>)</h6>
+                        <div id="orderItemsContainer" class="order-items-list">
+                            <!-- Order items will be loaded here -->
+                        </div>
+
+                        <hr>
+
+                        <!-- Price Breakdown -->
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span id="subtotalAmount">$0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Tax:</span>
+                            <span id="taxAmount">$0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Discount:</span>
+                            <span id="discountAmount" class="text-success">-$0.00</span>
+                        </div>
+                        <hr>
+                        <div class="summary-row total">
+                            <span><strong>Total:</strong></span>
+                            <span id="totalAmount"><strong>$0.00</strong></span>
+                        </div>
+
+                        <!-- Payment Method Selection -->
+                        <div class="mt-4">
+                            <h6 class="mb-3">Payment Method</h6>
+                            <div class="payment-method-card active" data-method="bank">
+                                <i class="fas fa-university fa-2x text-primary"></i>
+                                <div>
+                                    <strong>Bank Transfer</strong>
+                                    <p class="mb-0 small text-muted">Pay via OPay or PalmPay</p>
+                                </div>
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+
+                        <!-- Place Order Button -->
+                        <button class="btn btn-primary-custom btn-lg w-100 mt-4" id="placeOrderBtn">
+                            <i class="fas fa-lock"></i> Place Order
+                        </button>
+
+                        <!-- Security Info -->
+                        <div class="text-center mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-shield-alt text-success"></i> 
+                                Your information is secure
+                            </small>
+                        </div>
+
+                        <!-- Money Back Guarantee -->
+                        <div class="alert alert-info mt-3 mb-0">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Money-back guarantee</strong>
+                            <p class="mb-0 small">If you're not satisfied, we'll refund your purchase within 30 days.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5><i class="fas fa-store"></i> DigiMarket Pro</h5>
+                    <p>Your trusted marketplace for premium digital products</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="fas fa-envelope me-2"></i> scottplug001@gmail.com</p>
+                    <p><i class="fas fa-phone me-2"></i> +234 9133767432</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Secure Payments</h5>
+                    <div class="payment-methods">
+                        <i class="fas fa-credit-card fa-2x me-2"></i>
+                        <i class="fas fa-university fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="/project.js"></script>
+</body>
+</html>

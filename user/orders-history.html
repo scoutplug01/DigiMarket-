@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History - DigiMarket Pro</title>
+    <link rel="shortcut icon" href="../img/image.png" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/user-style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/project-root/index.html">
+                <i class="fas fa-store"></i> DigiMarket Pro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/project-root/home.html"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/project-root/market.html"><i class="fas fa-th"></i> Marketplace</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 p-0">
+                <div class="dashboard-sidebar">
+                    <h5 class="mb-4"><i class="fas fa-tachometer-alt"></i> Dashboard</h5>
+                    <a href="dashboard.html" class="dashboard-menu-item">
+                        <i class="fas fa-chart-line me-2"></i> Overview
+                    </a>
+                    <a href="orders.html" class="dashboard-menu-item">
+                        <i class="fas fa-shopping-bag me-2"></i> My Orders
+                    </a>
+                    <a href="orders-history.html" class="dashboard-menu-item active">
+                        <i class="fas fa-history me-2"></i> Order History
+                    </a>
+                    <a href="downloads.html" class="dashboard-menu-item">
+                        <i class="fas fa-download me-2"></i> Downloads
+                    </a>
+                    <a href="coures.html" class="dashboard-menu-item">
+                        <i class="fas fa-graduation-cap me-2"></i> My Courses
+                    </a>
+                    <a href="wishlist.html" class="dashboard-menu-item">
+                        <i class="fas fa-heart me-2"></i> Wishlist
+                    </a>
+                    <a href="massage.html" class="dashboard-menu-item">
+                        <i class="fas fa-envelope me-2"></i> Messages
+                    </a>
+                    <a href="setting.html" class="dashboard-menu-item">
+                        <i class="fas fa-cog me-2"></i> Settings
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 p-4">
+                <h2 class="mb-4"><i class="fas fa-history"></i> Order History</h2>
+                
+                <!-- Filter by Date -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <label>From Date</label>
+                        <input type="date" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label>To Date</label>
+                        <input type="date" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Status</label>
+                        <select class="form-control">
+                            <option>All Status</option>
+                            <option>Completed</option>
+                            <option>Cancelled</option>
+                            <option>Refunded</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-primary w-100">Filter</button>
+                    </div>
+                </div>
+
+                <!-- Order History Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Product</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Payment Method</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#ORD-001</td>
+                                        <td>Premium E-commerce Template</td>
+                                        <td>Nov 20, 2024</td>
+                                        <td>$149</td>
+                                        <td>OPay</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                        <td>
+                                            <a href="/project-root/invoice.html" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-file-invoice"></i> Invoice
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#ORD-002</td>
+                                        <td>AI Content Generator API</td>
+                                        <td>Nov 18, 2024</td>
+                                        <td>$199</td>
+                                        <td>PalmPay</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                        <td>
+                                            <a href="/project-root/invoice.html" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-file-invoice"></i> Invoice
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#ORD-003</td>
+                                        <td>Full Stack Development Course</td>
+                                        <td>Nov 15, 2024</td>
+                                        <td>$99</td>
+                                        <td>OPay</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                        <td>
+                                            <a href="/project-root/invoice.html" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-file-invoice"></i> Invoice
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#ORD-004</td>
+                                        <td>Mobile App UI Kit</td>
+                                        <td>Nov 10, 2024</td>
+                                        <td>$79</td>
+                                        <td>PalmPay</td>
+                                        <td><span class="badge bg-danger">Cancelled</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-danger" disabled>
+                                                <i class="fas fa-ban"></i> Cancelled
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#ORD-005</td>
+                                        <td>SEO Optimization Tools</td>
+                                        <td>Nov 5, 2024</td>
+                                        <td>$129</td>
+                                        <td>OPay</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                        <td>
+                                            <a href="/project-root/invoice.html" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-file-invoice"></i> Invoice
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Card -->
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <div class="row text-center">
+                                    <div class="col-md-3">
+                                        <h4 class="text-primary">12</h4>
+                                        <p class="mb-0">Total Orders</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h4 class="text-success">$1,245</h4>
+                                        <p class="mb-0">Total Spent</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h4 class="text-info">10</h4>
+                                        <p class="mb-0">Completed</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h4 class="text-danger">2</h4>
+                                        <p class="mb-0">Cancelled</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="/user-script.js"></script>
+</body>
+</html>

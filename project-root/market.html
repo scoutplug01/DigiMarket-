@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace - DigiMarket Pro</title>
+    <link rel="shortcut icon" href="assets/images/logo.png" type="image/x-icon">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS Animation -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/project.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-store"></i> DigiMarket Pro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.html">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="market.html">
+                            <i class="fas fa-th"></i> Browse
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="notification-icon text-white mx-3" id="notificationIcon">
+                            <i class="fas fa-bell fa-lg"></i>
+                            <span class="notification-badge" id="notificationBadge">0</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a href="cart.html" class="nav-link">
+                            <div class="cart-icon text-white">
+                                <i class="fas fa-shopping-cart fa-lg"></i>
+                                <span class="cart-count" id="cartCount">0</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/dashboard.html">
+                            <i class="fas fa-chart-line"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i> <span id="userName">User</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/user/dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                            <li><a class="dropdown-item" href="/user/orders-history.html"><i class="fas fa-shopping-bag"></i> Orders</a></li>
+                            <li><a class="dropdown-item" href="/user/setting.html"><i class="fas fa-cog"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header bg-gradient text-white py-5">
+        <div class="container">
+            <h1 class="display-5 fw-bold mb-3">
+                <i class="fas fa-th"></i> Browse Marketplace
+            </h1>
+            <p class="lead mb-0">Discover thousands of premium digital products</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <div class="row">
+            <!-- Sidebar Filters -->
+            <div class="col-lg-3 mb-4">
+                <div class="filter-sidebar">
+                    <h5 class="mb-4"><i class="fas fa-filter"></i> Filters</h5>
+                    
+                    <!-- Search -->
+                    <div class="filter-section mb-4">
+                        <label class="form-label fw-bold">Search Products</label>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search...">
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="filter-section mb-4">
+                        <label class="form-label fw-bold">Category</label>
+                        <select class="form-select" id="categoryFilter">
+                            <option value="all">All Categories</option>
+                            <option value="websites">Websites</option>
+                            <option value="apps">Apps</option>
+                            <option value="apis">APIs</option>
+                            <option value="ai-tools">AI Tools</option>
+                            <option value="courses">Courses</option>
+                            <option value="plugins">Plugins</option>
+                        </select>
+                    </div>
+
+                    <!-- Price Filter -->
+                    <div class="filter-section mb-4">
+                        <label class="form-label fw-bold">Price Range</label>
+                        <select class="form-select" id="priceFilter">
+                            <option value="all">All Prices</option>
+                            <option value="0-99">$0 - $99</option>
+                            <option value="100-199">$100 - $199</option>
+                            <option value="200-299">$200 - $299</option>
+                            <option value="300-499">$300 - $499</option>
+                            <option value="500-999">$500+</option>
+                        </select>
+                    </div>
+
+                    <!-- Rating Filter -->
+                    <div class="filter-section mb-4">
+                        <label class="form-label fw-bold">Minimum Rating</label>
+                        <select class="form-select" id="ratingFilter">
+                            <option value="0">All Ratings</option>
+                            <option value="4">4★ & Above</option>
+                            <option value="4.5">4.5★ & Above</option>
+                            <option value="4.8">4.8★ & Above</option>
+                        </select>
+                    </div>
+
+                    <!-- Sort By -->
+                    <div class="filter-section mb-4">
+                        <label class="form-label fw-bold">Sort By</label>
+                        <select class="form-select" id="sortFilter">
+                            <option value="featured">Featured</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="rating">Top Rated</option>
+                            <option value="newest">Newest First</option>
+                        </select>
+                    </div>
+
+                    <!-- Clear Filters -->
+                    <button class="btn btn-outline-danger w-100" id="clearFiltersBtn">
+                        <i class="fas fa-times"></i> Clear Filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="col-lg-9">
+                <!-- Results Info -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h5 class="mb-0">
+                            <span id="resultsCount">0</span> Products Found
+                        </h5>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary" id="gridViewBtn">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" id="listViewBtn">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Products Container -->
+                <div class="row g-4" id="productsContainer">
+                    <!-- Products will be loaded here by JavaScript -->
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-3 text-muted">Loading products...</p>
+                    </div>
+                </div>
+
+                <!-- No Results -->
+                <div id="noResults" class="text-center py-5 hidden">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h4>No Products Found</h4>
+                    <p class="text-muted">Try adjusting your filters or search terms</p>
+                    <button class="btn btn-primary-custom" id="resetFiltersBtn">
+                        <i class="fas fa-redo"></i> Reset Filters
+                    </button>
+                </div>
+
+                <!-- Pagination -->
+                <nav class="mt-5" id="paginationContainer">
+                    <ul class="pagination justify-content-center">
+                        <!-- Pagination will be loaded here -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5><i class="fas fa-store"></i> DigiMarket Pro</h5>
+                    <p>Your trusted marketplace for premium digital products</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50">About Us</a></li>
+                        <li><a href="#" class="text-white-50">Contact</a></li>
+                        <li><a href="#" class="text-white-50">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="fas fa-envelope me-2"></i> scottplug001@gmail.com</p>
+                    <p><i class="fas fa-phone me-2"></i> +234 9133767432</p>
+                </div>
+            </div>
+            <hr style="border-color: rgba(255,255,255,0.1);">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 DigiMarket Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="/project.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+    </script>
+</body>
+</html>

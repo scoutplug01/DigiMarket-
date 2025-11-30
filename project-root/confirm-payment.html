@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Payment - DigiMarket Pro</title>
+    <link rel="shortcut icon" href="assets/images/logo.png" type="image/x-icon">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/project.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="home.html">
+                <i class="fas fa-store"></i> DigiMarket Pro
+            </a>
+            <div class="navbar-text text-white ms-auto">
+                <i class="fas fa-lock"></i> Secure Payment
+            </div>
+        </div>
+    </nav>
+
+    <!-- Checkout Steps -->
+    <div class="container my-4">
+        <div class="checkout-steps">
+            <div class="step completed">
+                <div class="step-number"><i class="fas fa-check"></i></div>
+                <div class="step-label">Cart</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step completed">
+                <div class="step-number"><i class="fas fa-check"></i></div>
+                <div class="step-label">Checkout</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step active">
+                <div class="step-number">3</div>
+                <div class="step-label">Payment</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-label">Complete</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Payment Instructions Card -->
+                <div class="card shadow-lg mb-4">
+                    <div class="card-header bg-primary text-white text-center py-3">
+                        <h4 class="mb-0">
+                            <i class="fas fa-credit-card"></i> Complete Your Payment
+                        </h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Order Summary -->
+                        <div class="alert alert-info mb-4">
+                            <h6 class="mb-2"><i class="fas fa-info-circle"></i> Order Summary</h6>
+                            <div class="d-flex justify-content-between">
+                                <span><strong>Total Amount:</strong></span>
+                                <span class="h5 mb-0 text-primary" id="paymentTotalAmount">$0.00</span>
+                            </div>
+                            <hr class="my-2">
+                            <small>Order ID: #<span id="orderId"></span></small>
+                        </div>
+
+                        <!-- Payment Instructions -->
+                        <div class="alert alert-warning">
+                            <h6><i class="fas fa-exclamation-triangle"></i> IMPORTANT INSTRUCTIONS</h6>
+                            <ol class="mb-0">
+                                <li>Make payment to one of the bank accounts below</li>
+                                <li>Take a screenshot of your payment confirmation</li>
+                                <li>Upload the screenshot using the form below</li>
+                                <li>Wait for admin confirmation (Usually within 24 hours)</li>
+                            </ol>
+                        </div>
+
+                        <!-- Bank Accounts -->
+                        <h5 class="mb-3"><i class="fas fa-university"></i> Payment Details</h5>
+                        
+                        <!-- OPay Account -->
+                        <div class="bank-account-card mb-3">
+                            <div class="bank-header">
+                                <img src="https://cdn-icons-png.flaticon.com/128/6124/6124998.png" 
+                                     alt="OPay" class="bank-logo">
+                                <h6 class="mb-0">OPay</h6>
+                            </div>
+                            <div class="bank-details">
+                                <div class="detail-row">
+                                    <span class="detail-label">Account Number:</span>
+                                    <span class="detail-value">
+                                        <strong id="opayAccount">9133767432</strong>
+                                        <button class="btn btn-sm btn-outline-primary ms-2" 
+                                                onclick="copyToClipboard('9133767432', this)">
+                                            <i class="fas fa-copy"></i> Copy
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Account Name:</span>
+                                    <span class="detail-value">Ometta Abraham Kenechi</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PalmPay Account -->
+                        <div class="bank-account-card mb-4">
+                            <div class="bank-header">
+                                <img src="https://cdn-icons-png.flaticon.com/128/6124/6124998.png" 
+                                     alt="PalmPay" class="bank-logo">
+                                <h6 class="mb-0">PalmPay</h6>
+                            </div>
+                            <div class="bank-details">
+                                <div class="detail-row">
+                                    <span class="detail-label">Account Number:</span>
+                                    <span class="detail-value">
+                                        <strong id="palmpayAccount">9133767432</strong>
+                                        <button class="btn btn-sm btn-outline-primary ms-2" 
+                                                onclick="copyToClipboard('9133767432', this)">
+                                            <i class="fas fa-copy"></i> Copy
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Account Name:</span>
+                                    <span class="detail-value">Ometta Abraham Kenechi</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Upload Payment Proof Form -->
+                        <div class="payment-proof-section">
+                            <h5 class="mb-3"><i class="fas fa-upload"></i> Submit Payment Proof</h5>
+                            <form id="paymentProofForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Your Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="payerName" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Email Address <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control" id="payerEmail" required readonly>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Amount Paid ($) <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="amountPaid" required readonly>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Payment Bank <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="paymentBank" required>
+                                            <option value="">Select Bank</option>
+                                            <option value="OPay">OPay</option>
+                                            <option value="PalmPay">PalmPay</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Upload Payment Screenshot <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="file" class="form-control" id="paymentScreenshot" 
+                                           accept="image/*" required>
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle"></i> 
+                                        Upload a clear screenshot showing payment confirmation
+                                    </small>
+                                </div>
+
+                                <!-- Screenshot Preview -->
+                                <div id="screenshotPreview" class="mb-3"></div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Additional Notes (Optional)</label>
+                                    <textarea class="form-control" id="paymentNotes" rows="2" 
+                                              placeholder="Any additional information..."></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-success btn-lg w-100">
+                                    <i class="fas fa-check-circle"></i> Submit Payment Proof
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Help Card -->
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h6><i class="fas fa-question-circle"></i> Need Help?</h6>
+                        <p class="mb-0">
+                            If you encounter any issues, please contact us:
+                            <br>
+                            <i class="fas fa-phone text-primary"></i> +234 9133767432
+                            <br>
+                            <i class="fas fa-envelope text-primary"></i> scottplug001@gmail.com
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2025 DigiMarket Pro. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="/project.js"></script>
+</body>
+</html>

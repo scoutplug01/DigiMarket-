@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers - Admin</title>
+    <link rel="shortcut icon" href="../img/image.png" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/adim-style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/project-root/index.html">
+                <i class="fas fa-store"></i> DigiMarket Pro - Admin
+            </a>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 col-lg-2 p-0">
+                <div class="dashboard-sidebar">
+                    <h5 class="mb-4"><i class="fas fa-user-shield"></i> Admin Panel</h5>
+                    <a href="dashboard.html" class="dashboard-menu-item">
+                        <i class="fas fa-chart-line me-2"></i> Dashboard
+                    </a>
+                    <a href="product.html" class="dashboard-menu-item">
+                        <i class="fas fa-box me-2"></i> Products
+                    </a>
+                    <a href="orders.html" class="dashboard-menu-item">
+                        <i class="fas fa-shopping-cart me-2"></i> Orders
+                    </a>
+                    <a href="cusmtors.html" class="dashboard-menu-item active">
+                        <i class="fas fa-users me-2"></i> Customers
+                    </a>
+                    <a href="support.html" class="dashboard-menu-item">
+    <i class="fas fa-headset me-2"></i> Support
+    <span class="badge bg-danger ms-2" id="sidebarUnreadCount">0</span>
+</a>
+                    <a href="create-product.html" class="dashboard-menu-item">
+                        <i class="fas fa-store me-2"></i> create product
+                    </a>
+                    <a href="/user/setting.html" class="dashboard-menu-item">
+                        <i class="fas fa-cog me-2"></i> Settings
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-9 col-lg-10 p-4">
+                <h2 class="mb-4"><i class="fas fa-users"></i> Customers Management</h2>
+
+                <!-- Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body text-center">
+                                <h3>8,456</h3>
+                                <p class="mb-0">Total Customers</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body text-center">
+                                <h3>5,678</h3>
+                                <p class="mb-0">Active</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body text-center">
+                                <h3>234</h3>
+                                <p class="mb-0">New This Month</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body text-center">
+                                <h3>$125K</h3>
+                                <p class="mb-0">Total Spent</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <select class="form-control">
+                            <option>All Customers</option>
+                            <option>Active</option>
+                            <option>Inactive</option>
+                            <option>New</option>
+                        </select>
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" placeholder="Search customers...">
+                    </div>
+                </div>
+
+                <!-- Customers Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Customer</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Total Orders</th>
+                                        <th>Total Spent</th>
+                                        <th>Join Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#001</td>
+                                        <td>
+                                            <img src="https://i.pravatar.cc/30?img=1" class="rounded-circle me-2" width="30">
+                                            John Doe
+                                        </td>
+                                        <td>john@example.com</td>
+                                        <td>+234 123 456 789</td>
+                                        <td>24</td>
+                                        <td>$2,450</td>
+                                        <td>Jan 15, 2024</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-ban"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#002</td>
+                                        <td>
+                                            <img src="https://i.pravatar.cc/30?img=5" class="rounded-circle me-2" width="30">
+                                            Sarah Smith
+                                        </td>
+                                        <td>sarah@example.com</td>
+                                        <td>+234 987 654 321</td>
+                                        <td>18</td>
+                                        <td>$1,890</td>
+                                        <td>Feb 20, 2024</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-ban"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#003</td>
+                                        <td>
+                                            <img src="https://i.pravatar.cc/30?img=8" class="rounded-circle me-2" width="30">
+                                            Mike Wilson
+                                        </td>
+                                        <td>mike@example.com</td>
+                                        <td>+234 555 123 456</td>
+                                        <td>32</td>
+                                        <td>$3,200</td>
+                                        <td>Dec 10, 2023</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-ban"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#004</td>
+                                        <td>
+                                            <img src="https://i.pravatar.cc/30?img=12" class="rounded-circle me-2" width="30">
+                                            Emma Davis
+                                        </td>
+                                        <td>emma@example.com</td>
+                                        <td>+234 444 777 888</td>
+                                        <td>15</td>
+                                        <td>$1,650</td>
+                                        <td>Mar 5, 2024</td>
+                                        <td><span class="badge bg-warning">Inactive</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-ban"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#005</td>
+                                        <td>
+                                            <img src="https://i.pravatar.cc/30?img=15" class="rounded-circle me-2" width="30">
+                                            Alex Brown
+                                        </td>
+                                        <td>alex@example.com</td>
+                                        <td>+234 222 333 444</td>
+                                        <td>8</td>
+                                        <td>$920</td>
+                                        <td>Nov 20, 2024</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-ban"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <nav class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="/adim.js"></script>
+</body>
+</html>

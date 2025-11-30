@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful - DigiMarket Pro</title>
+    <link rel="shortcut icon" href="assets/images/logo.png" type="image/x-icon">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/project.css">
+    
+    <!-- Success Content -->
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Success Card -->
+                <div class="card shadow-lg border-0 success-animation">
+                    <div class="card-body text-center p-5">
+                        <!-- Success Icon -->
+                        <div class="success-icon">
+                            <i class="fas fa-check fa-4x text-white"></i>
+                        </div>
+
+                        <!-- Success Message -->
+                        <h1 class="display-5 fw-bold text-success mb-3">
+                            Payment Submitted Successfully!
+                        </h1>
+                        <p class="lead text-muted mb-4">
+                            Thank you for your order. We've received your payment proof and it's being reviewed.
+                        </p>
+
+                        <!-- Order Information -->
+                        <div class="order-details-card text-start">
+                            <h5 class="mb-3">
+                                <i class="fas fa-file-invoice"></i> Order Details
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <small class="text-muted">Order ID</small>
+                                    <p class="mb-0 fw-bold" id="orderIdDisplay">#ORD123456</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <small class="text-muted">Order Date</small>
+                                    <p class="mb-0 fw-bold" id="orderDate"></p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <small class="text-muted">Payment Status</small>
+                                    <p class="mb-0">
+                                        <span class="badge bg-warning">
+                                            <i class="fas fa-clock"></i> Pending Confirmation
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <small class="text-muted">Amount Paid</small>
+                                    <p class="mb-0 fw-bold text-primary" id="totalAmountDisplay">$0.00</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Next Steps -->
+                        <div class="alert alert-info text-start mb-4">
+                            <h6 class="mb-2">
+                                <i class="fas fa-info-circle"></i> What happens next?
+                            </h6>
+                            <ol class="mb-0">
+                                <li>Our admin team will review your payment proof</li>
+                                <li>You'll receive a confirmation email within 24 hours</li>
+                                <li>Once confirmed, your products will be available for download</li>
+                                <li>You can track your order status in your dashboard</li>
+                            </ol>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-3 d-md-flex justify-content-md-center">
+                            <a href="/user/orders-history.html" class="btn btn-primary-custom btn-lg">
+                                <i class="fas fa-history"></i> View Order History
+                            </a>
+                            <a href="market.html" class="btn btn-outline-primary btn-lg">
+                                <i class="fas fa-shopping-bag"></i> Continue Shopping
+                            </a>
+                        </div>
+
+                        <!-- Email Confirmation -->
+                        <div class="mt-4 pt-4 border-top">
+                            <p class="text-muted mb-0">
+                                <i class="fas fa-envelope"></i> 
+                                A confirmation email has been sent to <strong id="userEmail"></strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Help Card -->
+                <div class="card shadow-sm mt-4">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h6 class="mb-2">
+                                    <i class="fas fa-headset text-primary"></i> Need Assistance?
+                                </h6>
+                                <p class="mb-0 text-muted">
+                                    Our support team is available 24/7 to help you with any questions.
+                                </p>
+                            </div>
+                            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                                <a href="#" class="btn btn-outline-primary" id="contactSupportBtn">
+                                    <i class="fas fa-comments"></i> Contact Support
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Share -->
+                <div class="text-center mt-4">
+                    <p class="text-muted mb-3">Share your experience:</p>
+                    <div class="social-share-buttons">
+                        <a href="#" class="btn btn-outline-primary btn-sm me-2">
+                            <i class="fab fa-facebook"></i> Facebook
+                        </a>
+                        <a href="#" class="btn btn-outline-info btn-sm me-2">
+                            <i class="fab fa-twitter"></i> Twitter
+                        </a>
+                        <a href="#" class="btn btn-outline-success btn-sm">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <h5><i class="fas fa-store"></i> DigiMarket Pro</h5>
+                    <p class="mb-0">Your trusted marketplace for premium digital products</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h6>Contact Us</h6>
+                    <p class="mb-0">
+                        <i class="fas fa-envelope"></i> scottplug001@gmail.com<br>
+                        <i class="fas fa-phone"></i> +234 9133767432
+                    </p>
+                </div>
+            </div>
+            <hr class="my-3" style="border-color: rgba(255,255,255,0.1);">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 DigiMarket Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="/project.js"></script>
+  >
+</body>
+</html>

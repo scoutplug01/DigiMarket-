@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Product - Admin</title>
+    <link rel="shortcut icon" href="../img/image.png" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/adim-style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/project-root/index.html">
+                <i class="fas fa-store"></i> DigiMarket Pro - Admin
+            </a>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 col-lg-2 p-0">
+                <div class="dashboard-sidebar">
+                    <h5 class="mb-4"><i class="fas fa-user-shield"></i> Admin Panel</h5>
+                    <a href="dashboard.html" class="dashboard-menu-item">
+                        <i class="fas fa-chart-line me-2"></i> Dashboard
+                    </a>
+                    <a href="product.html" class="dashboard-menu-item active">
+                        <i class="fas fa-box me-2"></i> Products
+                    </a>
+                    <a href="orders.html" class="dashboard-menu-item">
+                        <i class="fas fa-shopping-cart me-2"></i> Orders
+                    </a>
+                    <a href="cusmtors.html" class="dashboard-menu-item">
+                        <i class="fas fa-users me-2"></i> Customers
+                    </a>
+                    <a href="support.html" class="dashboard-menu-item">
+    <i class="fas fa-headset me-2"></i> Support
+    <span class="badge bg-danger ms-2" id="sidebarUnreadCount">0</span>
+</a>
+                    <a href="/user/setting.html" class="dashboard-menu-item">
+                        <i class="fas fa-cog me-2"></i> Settings
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-9 col-lg-10 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fas fa-plus-circle"></i> Create New Product</h2>
+                    <a href="product.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Products
+                    </a>
+                </div>
+
+                <form>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5>Product Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <label class="form-label">Product Name *</label>
+                                    <input type="text" class="form-control" placeholder="Enter product name" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Category *</label>
+                                    <select class="form-control" required>
+                                        <option value="">Select Category</option>
+                                        <option>Website</option>
+                                        <option>App</option>
+                                        <option>API</option>
+                                        <option>AI Tool</option>
+                                        <option>Course</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Description *</label>
+                                <textarea class="form-control" rows="5" placeholder="Enter product description" required></textarea>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Price ($) *</label>
+                                    <input type="number" class="form-control" placeholder="99.00" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Discount (%)</label>
+                                    <input type="number" class="form-control" placeholder="0">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Final Price</label>
+                                    <input type="text" class="form-control" readonly value="$99.00">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5>Product Media</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Product Images *</label>
+                                <input type="file" class="form-control" multiple accept="image/*">
+                                <small class="text-muted">Upload product images (Max 5 images)</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Product Files</label>
+                                <input type="file" class="form-control" multiple>
+                                <small class="text-muted">Upload downloadable files for customers</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5>Additional Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Features (One per line)</label>
+                                    <textarea class="form-control" rows="5" placeholder="Enter product features"></textarea>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Tags (Comma separated)</label>
+                                    <input type="text" class="form-control" placeholder="e-commerce, website, template">
+                                    <small class="text-muted">Add relevant tags for better search</small>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Demo URL</label>
+                                    <input type="url" class="form-control" placeholder="https://demo.example.com">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Documentation URL</label>
+                                    <input type="url" class="form-control" placeholder="https://docs.example.com">
+                                </div>
+                            </div>
+
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="featured">
+                                <label class="form-check-label" for="featured">
+                                    Mark as Featured Product
+                                </label>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <select class="form-control">
+                                    <option>Active</option>
+                                    <option>Draft</option>
+                                    <option>Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="reset" class="btn btn-secondary me-2">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Create Product
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="/adim.js"></script>
+</body>
+</html>

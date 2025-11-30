@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products Management - Admin</title>
+    <link rel="shortcut icon" href="../img/image.png" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/adim-style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/project-root/index.html">
+                <i class="fas fa-store"></i> DigiMarket Pro - Admin
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 col-lg-2 p-0">
+                <div class="dashboard-sidebar">
+                    <h5 class="mb-4"><i class="fas fa-user-shield"></i> Admin Panel</h5>
+                    <a href="dashboard.html" class="dashboard-menu-item">
+                        <i class="fas fa-chart-line me-2"></i> Dashboard
+                    </a>
+                    <a href="product.html" class="dashboard-menu-item active">
+                        <i class="fas fa-box me-2"></i> Products
+                    </a>
+                    <a href="orders.html" class="dashboard-menu-item">
+                        <i class="fas fa-shopping-cart me-2"></i> Orders
+                    </a>
+                    <a href="cusmtors.html" class="dashboard-menu-item">
+                        <i class="fas fa-users me-2"></i> Customers
+                    </a>
+<a href="support.html" class="dashboard-menu-item">
+    <i class="fas fa-headset me-2"></i> Support
+    <span class="badge bg-danger ms-2" id="sidebarUnreadCount">0</span>
+</a>
+
+                    <a href="create-product.html" class="dashboard-menu-item">
+                        <i class="fas fa-store me-2"></i> create product
+                    </a>
+                    
+                    
+                    <a href="/user/setting.html" class="dashboard-menu-item">
+                        <i class="fas fa-cog me-2"></i> Settings
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-9 col-lg-10 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fas fa-box"></i> Products Management</h2>
+                    <a href="create-product.html" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add New Product
+                    </a>
+                </div>
+
+                <!-- Filter Row -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <select class="form-control">
+                            <option>All Categories</option>
+                            <option>Websites</option>
+                            <option>Apps</option>
+                            <option>APIs</option>
+                            <option>AI Tools</option>
+                            <option>Courses</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control">
+                            <option>All Status</option>
+                            <option>Active</option>
+                            <option>Inactive</option>
+                            <option>Draft</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" placeholder="Search products...">
+                    </div>
+                </div>
+
+                <!-- Products Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Image</th>
+                                        <th>Product Name</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Sales</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#001</td>
+                                        <td><img src="/my img/ist img.jpg" class="img-thumbnail" width="50"></td>
+                                        <td>E-commerce Template</td>
+                                        <td><span class="badge bg-primary">Website</span></td>
+                                        <td>$149</td>
+                                        <td>234</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td>
+                                            <a href="product.html" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                            <a href="create-product.html" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#002</td>
+                                        <td><img src="/my img/4th img.jpg" class="img-thumbnail" width="50"></td>
+                                        <td>AI Content Generator</td>
+                                        <td><span class="badge bg-success">API</span></td>
+                                        <td>$199</td>
+                                        <td>189</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td>
+                                            <a href="product.html" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                            <a href="create-product.html" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#003</td>
+                                        <td><img src="/my img/6th img.jpg" class="img-thumbnail" width="50"></td>
+                                        <td>Full Stack Course</td>
+                                        <td><span class="badge bg-warning">Course</span></td>
+                                        <td>$99</td>
+                                        <td>156</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td>
+                                            <a href="product.html" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                            <a href="create-product.html" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#004</td>
+                                        <td><img src="/my img/myimg9.jpg" class="img-thumbnail" width="50"></td>
+                                        <td>Mobile UI Kit</td>
+                                        <td><span class="badge bg-info">App</span></td>
+                                        <td>$129</td>
+                                        <td>134</td>
+                                        <td><span class="badge bg-warning">Draft</span></td>
+                                        <td>
+                                            <a href="product.html" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                            <a href="create-product.html" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#005</td>
+                                        <td><img src="/my img/img7.jpg" class="img-thumbnail" width="50"></td>
+                                        <td>SEO Tools Package</td>
+                                        <td><span class="badge bg-danger">AI Tool</span></td>
+                                        <td>$89</td>
+                                        <td>98</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td>
+                                            <a href="product.html" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                            <a href="create-product.html" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <nav class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="/adim.js"></script>
+</body>
+</html>
