@@ -1,4 +1,6 @@
-// Fixed AUTH.JS (Clean, Simple, Fully Working)
+// ===================================
+// FIXED AUTH.JS - Authentication System
+// ===================================
 
 // Initialize AOS Animation
 document.addEventListener('DOMContentLoaded', function() {
@@ -17,7 +19,9 @@ function showAlert(message, type) {
     div.textContent = message;
 
     const form = document.querySelector('form');
-    form.parentNode.insertBefore(div, form);
+    if (form) {
+        form.parentNode.insertBefore(div, form);
+    }
 
     setTimeout(() => div.remove(), 4000);
 }
@@ -29,14 +33,14 @@ function isValidEmail(email) {
 
 // Store new user
 function storeUser(user) {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const users = JSON.parse(localStorage.getItem('digimarket_users') || '[]');
     users.push(user);
-    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.setItem('digimarket_users', JSON.stringify(users));
 }
 
 // Find user
 function findUser(email) {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const users = JSON.parse(localStorage.getItem('digimarket_users') || '[]');
     return users.find(u => u.email === email);
 }
 
@@ -58,15 +62,24 @@ if (loginForm) {
         if (!user) return showAlert('No account found with this email', 'danger');
         if (user.password !== pass) return showAlert('Incorrect password', 'danger');
 
-        // Login successful
-        localStorage.setItem('currentUser', JSON.stringify(user));
+        // Login successful - Save to BOTH storage keys
+        const userSession = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role || 'buyer'
+        };
+        
+        // Save to both keys for compatibility
+        localStorage.setItem('currentUser', JSON.stringify(userSession));
+        localStorage.setItem('digimarket_user', JSON.stringify(userSession));
+        
         showAlert('Login successful! Redirecting...', 'success');
-
         loginForm.querySelector('button[type="submit"]').disabled = true;
 
-        // Correct redirect
+        // Redirect to home page
         setTimeout(() => {
-            window.location.href = "/project-root/home.html";
+            window.location.href = "../home.html";
         }, 1500);
     });
 }
@@ -83,8 +96,8 @@ if (registerForm) {
         const email = document.getElementById('registerEmail').value.trim();
         const pass = document.getElementById('registerPassword').value;
         const confirm = document.getElementById('confirmPassword').value;
-        const type = document.getElementById('accountType').value;
-        const terms = document.getElementById('agreeTerms').checked;
+        const type = document.getElementById('accountType') ? document.getElementById('accountType').value : 'buyer';
+        const terms = document.getElementById('agreeTerms') ? document.getElementById('agreeTerms').checked : true;
 
         if (!name || !email || !pass || !confirm) return showAlert('Please fill in all fields', 'danger');
         if (!isValidEmail(email)) return showAlert('Invalid email format', 'danger');
@@ -94,19 +107,33 @@ if (registerForm) {
         if (findUser(email)) return showAlert('Email already registered', 'danger');
 
         const newUser = {
+            id: Date.now(),
             name,
             email,
             password: pass,
-            accountType: type,
+            role: type,
             createdAt: new Date().toISOString()
         };
 
         storeUser(newUser);
+        
+        // Auto login after registration
+        const userSession = {
+            id: newUser.id,
+            name: newUser.name,
+            email: newUser.email,
+            role: newUser.role
+        };
+        
+        // Save to both keys
+        localStorage.setItem('currentUser', JSON.stringify(userSession));
+        localStorage.setItem('digimarket_user', JSON.stringify(userSession));
+        
         showAlert('Account created! Redirecting...', 'success');
         registerForm.querySelector('button[type="submit"]').disabled = true;
 
         setTimeout(() => {
-            window.location.href = "login.html";
+            window.location.href = "../home.html";
         }, 1500);
     });
 }
@@ -127,8 +154,8 @@ if (forgotPasswordForm) {
         if (!user) return showAlert('No account found with this email', 'danger');
 
         showAlert('Password reset link sent to your email!', 'success');
-
         forgotPasswordForm.querySelector('button[type="submit"]').disabled = true;
+        
         setTimeout(() => {
             window.location.href = "login.html";
         }, 2000);

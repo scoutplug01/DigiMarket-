@@ -1,5 +1,5 @@
 // ===================================
-// DigiMarket Pro - project.js (FULL, corrected)
+// DigiMarket Pro - project.js (FIXED - PART 1)
 // ===================================
 
 // === GLOBAL STATE ===
@@ -25,16 +25,22 @@ function initializeApp() {
     initializeAnimations();
     ensureLogoutBinding();
     ensureLiveChat();
+    setupNotificationClose();
 }
 
 // === LOCAL STORAGE MANAGEMENT ===
 function loadFromLocalStorage() {
     try {
-        const user = localStorage.getItem('digimarket_user');
+        // Load user from BOTH possible keys
+        let user = localStorage.getItem('digimarket_user');
+        if (!user) {
+            user = localStorage.getItem('currentUser');
+        }
+        
         const cart = localStorage.getItem('digimarket_cart');
         const wishlist = localStorage.getItem('digimarket_wishlist');
         const notifications = localStorage.getItem('digimarket_notifications');
-        const products = localStorage.getItem('digimarket_products'); // optional persisted products
+        const products = localStorage.getItem('digimarket_products');
 
         if (user) appState.user = JSON.parse(user);
         if (cart) appState.cart = JSON.parse(cart);
@@ -48,11 +54,14 @@ function loadFromLocalStorage() {
 
 function saveToLocalStorage() {
     try {
-        localStorage.setItem('digimarket_user', JSON.stringify(appState.user));
+        // Save to BOTH keys for compatibility
+        if (appState.user) {
+            localStorage.setItem('digimarket_user', JSON.stringify(appState.user));
+            localStorage.setItem('currentUser', JSON.stringify(appState.user));
+        }
         localStorage.setItem('digimarket_cart', JSON.stringify(appState.cart));
         localStorage.setItem('digimarket_wishlist', JSON.stringify(appState.wishlist));
         localStorage.setItem('digimarket_notifications', JSON.stringify(appState.notifications));
-        // products not always persisted, but keep if present
         if (appState.products && appState.products.length) {
             localStorage.setItem('digimarket_products', JSON.stringify(appState.products));
         }
@@ -64,43 +73,36 @@ function saveToLocalStorage() {
 // === AUTHENTICATION ===
 function checkAuthStatus() {
     const currentPage = window.location.pathname;
-    // pages that should be publicly accessible
-    const publicPages = ['/project-root/index.html', '/auth/login.html', '/auth/signup.html', '/project-root/', '/project-root/auth/login.html', '/project-root/auth/signup.html'];
-    const isPublicPage = publicPages.some(page => currentPage.includes(page) || currentPage === '/');
+    const publicPages = ['index.html', 'login.html', 'signup.html', '/'];
+    const isPublicPage = publicPages.some(page => currentPage.includes(page));
 
     if (!appState.user && !isPublicPage) {
         showToast('Please login to continue', 'warning');
         setTimeout(() => {
-            // redirect to auth login (relative)
-            // if already under /auth/ then go to login.html directly
-            const path = window.location.pathname;
-            if (path.includes('/auth/')) {
-                window.location.href = '/auth/login.html';
-            } else {
-                // go to auth folder login page
-                const base = path.split('/').slice(0, -1).join('/') || '';
-                window.location.href = `${base}/auth/login.html`.replace('//', '/');
-            }
+            window.location.href = '/auth/login.html';
         }, 1200);
     }
 }
 
 function logout() {
-    // Clear only app-related keys (safer than wiping all localStorage)
     appState.user = null;
     appState.cart = [];
     appState.wishlist = [];
     appState.notifications = [];
-    saveToLocalStorage();
-
-    // Remove session-like keys also used elsewhere
+    
+    // Clear BOTH storage keys
+    localStorage.removeItem('digimarket_user');
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('digimarket_cart');
+    localStorage.removeItem('digimarket_wishlist');
+    localStorage.removeItem('digimarket_notifications');
     localStorage.removeItem('digimarket_current_order');
-    // keep stored users list (digimarket_users) intact so accounts persist
+    
+    saveToLocalStorage();
     showToast('Logged out successfully', 'success');
 
     setTimeout(() => {
-        // redirect to index (relative)
-        window.location.href = '/project-root/index.html';
+        window.location.href = 'index.html';
     }, 800);
 }
 
@@ -120,7 +122,6 @@ function generateSampleProducts() {
             rating: (Math.random() * 2 + 3).toFixed(1),
             reviews: Math.floor(Math.random() * 1000) + 50,
             image: `https://picsum.photos/seed/${category + i}/400/300`,
-
             badge: ['new', 'featured', 'hot', null][Math.floor(Math.random() * 4)],
             features: [
                 'Lifetime updates included',
@@ -137,7 +138,7 @@ function generateSampleProducts() {
     }
 
     appState.products = products;
-    saveToLocalStorage(); // optional: persist so subsequent loads show same products
+    saveToLocalStorage();
 }
 
 function loadProducts() {
@@ -185,13 +186,11 @@ function getCartTotal() {
 }
 
 function updateCartUI() {
-    // Update cart count badges
     const cartCountElements = document.querySelectorAll('#cartCount, #cartItemsCount');
     cartCountElements.forEach(el => {
         if (el) el.textContent = appState.cart.length;
     });
 
-    // Update cart page if on cart page
     if (window.location.pathname.includes('cart.html')) {
         renderCartItems();
     }
@@ -207,7 +206,7 @@ function renderCartItems() {
     if (appState.cart.length === 0) {
         if (emptyState) emptyState.classList.remove('hidden');
         if (cartContent) cartContent.classList.add('hidden');
-        container.innerHTML = ''; // clear
+        container.innerHTML = '';
         return;
     }
 
@@ -239,8 +238,8 @@ function renderCartItems() {
 
 function updateOrderSummary() {
     const subtotal = getCartTotal();
-    const tax = 0; // No tax
-    const discount = 0; // No discount for now
+    const tax = 0;
+    const discount = 0;
     const total = subtotal - discount + tax;
 
     const elements = {
@@ -263,11 +262,9 @@ function addToWishlist(productId) {
 
     const existingItem = appState.wishlist.find(item => item.id === productId);
     if (existingItem) {
-        // Remove from wishlist
         appState.wishlist = appState.wishlist.filter(item => item.id !== productId);
         showToast('Removed from wishlist', 'info');
     } else {
-        // Add to wishlist
         appState.wishlist.push(product);
         showToast('Added to wishlist', 'success');
     }
@@ -282,6 +279,15 @@ function updateWishlistUI() {
         wishlistCountEl.textContent = appState.wishlist.length;
     }
 }
+
+// Make functions globally available
+window.addToCart = addToCart;
+window.removeFromCart = removeFromCart;
+window.addToWishlist = addToWishlist; 
+
+// ===================================
+// DigiMarket Pro - project.js (PART 2)
+// ===================================
 
 // === NOTIFICATIONS ===
 function addNotification(message, type = 'info') {
@@ -348,12 +354,50 @@ function markNotificationAsRead(notifId) {
 function formatTimestamp(timestamp) {
     const date = new Date(timestamp);
     const now = new Date();
-    const diff = Math.floor((now - date) / 1000); // seconds
+    const diff = Math.floor((now - date) / 1000);
 
     if (diff < 60) return 'Just now';
     if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
     if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
     return `${Math.floor(diff / 86400)} days ago`;
+}
+
+// === SETUP NOTIFICATION CLOSE BUTTON ===
+function setupNotificationClose() {
+    const notificationIcon = document.getElementById('notificationIcon');
+    const notificationDropdown = document.getElementById('notificationDropdown');
+    
+    if (!notificationIcon || !notificationDropdown) return;
+    
+    // Create close button if it doesn't exist
+    let closeBtn = document.getElementById('closeNotificationBtn');
+    if (!closeBtn) {
+        const headerDiv = notificationDropdown.querySelector('div[style*="border-bottom"]');
+        if (headerDiv) {
+            closeBtn = document.createElement('button');
+            closeBtn.id = 'closeNotificationBtn';
+            closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+            closeBtn.style.cssText = 'background: transparent; border: none; color: #6b7280; cursor: pointer; font-size: 1.5rem; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.3s ease; position: absolute; right: 1rem; top: 1rem;';
+            
+            headerDiv.style.position = 'relative';
+            headerDiv.appendChild(closeBtn);
+            
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notificationDropdown.classList.add('hidden');
+            });
+            
+            closeBtn.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = '#f3f4f6';
+                this.style.color = '#ef4444';
+            });
+            
+            closeBtn.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = 'transparent';
+                this.style.color = '#6b7280';
+            });
+        }
+    }
 }
 
 // === PRODUCT RENDERING ===
@@ -435,7 +479,6 @@ function generateStars(rating) {
 
 // === TOAST NOTIFICATIONS ===
 function showToast(message, type = 'info') {
-    // Remove existing toast container if any
     let container = document.querySelector('.toast-container');
     if (!container) {
         container = document.createElement('div');
@@ -467,19 +510,16 @@ function showToast(message, type = 'info') {
 
 // === EVENT LISTENERS SETUP ===
 function setupEventListeners() {
-    // Notification icon
     const notificationIcon = document.getElementById('notificationIcon');
     if (notificationIcon) {
         notificationIcon.addEventListener('click', toggleNotificationDropdown);
     }
 
-    // Checkout button
     const checkoutBtn = document.getElementById('checkoutBtn');
     if (checkoutBtn) {
         checkoutBtn.addEventListener('click', goToCheckout);
     }
 
-    // Search functionality
     const searchBtn = document.getElementById('searchBtn');
     const searchInput = document.getElementById('searchInput');
     if (searchBtn && searchInput) {
@@ -489,7 +529,6 @@ function setupEventListeners() {
         });
     }
 
-    // Become seller link
     const becomeSellerLink = document.getElementById('becomeSellerLink');
     if (becomeSellerLink) {
         becomeSellerLink.addEventListener('click', (e) => {
@@ -498,8 +537,19 @@ function setupEventListeners() {
         });
     }
 
-    // Navbar scroll effect
     window.addEventListener('scroll', handleNavbarScroll);
+    
+    // Close notification dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('notificationDropdown');
+        const notificationIcon = document.getElementById('notificationIcon');
+        
+        if (dropdown && !dropdown.classList.contains('hidden')) {
+            if (!dropdown.contains(event.target) && !notificationIcon.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        }
+    });
 }
 
 // === UTILITY FUNCTIONS ===
@@ -520,7 +570,7 @@ function goToCheckout() {
         showToast('Your cart is empty', 'warning');
         return;
     }
-    window.location.href = '/project-root/checkout.html';
+    window.location.href = 'checkout.html';
 }
 
 function performSearch() {
@@ -533,18 +583,7 @@ function performSearch() {
         return;
     }
 
-    // Redirect to market.html with query param
-    window.location.href = `/project-root/market.html?search=${encodeURIComponent(query)}`;
-}
-
-function openLiveChat() {
-    // If using the DOM live chat created below, toggle its visibility
-    const chatWindow = document.getElementById('chatWindow');
-    if (chatWindow) {
-        chatWindow.style.display = chatWindow.style.display === 'none' ? 'flex' : 'none';
-    } else {
-        showToast('Live chat feature coming soon!', 'info');
-    }
+    window.location.href = `market.html?search=${encodeURIComponent(query)}`;
 }
 
 function handleNavbarScroll() {
@@ -558,25 +597,7 @@ function handleNavbarScroll() {
     }
 }
 
-function copyToClipboard(text, button) {
-    navigator.clipboard.writeText(text).then(() => {
-        const originalHTML = button.innerHTML;
-        button.innerHTML = '<i class="fas fa-check"></i> Copied!';
-        button.classList.add('btn-success');
-        button.classList.remove('btn-outline-primary');
-
-        setTimeout(() => {
-            button.innerHTML = originalHTML;
-            button.classList.remove('btn-success');
-            button.classList.add('btn-outline-primary');
-        }, 2000);
-    }).catch(err => {
-        showToast('Failed to copy', 'error');
-    });
-}
-
 function initializeAnimations() {
-    // Initialize AOS if available
     if (typeof AOS !== 'undefined') {
         AOS.init({
             duration: 800,
@@ -585,7 +606,6 @@ function initializeAnimations() {
         });
     }
 
-    // Initialize Swiper if available
     if (typeof Swiper !== 'undefined') {
         new Swiper('.productsSwiper', {
             slidesPerView: 1,
@@ -611,9 +631,33 @@ function initializeAnimations() {
     }
 }
 
+// Make functions globally available
+window.markNotificationAsRead = markNotificationAsRead;
+window.copyToClipboard = copyToClipboard;
+
+function copyToClipboard(text, button) {
+    navigator.clipboard.writeText(text).then(() => {
+        const originalHTML = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        button.classList.add('btn-success');
+        button.classList.remove('btn-outline-primary');
+
+        setTimeout(() => {
+            button.innerHTML = originalHTML;
+            button.classList.remove('btn-success');
+            button.classList.add('btn-outline-primary');
+        }, 2000);
+    }).catch(err => {
+        showToast('Failed to copy', 'error');
+    });
+} 
+
+// ===================================
+// DigiMarket Pro - project.js (PART 3)
+// ===================================
+
 // === UPDATE UI ON PAGE LOAD ===
 function updateUI() {
-    // Update user name displays
     const userNameElements = document.querySelectorAll('#userName, #welcomeUserName');
     userNameElements.forEach(el => {
         if (el && appState.user) {
@@ -623,31 +667,24 @@ function updateUI() {
         }
     });
 
-    // Update cart count
     updateCartUI();
-
-    // Update wishlist count
     updateWishlistUI();
-
-    // Update notifications
     updateNotificationUI();
 
-    // Page-specific updates
     const currentPage = window.location.pathname;
 
-    if (currentPage.includes('/project-root/home.html') || currentPage === '/') {
+    if (currentPage.includes('home.html') || currentPage === '/') {
         loadHomePage();
-    } else if (currentPage.includes('/project-root/market.html')) {
+    } else if (currentPage.includes('market.html')) {
         loadMarketplacePage();
-    } else if (currentPage.includes('/project-root/cart.html')) {
+    } else if (currentPage.includes('cart.html')) {
         renderCartItems();
-    } else if (currentPage.includes('/project-root/checkout.html')) {
+    } else if (currentPage.includes('checkout.html')) {
         loadCheckoutPage();
     }
 }
 
 function loadHomePage() {
-    // Load featured products
     const featuredContainer = document.getElementById('featuredProductsContainer');
     if (featuredContainer && appState.products.length > 0) {
         const featured = appState.products.slice(0, 6);
@@ -658,7 +695,6 @@ function loadHomePage() {
         `).join('');
     }
 
-    // Update stats
     const cartItemsCountEl = document.getElementById('cartItemsCount');
     if (cartItemsCountEl) cartItemsCountEl.textContent = appState.cart.length;
     const totalPurchasesEl = document.getElementById('totalPurchases');
@@ -668,7 +704,6 @@ function loadHomePage() {
 }
 
 function loadMarketplacePage() {
-    // If url contains search param, prefill search input
     const params = new URLSearchParams(window.location.search);
     const q = params.get('search');
     if (q) {
@@ -677,8 +712,6 @@ function loadMarketplacePage() {
     }
 
     renderProducts(appState.products, 'productsContainer');
-
-    // Setup filters and handlers
     setupMarketplaceFilters();
 }
 
@@ -693,24 +726,20 @@ function setupMarketplaceFilters() {
     const applyFilters = () => {
         let filtered = [...appState.products];
 
-        // Category filter
         if (categoryFilter && categoryFilter.value !== 'all') {
             filtered = filtered.filter(p => p.category === categoryFilter.value);
         }
 
-        // Price filter
         if (priceFilter && priceFilter.value !== 'all') {
             const [min, max] = priceFilter.value.split('-').map(Number);
             filtered = filtered.filter(p => p.price >= min && (max ? p.price <= max : true));
         }
 
-        // Rating filter
         if (ratingFilter && ratingFilter.value !== '0') {
             const minRating = parseFloat(ratingFilter.value);
             filtered = filtered.filter(p => parseFloat(p.rating) >= minRating);
         }
 
-        // Search filter
         if (searchInput && searchInput.value) {
             const query = searchInput.value.toLowerCase();
             filtered = filtered.filter(p =>
@@ -719,7 +748,6 @@ function setupMarketplaceFilters() {
             );
         }
 
-        // Sort
         if (sortFilter) {
             switch (sortFilter.value) {
                 case 'price-low':
@@ -756,12 +784,10 @@ function setupMarketplaceFilters() {
         });
     }
 
-    // Initial render
     applyFilters();
 }
 
 function loadCheckoutPage() {
-    // Pre-fill order items
     const itemsCount = document.getElementById('itemsCount');
     if (itemsCount) itemsCount.textContent = appState.cart.length;
 
@@ -777,7 +803,6 @@ function loadCheckoutPage() {
         `).join('');
     }
 
-    // Pre-fill user email if logged in
     const emailInput = document.getElementById('email');
     if (emailInput && appState.user) {
         emailInput.value = appState.user.email || '';
@@ -785,7 +810,6 @@ function loadCheckoutPage() {
 
     updateOrderSummary();
 
-    // Setup place order button
     const placeOrderBtn = document.getElementById('placeOrderBtn');
     if (placeOrderBtn) {
         placeOrderBtn.addEventListener('click', handlePlaceOrder);
@@ -800,7 +824,6 @@ function handlePlaceOrder() {
         return;
     }
 
-    // Create order
     const order = {
         id: 'ORD' + Date.now(),
         items: appState.cart,
@@ -815,566 +838,18 @@ function handlePlaceOrder() {
         status: 'pending'
     };
 
-    // Save order to localStorage
     const orders = JSON.parse(localStorage.getItem('digimarket_orders') || '[]');
     orders.push(order);
     localStorage.setItem('digimarket_orders', JSON.stringify(orders));
     localStorage.setItem('digimarket_current_order', JSON.stringify(order));
 
-    // Clear cart (optional)
     appState.cart = [];
     saveToLocalStorage();
 
-    // Go to payment confirmation
-    window.location.href = '/project-root/confirm-payment.html';
+    window.location.href = 'confirm-payment.html';
 }
 
-// Make functions globally available
-window.addToCart = addToCart;
-window.removeFromCart = removeFromCart;
-window.addToWishlist = addToWishlist;
-window.copyToClipboard = copyToClipboard;
-window.markNotificationAsRead = markNotificationAsRead;
-
-// ===================================
-// Payment & Authentication Scripts
-// ===================================
-
-// === PAYMENT CONFIRMATION PAGE ===
-if (window.location.pathname.includes('confirm-payment.html')) {
-    document.addEventListener('DOMContentLoaded', initializePaymentPage);
-}
-
-function initializePaymentPage() {
-    const currentOrder = JSON.parse(localStorage.getItem('digimarket_current_order') || 'null');
-
-    if (!currentOrder) {
-        showToast('No order found', 'error');
-        setTimeout(() => window.location.href = '/project-root/cart.html', 1500);
-        return;
-    }
-
-    // Display order info
-    const orderIdEl = document.getElementById('orderId');
-    if (orderIdEl) orderIdEl.textContent = currentOrder.id;
-    const paymentTotalAmountEl = document.getElementById('paymentTotalAmount');
-    if (paymentTotalAmountEl) paymentTotalAmountEl.textContent = `$${currentOrder.total.toFixed(2)}`;
-    const payerEmailEl = document.getElementById('payerEmail');
-    if (payerEmailEl) payerEmailEl.value = currentOrder.customerInfo.email;
-    const amountPaidEl = document.getElementById('amountPaid');
-    if (amountPaidEl) amountPaidEl.value = currentOrder.total.toFixed(2);
-    const payerNameEl = document.getElementById('payerName');
-    if (payerNameEl) payerNameEl.value = currentOrder.customerInfo.name;
-
-    // Setup payment proof form
-    const form = document.getElementById('paymentProofForm');
-    if (form) {
-        form.addEventListener('submit', handlePaymentProofSubmit);
-    }
-
-    // Setup file preview
-    const screenshotInput = document.getElementById('paymentScreenshot');
-    if (screenshotInput) {
-        screenshotInput.addEventListener('change', handleScreenshotPreview);
-    }
-}
-
-function handleScreenshotPreview(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-        showToast('Please upload an image file', 'error');
-        e.target.value = '';
-        return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = function(event) {
-        const preview = document.getElementById('screenshotPreview');
-        if (preview) {
-            preview.innerHTML = `
-                <div style="position: relative; display: inline-block;">
-                    <img src="${event.target.result}" 
-                         style="max-width: 100%; max-height: 300px; border-radius: 0.75rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                    <button type="button" class="btn btn-sm btn-danger" 
-                            style="position: absolute; top: 10px; right: 10px;"
-                            onclick="clearScreenshot()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `;
-        }
-    };
-    reader.readAsDataURL(file);
-}
-
-function clearScreenshot() {
-    const input = document.getElementById('paymentScreenshot');
-    if (input) input.value = '';
-    const preview = document.getElementById('screenshotPreview');
-    if (preview) preview.innerHTML = '';
-}
-
-function handlePaymentProofSubmit(e) {
-    e.preventDefault();
-
-    const form = e.target;
-    if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-    }
-
-    const formData = {
-        orderId: document.getElementById('orderId') ? document.getElementById('orderId').textContent : '',
-        payerName: document.getElementById('payerName') ? document.getElementById('payerName').value : '',
-        payerEmail: document.getElementById('payerEmail') ? document.getElementById('payerEmail').value : '',
-        amountPaid: document.getElementById('amountPaid') ? document.getElementById('amountPaid').value : '',
-        paymentBank: document.getElementById('paymentBank') ? document.getElementById('paymentBank').value : '',
-        paymentNotes: document.getElementById('paymentNotes') ? document.getElementById('paymentNotes').value : '',
-        timestamp: new Date().toISOString()
-    };
-
-    // Save payment proof to localStorage
-    const paymentProofs = JSON.parse(localStorage.getItem('digimarket_payment_proofs') || '[]');
-    paymentProofs.push(formData);
-    localStorage.setItem('digimarket_payment_proofs', JSON.stringify(paymentProofs));
-
-    // Update order status
-    const orders = JSON.parse(localStorage.getItem('digimarket_orders') || '[]');
-    const orderIndex = orders.findIndex(o => o.id === formData.orderId);
-    if (orderIndex !== -1) {
-        orders[orderIndex].status = 'pending_confirmation';
-        orders[orderIndex].paymentProofSubmitted = true;
-        localStorage.setItem('digimarket_orders', JSON.stringify(orders));
-    }
-
-    // Clear cart
-    appState.cart = [];
-    saveToLocalStorage();
-
-    // Add notification
-    addNotification('Payment proof submitted successfully! We will review it within 24 hours.', 'success');
-
-    // Show success message
-    showToast('Payment proof submitted successfully!', 'success');
-
-    // Redirect to success page
-    setTimeout(() => {
-        window.location.href = '/project-root/payment-success.html';
-    }, 1200);
-}
-
-// === PAYMENT SUCCESS PAGE ===
-if (window.location.pathname.includes('/project-root/payment-success.html')) {
-    document.addEventListener('DOMContentLoaded', initializeSuccessPage);
-}
-
-function initializeSuccessPage() {
-    const currentOrder = JSON.parse(localStorage.getItem('digimarket_current_order') || 'null');
-
-    if (currentOrder) {
-        const orderIdDisplay = document.getElementById('orderIdDisplay');
-        if (orderIdDisplay) orderIdDisplay.textContent = `#${currentOrder.id}`;
-        const totalAmountDisplay = document.getElementById('totalAmountDisplay');
-        if (totalAmountDisplay) totalAmountDisplay.textContent = `$${currentOrder.total.toFixed(2)}`;
-        const userEmail = document.getElementById('userEmail');
-        if (userEmail) userEmail.textContent = currentOrder.customerInfo.email;
-    }
-
-    const now = new Date();
-    const orderDateEl = document.getElementById('orderDate');
-    if (orderDateEl) orderDateEl.textContent = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
-
-    // Contact support button
-    const contactBtn = document.getElementById('contactSupportBtn');
-    if (contactBtn) {
-        contactBtn.addEventListener('click', () => {
-            window.location.href = 'mailto:scottplug001@gmail.com';
-        });
-    }
-}
-
-// === AUTHENTICATION PAGES ===
-if (window.location.pathname.includes('login.html')) {
-    document.addEventListener('DOMContentLoaded', initializeLoginPage);
-}
-
-if (window.location.pathname.includes('signup.html')) {
-    document.addEventListener('DOMContentLoaded', initializeSignupPage);
-}
-
-function initializeLoginPage() {
-    const form = document.getElementById('loginForm');
-    if (form) {
-        form.addEventListener('submit', handleLogin);
-    }
-}
-
-function initializeSignupPage() {
-    const form = document.getElementById('signupForm');
-    if (form) {
-        form.addEventListener('submit', handleSignup);
-    }
-}
-
-function handleLogin(e) {
-    e.preventDefault();
-
-    const email = document.getElementById('loginEmail')?.value;
-    const password = document.getElementById('loginPassword')?.value;
-
-    if (!email || !password) {
-        showToast('Please fill in all fields', 'warning');
-        return;
-    }
-
-    // Check if user exists
-    const users = JSON.parse(localStorage.getItem('digimarket_users') || '[]');
-    const user = users.find(u => u.email === email && u.password === password);
-
-    if (!user) {
-        showToast('Invalid email or password', 'error');
-        return;
-    }
-
-    // Save user session (app level)
-    const userSession = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role || 'buyer'
-    };
-    appState.user = userSession;
-    saveToLocalStorage();
-
-    showToast('Login successful!', 'success');
-
-    setTimeout(() => {
-        // Redirect to home (adjust relative path)
-        const originPath = window.location.pathname;
-        if (originPath.includes('/auth/')) {
-            window.location.href = '/project-root/home.html';
-        } else {
-            window.location.href = '/project-root/home.html';
-        }
-    }, 900);
-}
-
-function handleSignup(e) {
-    e.preventDefault();
-
-    const name = document.getElementById('signupName')?.value;
-    const email = document.getElementById('signupEmail')?.value;
-    const password = document.getElementById('signupPassword')?.value;
-    const confirmPassword = document.getElementById('signupConfirmPassword')?.value;
-
-    if (!name || !email || !password || !confirmPassword) {
-        showToast('Please fill in all fields', 'warning');
-        return;
-    }
-
-    if (password !== confirmPassword) {
-        showToast('Passwords do not match', 'error');
-        return;
-    }
-
-    if (password.length < 6) {
-        showToast('Password must be at least 6 characters', 'error');
-        return;
-    }
-
-    // Check if user already exists
-    const users = JSON.parse(localStorage.getItem('digimarket_users') || '[]');
-    const existingUser = users.find(u => u.email === email);
-
-    if (existingUser) {
-        showToast('User with this email already exists', 'error');
-        return;
-    }
-
-    // Create new user
-    const newUser = {
-        id: Date.now(),
-        name,
-        email,
-        password, // In production, this should be hashed!
-        role: 'buyer',
-        createdAt: new Date().toISOString()
-    };
-
-    users.push(newUser);
-    localStorage.setItem('digimarket_users', JSON.stringify(users));
-
-    // Auto login app-level
-    const userSession = {
-        id: newUser.id,
-        name: newUser.name,
-        email: newUser.email,
-        role: newUser.role
-    };
-    appState.user = userSession;
-    saveToLocalStorage();
-
-    showToast('Account created successfully!', 'success');
-
-    setTimeout(() => {
-        // redirect to home
-        window.location.href = '/project-root/home.html';
-    }, 900);
-}
-
-// === CHECKOUT PAGE FUNCTIONALITY ===
-if (window.location.pathname.includes('checkout.html')) {
-    document.addEventListener('DOMContentLoaded', initializeCheckoutPage);
-}
-
-function initializeCheckoutPage() {
-    // Additional checkout-specific functionality can go here
-}
-
-// === INVOICE PAGE ===
-if (window.location.pathname.includes('/project-root/invoice.html')) {
-    document.addEventListener('DOMContentLoaded', initializeInvoicePage);
-}
-
-function initializeInvoicePage() {
-    // Get order ID from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const orderId = urlParams.get('order');
-
-    if (!orderId) {
-        showToast('Order not found', 'error');
-        return;
-    }
-
-    // Load order
-    const orders = JSON.parse(localStorage.getItem('digimarket_orders') || '[]');
-    const order = orders.find(o => o.id === orderId);
-
-    if (!order) {
-        showToast('Order not found', 'error');
-        return;
-    }
-
-    // Populate invoice
-    const invoiceNumberEl = document.getElementById('invoiceNumber');
-    if (invoiceNumberEl) invoiceNumberEl.textContent = order.id;
-    const invoiceDateEl = document.getElementById('invoiceDate');
-    if (invoiceDateEl) invoiceDateEl.textContent = new Date(order.date).toLocaleDateString();
-
-    const statusBadge = document.getElementById('invoiceStatus');
-    if (statusBadge) {
-        const statusConfig = {
-            'pending': { text: 'Pending Payment', class: 'bg-warning text-dark' },
-            'pending_confirmation': { text: 'Awaiting Confirmation', class: 'bg-info' },
-            'paid': { text: 'Paid', class: 'bg-success' },
-            'completed': { text: 'Completed', class: 'bg-success' }
-        };
-
-        const config = statusConfig[order.status] || statusConfig.pending;
-        statusBadge.textContent = config.text;
-        statusBadge.className = `status-badge ${config.class}`;
-    }
-
-    // Customer info
-    const customerNameEl = document.getElementById('customerName');
-    if (customerNameEl) customerNameEl.textContent = order.customerInfo.name;
-    const customerEmailEl = document.getElementById('customerEmail');
-    if (customerEmailEl) customerEmailEl.textContent = order.customerInfo.email;
-    const customerPhoneEl = document.getElementById('customerPhone');
-    if (customerPhoneEl) customerPhoneEl.textContent = order.customerInfo.phone;
-
-    // Items
-    const tbody = document.getElementById('invoiceItemsBody');
-    if (tbody) {
-        tbody.innerHTML = order.items.map((item, index) => `
-            <tr>
-                <td>${index + 1}</td>
-                <td>${item.name}</td>
-                <td>${item.category}</td>
-                <td class="text-center">1</td>
-                <td class="text-end">$${item.price.toFixed(2)}</td>
-            </tr>
-        `).join('');
-    }
-
-    // Totals
-    const subtotal = order.total;
-    const invoiceSubtotal = document.getElementById('invoiceSubtotal');
-    if (invoiceSubtotal) invoiceSubtotal.textContent = `$${subtotal.toFixed(2)}`;
-    const invoiceTax = document.getElementById('invoiceTax');
-    if (invoiceTax) invoiceTax.textContent = '$0.00';
-    const invoiceDiscount = document.getElementById('invoiceDiscount');
-    if (invoiceDiscount) invoiceDiscount.textContent = '-$0.00';
-    const invoiceTotal = document.getElementById('invoiceTotal');
-    if (invoiceTotal) invoiceTotal.textContent = `$${subtotal.toFixed(2)}`;
-
-    // Show download section if paid
-    if (order.status === 'paid' || order.status === 'completed') {
-        const downloadSection = document.getElementById('downloadSection');
-        if (downloadSection) {
-            downloadSection.style.display = 'block';
-            const downloadLinks = document.getElementById('downloadLinks');
-            if (downloadLinks) {
-                downloadLinks.innerHTML = order.items.map(item => `
-                    <div style="padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.2);">
-                        <a href="#" class="text-white" onclick="downloadProduct('${item.id}'); return false;">
-                            <i class="fas fa-download"></i> Download ${item.name}
-                        </a>
-                    </div>
-                `).join('');
-            }
-        }
-    }
-}
-
-function downloadProduct(productId) {
-    showToast('Download started!', 'success');
-    // In a real application, this would trigger an actual download
-    console.log('Downloading product:', productId);
-}
-
-function downloadPDF() {
-    showToast('PDF download feature coming soon!', 'info');
-    // In production, use jsPDF library to generate PDF
-}
-
-// === PRODUCT DETAILS PAGE ===
-if (window.location.pathname.includes('/project-root/product-details.html')) {
-    document.addEventListener('DOMContentLoaded', initializeProductDetailsPage);
-}
-
-function initializeProductDetailsPage() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const productId = parseInt(urlParams.get('id'));
-
-    if (!productId) {
-        showToast('Product not found', 'error');
-        setTimeout(() => window.location.href = '/project-root/market.html', 1500);
-        return;
-    }
-
-    // Load products if not loaded
-    if (!appState.products || appState.products.length === 0) {
-        generateSampleProducts();
-    }
-
-    const product = appState.products.find(p => p.id === productId);
-
-    if (!product) {
-        showToast('Product not found', 'error');
-        setTimeout(() => window.location.href = 'market.html', 1500);
-        return;
-    }
-
-    // Populate product details (guard elements as they may not exist)
-    const productMainImage = document.getElementById('productMainImage');
-    if (productMainImage) {
-        productMainImage.src = product.image;
-        productMainImage.alt = product.name;
-    }
-    const productCategory = document.getElementById('productCategory');
-    if (productCategory) {
-        productCategory.textContent = product.category;
-        productCategory.className = 'product-category';
-    }
-    const productName = document.getElementById('productName');
-    if (productName) productName.textContent = product.name;
-    const productDescription = document.getElementById('productDescription');
-    if (productDescription) productDescription.textContent = product.description;
-    const productPrice = document.getElementById('productPrice');
-    if (productPrice) productPrice.textContent = `$${product.price}`;
-
-    // Rating
-    const ratingEl = document.getElementById('productRating');
-    if (ratingEl) {
-        ratingEl.innerHTML = `
-            <span class="stars">${generateStars(product.rating)}</span>
-            <span class="text-muted">${product.rating} (${product.reviews} reviews)</span>
-        `;
-    }
-
-    // Badge
-    const badgesEl = document.getElementById('productBadges');
-    if (badgesEl && product.badge) {
-        badgesEl.innerHTML = `<span class="product-badge ${product.badge}">${product.badge}</span>`;
-    }
-
-    // Features
-    const featuresEl = document.getElementById('productFeaturesList');
-    if (featuresEl) {
-        featuresEl.innerHTML = product.features.map(f => `<li><i class="fas fa-check text-success"></i> ${f}</li>`).join('');
-    }
-
-    // Full description
-    const fullDesc = document.getElementById('productFullDescription');
-    if (fullDesc) fullDesc.innerHTML = `<p>${product.description}</p>`;
-
-    // Seller info
-    const sellerEl = document.getElementById('sellerInfo');
-    if (sellerEl) {
-        sellerEl.innerHTML = `
-            <div class="seller-avatar">${product.seller.name.charAt(0)}</div>
-            <div>
-                <strong>${product.seller.name}</strong>
-                <div class="stars">${generateStars(product.seller.rating)}</div>
-            </div>
-        `;
-    }
-
-    // Breadcrumb
-    const breadcrumbCategory = document.getElementById('breadcrumbCategory');
-    if (breadcrumbCategory) breadcrumbCategory.textContent = product.category;
-
-    // Setup buttons (guard)
-    const addToCartBtn = document.getElementById('addToCartBtn');
-    if (addToCartBtn) addToCartBtn.addEventListener('click', () => addToCart(productId));
-    const addToWishlistBtn = document.getElementById('addToWishlistBtn');
-    if (addToWishlistBtn) addToWishlistBtn.addEventListener('click', () => addToWishlist(productId));
-
-    // Load related products
-    const related = appState.products
-        .filter(p => p.category === product.category && p.id !== productId)
-        .slice(0, 3);
-
-    const relatedContainer = document.getElementById('relatedProductsContainer');
-    if (relatedContainer) {
-        relatedContainer.innerHTML = related.map(p => createProductCard(p)).join('');
-    }
-}
-
-// Helper function for notifications (duplicate safe)
-function addNotification(message, type) {
-    const notifications = JSON.parse(localStorage.getItem('digimarket_notifications') || '[]');
-    notifications.unshift({
-        id: Date.now(),
-        message,
-        type,
-        read: false,
-        timestamp: new Date().toISOString()
-    });
-    localStorage.setItem('digimarket_notifications', JSON.stringify(notifications));
-}
-
-// Helper function for toast (duplicate-safe name)
-function showToast(message, type) {
-    // Delegates to main showToast above (already defined) - avoid double-def
-    try {
-        // main showToast exists; call it
-        const fn = window.showToast || null;
-        if (typeof fn === 'function' && fn !== showToast) {
-            fn(message, type);
-            return;
-        }
-    } catch (e) {
-        // ignore
-    }
-    // fallback: basic alert
-    alert(message);
-}
-
-// === LIVE CHAT & LOGOUT HELPERS ===
+// === LOGOUT HELPER ===
 function ensureLogoutBinding() {
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn && !logoutBtn._bound) {
@@ -1386,44 +861,22 @@ function ensureLogoutBinding() {
     }
 }
 
+// === LIVE CHAT ===
 function ensureLiveChat() {
-    // Create simple live chat UI only once
     if (document.getElementById('liveChatBtn')) return;
 
     const body = document.body;
 
-    // Chat Button
     const chatBtn = document.createElement('button');
     chatBtn.id = 'liveChatBtn';
     chatBtn.title = 'Live chat';
     chatBtn.className = 'live-chat-btn';
-    chatBtn.style.position = 'fixed';
-    chatBtn.style.right = '20px';
-    chatBtn.style.bottom = '20px';
-    chatBtn.style.zIndex = '9999';
-    chatBtn.style.borderRadius = '50px';
-    chatBtn.style.padding = '12px 14px';
-    chatBtn.style.background = '#007bff';
-    chatBtn.style.color = '#fff';
-    chatBtn.style.border = 'none';
-    chatBtn.style.boxShadow = '0 6px 18px rgba(0,0,0,0.15)';
+    chatBtn.style.cssText = 'position: fixed; right: 20px; bottom: 20px; z-index: 9999; border-radius: 50px; padding: 12px 14px; background: #007bff; color: #fff; border: none; box-shadow: 0 6px 18px rgba(0,0,0,0.15);';
     chatBtn.innerHTML = '<i class="fas fa-comments"></i>';
 
-    // Chat Window
     const chatWindow = document.createElement('div');
     chatWindow.id = 'chatWindow';
-    chatWindow.style.position = 'fixed';
-    chatWindow.style.right = '20px';
-    chatWindow.style.bottom = '80px';
-    chatWindow.style.width = '320px';
-    chatWindow.style.maxHeight = '420px';
-    chatWindow.style.display = 'none';
-    chatWindow.style.flexDirection = 'column';
-    chatWindow.style.background = '#fff';
-    chatWindow.style.borderRadius = '8px';
-    chatWindow.style.boxShadow = '0 8px 30px rgba(0,0,0,0.2)';
-    chatWindow.style.overflow = 'hidden';
-    chatWindow.style.zIndex = '9999';
+    chatWindow.style.cssText = 'position: fixed; right: 20px; bottom: 80px; width: 320px; max-height: 420px; display: none; flex-direction: column; background: #fff; border-radius: 8px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); overflow: hidden; z-index: 9999;';
 
     chatWindow.innerHTML = `
         <div style="background:#007bff;color:#fff;padding:12px;font-weight:600;">
@@ -1462,12 +915,11 @@ function ensureLiveChat() {
         input.value = '';
         box.scrollTop = box.scrollHeight;
 
-        // Simulated agent response
         setTimeout(() => {
             const agent = document.createElement('div');
             agent.style.margin = '6px 0';
             agent.style.textAlign = 'left';
-            agent.innerHTML = `<div style="display:inline-block;background:#f1f1f1;padding:8px;border-radius:8px;">Support: Thanks — we'll get back shortly.</div>`;
+            agent.innerHTML = `<div style="display:inline-block;background:#f1f1f1;padding:8px;border-radius:8px;">Support: Thanks – we'll get back shortly.</div>`;
             box.appendChild(agent);
             box.scrollTop = box.scrollHeight;
         }, 700);
@@ -1480,26 +932,9 @@ function escapeHtml(unsafe) {
     });
 }
 
-// === PAGE ROUTER HELPERS ===
-function ensurePageRoutingFixes() {
-    // Nothing extra required; updateUI uses market.html check
-}
-
-// === PRODUCT-RELATED HELPERS (download etc.) ===
-// already implemented above (downloadProduct, downloadPDF)
-
-// === PRODUCT DETAILS / MARKETPLACE already implemented above ===
-
-// Final safety: bind logout once DOM ready
+// Final initialization
 document.addEventListener('DOMContentLoaded', () => {
     ensureLogoutBinding();
     ensureLiveChat();
+    setupNotificationClose();
 });
-
-// expose some helper functions globally (again)
-window.addToCart = addToCart;
-window.removeFromCart = removeFromCart;
-window.addToWishlist = addToWishlist;
-window.markNotificationAsRead = markNotificationAsRead;
-window.downloadProduct = downloadProduct;
-window.downloadPDF = downloadPDF;
