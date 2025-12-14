@@ -1456,4 +1456,529 @@ function getNotificationIcon(type) {
     return icons[type] || 'info-circle';
 }
 
-console.log('Admin Support System Loaded! ✅');
+console.log('Admin Support System Loaded! ✅'); 
+
+// ===================================
+// PAGE GUARD - Access Control System
+// Protects pages from non-logged-in users
+// ===================================
+
+(function() {
+    'use strict';
+    
+    // Get current page name
+    const currentPage = window.location.pathname.split('/').pop().toLowerCase();
+    
+    // Pages that don't require login (PUBLIC PAGES)
+    const publicPages = [
+        'index.html',
+        'login.html',
+        'register.html',
+        'forgot-password.html',
+        '' // for root path
+    ];
+    
+    // Check if current page is public
+    const isPublicPage = publicPages.some(page => currentPage === page || currentPage === '');
+    
+    // If this is a public page, no need to check authentication
+    if (isPublicPage) {
+        console.log('✅ Public page - No authentication required');
+        return;
+    }
+    
+    // CHECK IF USER IS LOGGED IN
+    function isUserLoggedIn() {
+        const currentUser = localStorage.getItem('currentUser');
+        const digimarketUser = localStorage.getItem('digimarket_user');
+        
+        // User must be in at least one storage
+        return currentUser !== null || digimarketUser !== null;
+    }
+    
+    // REDIRECT TO INDEX IF NOT LOGGED IN
+    if (!isUserLoggedIn()) {
+        console.log('🚫 Access Denied - User not logged in');
+        console.log('📍 Redirecting to index page...');
+        
+        // Show alert before redirect
+        alert('⚠️ Please login to access this page!');
+        
+        // Redirect to index page
+        window.location.href = '../index.html';
+        
+        // Stop page execution
+        throw new Error('Authentication required');
+    }
+    
+    console.log('✅ Access Granted - User is authenticated');
+    
+})();
+
+// ===================================
+// ADDITIONAL: Update Navigation UI
+// Show/Hide elements based on login status
+// ===================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    updateNavigationUI();
+});
+
+function updateNavigationUI() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    const digimarketUser = JSON.parse(localStorage.getItem('digimarket_user') || 'null');
+    const user = currentUser || digimarketUser;
+    
+    if (user) {
+        // User is logged in - Update UI
+        console.log('👤 Logged in as:', user.name);
+        
+        // Show user name in navigation if element exists
+        const userNameElements = document.querySelectorAll('.user-name, #userName');
+        userNameElements.forEach(el => {
+            if (el) el.textContent = user.name;
+        });
+        
+        // Show user email if element exists
+        const userEmailElements = document.querySelectorAll('.user-email, #userEmail');
+        userEmailElements.forEach(el => {
+            if (el) el.textContent = user.email;
+        });
+        
+        // Show admin badge if user is admin/owner
+        if (user.isOwner || user.isAdmin) {
+            const adminBadges = document.querySelectorAll('.admin-badge');
+            adminBadges.forEach(badge => {
+                if (badge) {
+                    badge.style.display = 'inline-block';
+                    badge.textContent = user.isOwner ? '👑 OWNER' : '🛡️ ADMIN';
+                }
+            });
+        }
+        
+        // Hide login/register buttons if they exist
+        const loginButtons = document.querySelectorAll('.btn-login, .login-btn');
+        loginButtons.forEach(btn => {
+            if (btn) btn.style.display = 'none';
+        });
+        
+        const registerButtons = document.querySelectorAll('.btn-register, .register-btn');
+        registerButtons.forEach(btn => {
+            if (btn) btn.style.display = 'none';
+        });
+        
+        // Show logout button if it exists
+        const logoutButtons = document.querySelectorAll('.btn-logout, .logout-btn');
+        logoutButtons.forEach(btn => {
+            if (btn) btn.style.display = 'inline-block';
+        });
+        
+    } else {
+        console.log('👤 User not logged in');
+    }
+}
+
+// ===================================
+// LOGOUT FUNCTIONALITY
+// ===================================
+
+function logout() {
+    if (confirm('Are you sure you want to logout?')) {
+        // Clear both storage keys
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('digimarket_user');
+        
+        console.log('👋 User logged out');
+        
+        // Redirect to index
+        alert('✅ You have been logged out successfully!');
+        window.location.href = '../index.html';
+    }
+}
+
+// Attach logout to logout buttons
+document.addEventListener('DOMContentLoaded', function() {
+    const logoutButtons = document.querySelectorAll('.btn-logout, .logout-btn, #logoutBtn');
+    logoutButtons.forEach(btn => {
+        if (btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                logout();
+            });
+        }
+    });
+});  
+
+// ===================================
+// ADMIN PANEL JAVASCRIPT - UPDATED
+// With Owner/Admin Access Control
+// ===================================
+
+// ===================================
+// ADMIN ACCESS VERIFICATION
+// Only Owner and Admins can access admin panel
+// ===================================
+
+(function() {
+    'use strict';
+    
+    // Check if user has admin access
+    function hasAdminAccess() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        const digimarketUser = JSON.parse(localStorage.getItem('digimarket_user') || 'null');
+        const user = currentUser || digimarketUser;
+        
+        if (!user) {
+            return false;
+        }
+        
+        // Check if user is owner or admin
+        return user.isOwner === true || user.isAdmin === true || user.role === 'admin';
+    }
+    
+    // Verify admin access
+    if (!hasAdminAccess()) {
+        console.log('🚫 Admin Access Denied - Insufficient permissions');
+        alert('⚠️ Access Denied!\n\nYou do not have permission to access the Admin Panel.\nOnly the Site Owner and Admins can access this area.');
+        
+        // Redirect to home page
+        window.location.href = '../home.html';
+        throw new Error('Admin access required');
+    }
+    
+    console.log('✅ Admin Access Granted');
+    
+    // Show owner badge if user is owner
+    const user = JSON.parse(localStorage.getItem('currentUser') || 'null') || 
+                  JSON.parse(localStorage.getItem('digimarket_user') || 'null');
+    
+    if (user && user.isOwner) {
+        console.log('👑 Welcome, Site Owner!');
+        // You can add special UI elements for owner here
+    }
+    
+})();
+
+// ===================================
+// DOCUMENT READY
+// ===================================
+
+$(document).ready(function() {
+    initializeAdmin();
+    setupEventListeners();
+    loadDashboardData();
+    setupCharts();
+    setupButtonActions();
+    setupPagination();
+    setupFormHandlers();
+    displayAdminInfo(); // Show admin user info
+});
+
+// ===================================
+// DISPLAY ADMIN INFO
+// ===================================
+
+function displayAdminInfo() {
+    const user = JSON.parse(localStorage.getItem('currentUser') || 'null') || 
+                  JSON.parse(localStorage.getItem('digimarket_user') || 'null');
+    
+    if (user) {
+        // Update admin name in sidebar or header if element exists
+        const adminNameElements = document.querySelectorAll('.admin-name, #adminName');
+        adminNameElements.forEach(el => {
+            if (el) {
+                let displayName = user.name;
+                if (user.isOwner) {
+                    displayName += ' 👑';
+                } else if (user.isAdmin) {
+                    displayName += ' 🛡️';
+                }
+                el.textContent = displayName;
+            }
+        });
+        
+        // Show owner badge
+        if (user.isOwner) {
+            const ownerBadge = document.createElement('div');
+            ownerBadge.className = 'owner-badge';
+            ownerBadge.innerHTML = '<span class="badge bg-warning text-dark">👑 SITE OWNER</span>';
+            ownerBadge.style.cssText = 'position: fixed; top: 10px; right: 10px; z-index: 9999;';
+            document.body.appendChild(ownerBadge);
+        }
+        
+        console.log('👤 Admin Panel accessed by:', user.name, user.isOwner ? '(Owner)' : '(Admin)');
+    }
+}
+
+// ===================================
+// INITIALIZE ADMIN PANEL
+// ===================================
+
+function initializeAdmin() {
+    console.log('Admin Panel Initialized 🚀');
+    
+    // Add mobile menu toggle button if not exists
+    if ($(window).width() <= 991 && !$('.mobile-menu-toggle').length) {
+        $('body').append(`
+            <div class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="sidebar-overlay"></div>
+        `);
+    }
+    
+    // Add fade-in animation to cards
+    $('.card').addClass('fade-in');
+    
+    // Initialize tooltips
+    $('[data-bs-toggle="tooltip"]').tooltip();
+}
+
+// ===================================
+// SETUP ALL EVENT LISTENERS
+// ===================================
+
+function setupEventListeners() {
+    // Mobile menu toggle
+    $(document).on('click', '.mobile-menu-toggle', toggleMobileSidebar);
+    $(document).on('click', '.sidebar-overlay', closeMobileSidebar);
+    
+    // Dashboard menu items
+    $('.dashboard-menu-item').on('click', handleMenuClick);
+    
+    // Search functionality
+    $('#searchInput, input[placeholder*="Search"]').on('keyup', handleSearch);
+    
+    // Filter dropdowns
+    $('select.form-control').on('change', handleFilter);
+    
+    // Window resize handler
+    $(window).on('resize', handleWindowResize);
+}
+
+// ===================================
+// MOBILE SIDEBAR FUNCTIONS
+// ===================================
+
+function toggleMobileSidebar() {
+    $('.dashboard-sidebar').toggleClass('show');
+    $('.sidebar-overlay').toggleClass('show');
+    $(this).find('i').toggleClass('fa-bars fa-times');
+}
+
+function closeMobileSidebar() {
+    $('.dashboard-sidebar').removeClass('show');
+    $('.sidebar-overlay').removeClass('show');
+    $('.mobile-menu-toggle i').removeClass('fa-times').addClass('fa-bars');
+}
+
+function handleWindowResize() {
+    if ($(window).width() > 991) {
+        closeMobileSidebar();
+        $('.mobile-menu-toggle').hide();
+    } else {
+        $('.mobile-menu-toggle').show();
+    }
+}
+
+// ===================================
+// MENU CLICK HANDLER
+// ===================================
+
+function handleMenuClick(e) {
+    // Visual feedback
+    $('.dashboard-menu-item').removeClass('active');
+    $(this).addClass('active');
+    
+    // Close mobile sidebar after click
+    if ($(window).width() <= 991) {
+        closeMobileSidebar();
+    }
+    
+    // Get the page name from href
+    const href = $(this).attr('href');
+    const pageName = href.split('/').pop().replace('.html', '');
+    
+    // Show loading notification
+    showNotification('Loading ' + pageName + '...', 'info');
+}
+
+// ===================================
+// SEARCH FUNCTIONALITY
+// ===================================
+
+function handleSearch() {
+    const searchTerm = $(this).val().toLowerCase();
+    const targetTable = $(this).closest('.container-fluid').find('table tbody');
+    
+    if (targetTable.length) {
+        targetTable.find('tr').each(function() {
+            const rowText = $(this).text().toLowerCase();
+            $(this).toggle(rowText.includes(searchTerm));
+        });
+        
+        const visibleRows = targetTable.find('tr:visible').length;
+        showNotification(`Found ${visibleRows} results`, 'info');
+    }
+}
+
+// ===================================
+// FILTER FUNCTIONALITY
+// ===================================
+
+function handleFilter() {
+    const filterValue = $(this).val().toLowerCase();
+    const targetTable = $(this).closest('.container-fluid').find('table tbody');
+    
+    if (filterValue === 'all' || filterValue === 'all status' || filterValue === 'all categories' || filterValue === 'all customers') {
+        targetTable.find('tr').show();
+        showNotification('Showing all items', 'info');
+    } else {
+        let visibleCount = 0;
+        targetTable.find('tr').each(function() {
+            const rowText = $(this).text().toLowerCase();
+            const isVisible = rowText.includes(filterValue);
+            $(this).toggle(isVisible);
+            if (isVisible) visibleCount++;
+        });
+        showNotification(`Filter applied: ${filterValue} (${visibleCount} items)`, 'success');
+    }
+}
+
+// ===================================
+// LOAD DASHBOARD DATA
+// ===================================
+
+function loadDashboardData() {
+    animateCounters();
+    updateRecentActivity();
+}
+
+// ===================================
+// ANIMATE COUNTERS
+// ===================================
+
+function animateCounters() {
+    $('.card h3').each(function() {
+        const $this = $(this);
+        const countText = $this.text();
+        
+        const matches = countText.match(/[\d,]+/);
+        if (matches) {
+            const countTo = parseInt(matches[0].replace(/,/g, ''));
+            const prefix = countText.includes('$') ? '$' : '';
+            const suffix = countText.includes('%') ? '%' : '';
+            
+            $({ countNum: 0 }).animate({
+                countNum: countTo
+            }, {
+                duration: 2000,
+                easing: 'swing',
+                step: function() {
+                    const num = Math.floor(this.countNum).toLocaleString();
+                    $this.text(prefix + num + suffix);
+                },
+                complete: function() {
+                    const num = countTo.toLocaleString();
+                    $this.text(prefix + num + suffix);
+                }
+            });
+        }
+    });
+}
+
+// ===================================
+// UPDATE RECENT ACTIVITY
+// ===================================
+
+function updateRecentActivity() {
+    setInterval(() => {
+        const badge = $('#notificationBadge');
+        if (badge.length) {
+            const count = parseInt(badge.text()) || 0;
+            badge.text(count + 1);
+            badge.addClass('pulse');
+            setTimeout(() => badge.removeClass('pulse'), 500);
+        }
+    }, 30000);
+}
+
+// ===================================
+// NOTIFICATION SYSTEM
+// ===================================
+
+function showNotification(message, type = 'info') {
+    $('.admin-notification').remove();
+    
+    const notification = $(`
+        <div class="admin-notification alert alert-${type} shadow-lg" role="alert">
+            <i class="fas fa-${getNotificationIcon(type)} me-2"></i>
+            ${message}
+        </div>
+    `);
+    
+    notification.css({
+        position: 'fixed',
+        top: '90px',
+        right: '20px',
+        zIndex: 9999,
+        minWidth: '300px',
+        maxWidth: '400px',
+        animation: 'slideIn 0.3s ease-out'
+    });
+    
+    $('body').append(notification);
+    
+    setTimeout(() => {
+        notification.fadeOut(400, function() {
+            $(this).remove();
+        });
+    }, 3000);
+}
+
+function getNotificationIcon(type) {
+    const icons = {
+        'success': 'check-circle',
+        'danger': 'exclamation-circle',
+        'warning': 'exclamation-triangle',
+        'info': 'info-circle'
+    };
+    return icons[type] || 'info-circle';
+}
+
+// ===================================
+// KEYBOARD SHORTCUTS
+// ===================================
+
+$(document).on('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        $('input[placeholder*="Search"]').first().focus();
+    }
+    
+    if (e.key === 'Escape') {
+        closeMobileSidebar();
+    }
+});
+
+// ===================================
+// UTILITY FUNCTIONS
+// ===================================
+
+function formatCurrency(amount) {
+    return '$' + parseFloat(amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+}
+
+function formatDate(date) {
+    return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+}
+
+console.log('Admin Part 1: Core Functions Loaded! ✅');
+
+// [REST OF YOUR ORIGINAL ADMIN.JS CODE CONTINUES HERE...]
+// I've only shown the critical security additions at the top.
+// Keep all your existing button actions, forms, charts, and support system code below this.
