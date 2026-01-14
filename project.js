@@ -57,7 +57,7 @@ function saveToLocalStorage() {
         // Save to BOTH keys for compatibility
         if (appState.user) {
             localStorage.setItem('digimarket_user', JSON.stringify(appState.user));
-            localStorage.setItem('currentUser', JSON.stringify(appState.user));
+        
         }
         localStorage.setItem('digimarket_cart', JSON.stringify(appState.cart));
         localStorage.setItem('digimarket_wishlist', JSON.stringify(appState.wishlist));
@@ -79,7 +79,7 @@ function checkAuthStatus() {
     if (!appState.user && !isPublicPage) {
         showToast('Please login to continue', 'warning');
         setTimeout(() => {
-            window.location.href = '/auth/login.html';
+            window.location.href = '/index.html';
         }, 1200);
     }
 }
@@ -102,40 +102,119 @@ function logout() {
     showToast('Logged out successfully', 'success');
 
     setTimeout(() => {
-        window.location.href = 'index.html';
+        window.location.href = '/index.html';
     }, 800);
 }
 
-// === SAMPLE PRODUCTS DATA ===
+// === SAMPLE PRODUCTS DATA WITH PROPER IMAGES ===
 function generateSampleProducts() {
-    const categories = ['websites', 'apps', 'apis', 'ai-tools', 'courses', 'plugins'];
-    const products = [];
+    const categories = [
+        {
+            name: 'websites',
+            display: 'Websites',
+            images: [
+                'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1547658719-da2b51169166?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop'
+            ]
+        },
+        {
+            name: 'apps',
+            display: 'Mobile Apps',
+            images: [
+                'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400&h=300&fit=crop'
+            ]
+        },
+        {
+            name: 'apis',
+            display: 'APIs',
+            images: [
+                'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1580927752452-89d86da3fa0a?w=400&h=300&fit=crop'
+            ]
+        },
+        {
+            name: 'ai-tools',
+            display: 'AI Tools',
+            images: [
+                
+ 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1676277791608-ac68880c3de2?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1655721530024-c338e8f71b6f?w=400&h=300&fit=crop'
+            ]
+        
 
-    for (let i = 1; i <= 30; i++) {
-        const category = categories[Math.floor(Math.random() * categories.length)];
-        products.push({
-            id: i,
-            name: `Premium ${category.charAt(0).toUpperCase() + category.slice(1)} Product ${i}`,
-            description: `High-quality ${category} solution with advanced features and lifetime support.`,
-            price: Math.floor(Math.random() * 500) + 50,
-            category: category,
-            rating: (Math.random() * 2 + 3).toFixed(1),
-            reviews: Math.floor(Math.random() * 1000) + 50,
-            image: `https://picsum.photos/seed/${category + i}/400/300`,
-            badge: ['new', 'featured', 'hot', null][Math.floor(Math.random() * 4)],
-            features: [
-                'Lifetime updates included',
-                'Premium support 24/7',
-                'Easy customization',
-                'Well documented',
-                'Mobile responsive'
-            ],
-            seller: {
-                name: `Seller ${Math.floor(Math.random() * 100) + 1}`,
-                rating: (Math.random() * 2 + 3).toFixed(1)
-            }
-        });
-    }
+
+
+                
+            
+        },
+        {
+            name: 'courses',
+            display: 'Online Courses',
+            images: [
+                'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=300&fit=crop'
+            ]
+        },
+        {
+            name: 'plugins',
+            display: 'Plugins',
+            images: [
+                'https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1566241440091-ec10de8db2e1?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?w=400&h=300&fit=crop',
+                'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=400&h=300&fit=crop'
+            ]
+        }
+    ];
+
+    const products = [];
+    let productId = 1;
+
+    // Create 5 products for each category
+    categories.forEach(category => {
+        for (let i = 0; i < 5; i++) {
+            products.push({
+                id: productId,
+                name: `Premium ${category.display} Product ${i + 1}`,
+                description: `High-quality ${category.display.toLowerCase()} solution with advanced features and lifetime support. Perfect for businesses and professionals.`,
+                price: Math.floor(Math.random() * 500) + 50,
+                category: category.name,
+                rating: (Math.random() * 2 + 3).toFixed(1),
+                reviews: Math.floor(Math.random() * 1000) + 50,
+                image: category.images[i],
+                badge: ['new', 'featured', 'hot', null][Math.floor(Math.random() * 4)],
+                features: [
+                    'Lifetime updates included',
+                    'Premium support 24/7',
+                    'Easy customization',
+                    'Well documented',
+                    'Mobile responsive'
+                ],
+                seller: {
+                    name: `Seller ${Math.floor(Math.random() * 100) + 1}`,
+                    rating: (Math.random() * 2 + 3).toFixed(1)
+                }
+            });
+            productId++;
+        }
+    });
 
     appState.products = products;
     saveToLocalStorage();
@@ -283,7 +362,7 @@ function updateWishlistUI() {
 // Make functions globally available
 window.addToCart = addToCart;
 window.removeFromCart = removeFromCart;
-window.addToWishlist = addToWishlist; 
+window.addToWishlist = addToWishlist;
 
 // ===================================
 // DigiMarket Pro - project.js (PART 2)
@@ -650,10 +729,9 @@ function copyToClipboard(text, button) {
     }).catch(err => {
         showToast('Failed to copy', 'error');
     });
-} 
-
+}
 // ===================================
-// DigiMarket Pro - project.js (PART 3)
+// DigiMarket Pro - project.js (PART 3 - FINAL)
 // ===================================
 
 // === UPDATE UI ON PAGE LOAD ===
@@ -871,7 +949,7 @@ function ensureLiveChat() {
     chatBtn.id = 'liveChatBtn';
     chatBtn.title = 'Live chat';
     chatBtn.className = 'live-chat-btn';
-    chatBtn.style.cssText = 'position: fixed; right: 20px; bottom: 20px; z-index: 9999; border-radius: 50px; padding: 12px 14px; background: #007bff; color: #fff; border: none; box-shadow: 0 6px 18px rgba(0,0,0,0.15);';
+    chatBtn.style.cssText = 'position: fixed; right: 20px; bottom: 20px; z-index: 9999; border-radius: 50px; padding: 12px 14px; background: #007bff; color: #fff; border: none; box-shadow: 0 6px 18px rgba(0,0,0,0.15); cursor: pointer;';
     chatBtn.innerHTML = '<i class="fas fa-comments"></i>';
 
     const chatWindow = document.createElement('div');
@@ -883,7 +961,7 @@ function ensureLiveChat() {
             Live Support
             <button id="chatClose" style="float:right;background:transparent;border:none;color:#fff;font-size:16px;cursor:pointer">×</button>
         </div>
-        <div id="chatMessages" style="padding:10px;flex:1;overflow:auto;color:#333;">
+        <div id="chatMessages" style="padding:10px;flex:1;overflow:auto;color:#333;max-height:300px;">
             <p style="color:#666;margin:0">Welcome! How can we help you today?</p>
         </div>
         <div style="display:flex;border-top:1px solid #eee;padding:8px;">
@@ -924,6 +1002,13 @@ function ensureLiveChat() {
             box.scrollTop = box.scrollHeight;
         }, 700);
     });
+    
+    // Allow Enter key to send message
+    document.getElementById('chatInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            document.getElementById('chatSend').click();
+        }
+    });
 }
 
 function escapeHtml(unsafe) {
@@ -938,3 +1023,106 @@ document.addEventListener('DOMContentLoaded', () => {
     ensureLiveChat();
     setupNotificationClose();
 });
+
+
+// In project.js - Save cart even after logout
+function saveCartForUser(userId) {
+    const cartKey = `cart_${userId}`;
+    localStorage.setItem(cartKey, JSON.stringify(appState.cart));
+}
+
+function loadCartForUser(userId) {
+    const cartKey = `cart_${userId}`;
+    const savedCart = localStorage.getItem(cartKey);
+    if (savedCart) {
+        appState.cart = JSON.parse(savedCart);
+        updateCartUI();
+    }
+}
+
+// When user logs in (in auth.js):
+const user = findUser(email);
+if (user && user.password === pass) {
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    
+    // Load their saved cart
+    loadCartForUser(user.email);
+    
+    // ... rest of login code
+}
+
+
+// Add to market.html script section
+function searchProducts(query) {
+    const lowerQuery = query.toLowerCase();
+    return appState.products.filter(p => 
+        p.name.toLowerCase().includes(lowerQuery) ||
+        p.description.toLowerCase().includes(lowerQuery) ||
+        p.category.toLowerCase().includes(lowerQuery)
+    );
+}
+
+// Update the search input handler
+searchInput.addEventListener('input', function() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        const results = searchProducts(this.value);
+        renderProducts(results, 'productsContainer');
+        document.getElementById('resultsCount').textContent = results.length;
+    }, 300);
+}); 
+
+
+
+// In project.js - Prevent search from running on every keystroke
+let searchTimeout;
+function performSearch() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        const searchInput = document.getElementById('searchInput');
+        if (!searchInput) return;
+
+        const query = searchInput.value.trim();
+        if (!query) {
+            showToast('Please enter a search term', 'warning');
+            return;
+        }
+
+        window.location.href = `market.html?search=${encodeURIComponent(query)}`;
+    }, 500); // Wait 500ms after user stops typing
+}
+
+
+// Add to project.js
+function showLoading(message = 'Loading...') {
+    const loader = document.createElement('div');
+    loader.id = 'globalLoader';
+    loader.innerHTML = `
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                    background: rgba(0,0,0,0.7); z-index: 99999; 
+                    display: flex; align-items: center; justify-content: center;">
+            <div style="background: white; padding: 30px; border-radius: 15px; text-align: center;">
+                <div class="spinner-border text-primary mb-3" role="status"></div>
+                <p style="margin: 0; font-weight: 600;">${message}</p>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(loader);
+}
+
+function hideLoading() {
+    const loader = document.getElementById('globalLoader');
+    if (loader) loader.remove();
+}
+
+// Use it when navigating:
+function goToCheckout() {
+    if (appState.cart.length === 0) {
+        showToast('Your cart is empty', 'warning');
+        return;
+    }
+    showLoading('Preparing checkout...');
+    setTimeout(() => {
+        window.location.href = 'checkout.html';
+    }, 500);
+}

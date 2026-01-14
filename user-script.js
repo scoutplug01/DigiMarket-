@@ -813,4 +813,45 @@ function sendUserMessage(text) {
     
     // Save
     localStorage.setItem('supportConversations', JSON.stringify(conversations));
+} 
+
+
+
+
+// Add to orders-history.html
+const orderStatuses = {
+    'pending': { color: 'warning', icon: 'clock', text: 'Pending Payment' },
+    'processing': { color: 'info', icon: 'sync', text: 'Processing' },
+    'shipped': { color: 'primary', icon: 'truck', text: 'Shipped' },
+    'delivered': { color: 'success', icon: 'check-circle', text: 'Delivered' },
+    'cancelled': { color: 'danger', icon: 'times-circle', text: 'Cancelled' }
+};
+
+function renderOrderStatus(status) {
+    const statusInfo = orderStatuses[status] || orderStatuses.pending;
+    return `
+        <span class="badge bg-${statusInfo.color}">
+            <i class="fas fa-${statusInfo.icon}"></i> ${statusInfo.text}
+        </span>
+    `;
+}
+
+function showOrderTimeline(order) {
+    const timeline = `
+        <div class="order-timeline">
+            <div class="timeline-item ${order.status === 'pending' ? 'active' : 'completed'}">
+                <i class="fas fa-clock"></i> Order Placed
+            </div>
+            <div class="timeline-item ${order.status === 'processing' ? 'active' : order.status === 'shipped' || order.status === 'delivered' ? 'completed' : ''}">
+                <i class="fas fa-sync"></i> Processing
+            </div>
+            <div class="timeline-item ${order.status === 'shipped' ? 'active' : order.status === 'delivered' ? 'completed' : ''}">
+                <i class="fas fa-truck"></i> Shipped
+            </div>
+            <div class="timeline-item ${order.status === 'delivered' ? 'active completed' : ''}">
+                <i class="fas fa-check-circle"></i> Delivered
+            </div>
+        </div>
+    `;
+    return timeline;
 }

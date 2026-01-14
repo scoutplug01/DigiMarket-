@@ -1982,3 +1982,7 @@ console.log('Admin Part 1: Core Functions Loaded! ✅');
 // [REST OF YOUR ORIGINAL ADMIN.JS CODE CONTINUES HERE...]
 // I've only shown the critical security additions at the top.
 // Keep all your existing button actions, forms, charts, and support system code below this.
+
+
+
+

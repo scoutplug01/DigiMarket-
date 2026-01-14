@@ -238,4 +238,21 @@ select.form-control option {
 
 .fw-bold {
     font-weight: 700;
+} 
+
+.is-invalid {
+    border-color: #dc3545 !important;
+    animation: shake 0.3s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 13px;
+    margin-top: 4px;
 }
