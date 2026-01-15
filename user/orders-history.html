@@ -223,6 +223,25 @@
         </div>
     </div>
 
+<!-- Add this script before closing </body> tag in your HTML -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tableContainers = document.querySelectorAll('.table-responsive');
+    
+    tableContainers.forEach(container => {
+        container.addEventListener('scroll', function() {
+            if (this.scrollLeft > 10) {
+                this.classList.add('scrolled');
+            } else {
+                this.classList.remove('scrolled');
+            }
+        });
+    });
+});
+</script>
+
+
+
     <!-- jQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- Bootstrap JS -->

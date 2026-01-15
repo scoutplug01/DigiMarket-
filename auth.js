@@ -1,6 +1,6 @@
 // ========================================
-// ENHANCED AUTH.JS - MULTI-DEVICE LOGIN
-// Like Facebook - One Account, Multiple Devices
+// ENHANCED AUTH.JS - SECURED ADMIN ACCESS
+// Only scoutplug6@gmail.com can access admin
 // ========================================
 
 (function() {
@@ -52,15 +52,19 @@
 })();
 
 // ========================================
+// 🔐 ADMIN CONFIGURATION (EDIT THIS!)
+// ========================================
+const ADMIN_CONFIG = {
+    email: 'scoutplug6@gmail.com',  // ← Your admin email
+    password: '123456789',           // ← Your admin password
+    name: 'Admin'                    // ← Your display name
+};
+
+// ========================================
 // MULTI-DEVICE SESSION MANAGEMENT
 // ========================================
 
-/**
- * Get current user session from storage
- * Checks both storage locations for compatibility
- */
 function getUserSession() {
-    // Try to get from either storage location
     let session = localStorage.getItem('currentUser');
     if (!session) {
         session = localStorage.getItem('digimarket_user');
@@ -68,52 +72,36 @@ function getUserSession() {
     return session;
 }
 
-/**
- * Save user session to storage (multi-device support)
- * Saves to BOTH locations for redundancy
- */
 function saveUserSession(userData) {
     const userString = JSON.stringify(userData);
     localStorage.setItem('currentUser', userString);
     localStorage.setItem('digimarket_user', userString);
-    
     console.log('✅ User session saved:', userData.email);
 }
 
-/**
- * Clear user session from all storage locations
- */
 function clearUserSession() {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('digimarket_user');
     console.log('🔓 User session cleared');
 }
 
-/**
- * Get current logged in user
- */
 function getCurrentUser() {
     const session = getUserSession();
     return session ? JSON.parse(session) : null;
 }
 
-// Make available globally
 window.getCurrentUser = getCurrentUser;
 
 // ========================================
-// PASSWORD HASHING (Security Enhancement)
+// PASSWORD HASHING
 // ========================================
 
-/**
- * Simple hash function for passwords
- * Better than storing plain text passwords
- */
 function simpleHash(text) {
     let hash = 0;
     for (let i = 0; i < text.length; i++) {
         const char = text.charCodeAt(i);
         hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // Convert to 32bit integer
+        hash = hash & hash;
     }
     return hash.toString(16);
 }
@@ -122,49 +110,29 @@ function simpleHash(text) {
 // USER DATABASE MANAGEMENT
 // ========================================
 
-/**
- * Get all registered users from storage
- */
 function getAllUsers() {
     const users = localStorage.getItem('digimarket_users');
     return users ? JSON.parse(users) : [];
 }
 
-/**
- * Save all users to storage
- */
 function saveAllUsers(users) {
     localStorage.setItem('digimarket_users', JSON.stringify(users));
 }
 
-/**
- * Store new user in database
- */
 function storeUser(userData) {
     const users = getAllUsers();
-    
-    // Add creation timestamp
     userData.createdAt = new Date().toISOString();
     userData.lastLogin = new Date().toISOString();
-    
     users.push(userData);
     saveAllUsers(users);
-    
     console.log('✅ New user registered:', userData.email);
 }
 
-/**
- * Find user by email
- */
 function findUser(email) {
     const users = getAllUsers();
     return users.find(u => u.email.toLowerCase() === email.toLowerCase());
 }
 
-/**
- * Update user's last login time
- * This helps track active accounts
- */
 function updateLastLogin(email) {
     const users = getAllUsers();
     const userIndex = users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
@@ -177,6 +145,39 @@ function updateLastLogin(email) {
 }
 
 // ========================================
+// 🔐 ADMIN ACCOUNT AUTO-CREATION
+// ========================================
+
+function initializeAdminAccount() {
+    const adminExists = findUser(ADMIN_CONFIG.email);
+    
+    if (!adminExists) {
+        const adminUser = {
+            name: ADMIN_CONFIG.name,
+            email: ADMIN_CONFIG.email,
+            password: simpleHash(ADMIN_CONFIG.password),
+            accountType: 'admin',
+            createdAt: new Date().toISOString(),
+            lastLogin: new Date().toISOString()
+        };
+        
+        storeUser(adminUser);
+        console.log('👑 Admin account created automatically');
+    }
+}
+
+// Initialize admin on page load
+initializeAdminAccount();
+
+// ========================================
+// 🔒 CHECK IF EMAIL IS ADMIN
+// ========================================
+
+function isAdminEmail(email) {
+    return email.toLowerCase() === ADMIN_CONFIG.email.toLowerCase();
+}
+
+// ========================================
 // VALIDATION HELPERS
 // ========================================
 
@@ -185,16 +186,9 @@ function isValidEmail(email) {
 }
 
 function isStrongPassword(password) {
-    // At least 6 characters
     if (password.length < 6) {
         return { valid: false, message: 'Password must be at least 6 characters long' };
     }
-    
-    // Optional: Add more rules
-    // if (!/[A-Z]/.test(password)) {
-    //     return { valid: false, message: 'Password must contain at least one uppercase letter' };
-    // }
-    
     return { valid: true };
 }
 
@@ -203,7 +197,6 @@ function isStrongPassword(password) {
 // ========================================
 
 function showAlert(message, type) {
-    // Remove any existing alerts
     const existingAlerts = document.querySelectorAll('.alert');
     existingAlerts.forEach(alert => alert.remove());
     
@@ -223,7 +216,6 @@ function showAlert(message, type) {
 }
 
 function showFieldError(input, message) {
-    // Remove existing error
     const existingError = input.nextElementSibling;
     if (existingError && existingError.classList.contains('error-message')) {
         existingError.remove();
@@ -260,25 +252,20 @@ if (loginForm) {
         const email = emailInput.value.trim();
         const pass = passwordInput.value;
 
-        // Clear previous errors
         clearFieldError(emailInput);
         clearFieldError(passwordInput);
 
-        // Validate email format
         if (!isValidEmail(email)) {
             showFieldError(emailInput, 'Please enter a valid email address');
             return;
         }
 
-        // Show loading state
         const originalBtnText = submitBtn.innerHTML;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
         submitBtn.disabled = true;
 
-        // Simulate network delay (remove in production)
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        // Find user
         const user = findUser(email);
         
         if (!user) {
@@ -288,7 +275,6 @@ if (loginForm) {
             return;
         }
 
-        // Check password (hashed)
         const hashedPass = simpleHash(pass);
         if (user.password !== hashedPass) {
             submitBtn.innerHTML = originalBtnText;
@@ -297,13 +283,12 @@ if (loginForm) {
             return;
         }
 
-        // ✅ LOGIN SUCCESS - Save session
+        // ✅ LOGIN SUCCESS
         saveUserSession(user);
         updateLastLogin(email);
         
         showAlert('✅ Login successful! Redirecting...', 'success');
         
-        // Redirect based on account type
         setTimeout(() => {
             const isInsideAuth = window.location.pathname.includes('/auth/');
             const root = isInsideAuth ? '../' : '';
@@ -316,9 +301,7 @@ if (loginForm) {
         }, 1000);
     });
     
-    // Add real-time validation
     const emailInput = document.getElementById('loginEmail');
-    const passwordInput = document.getElementById('loginPassword');
     
     if (emailInput) {
         emailInput.addEventListener('blur', function() {
@@ -332,7 +315,7 @@ if (loginForm) {
 }
 
 // ========================================
-// SIGNUP FORM HANDLER
+// 🔒 SIGNUP FORM HANDLER (ADMIN BLOCKED)
 // ========================================
 
 const registerForm = document.getElementById('registerForm');
@@ -352,12 +335,10 @@ if (registerForm) {
         const email = emailInput.value.trim();
         const pass = passwordInput.value;
         const confirmPass = confirmPasswordInput.value;
-        const type = accountTypeSelect.value;
+        let type = accountTypeSelect.value;
 
-        // Clear all previous errors
         [nameInput, emailInput, passwordInput, confirmPasswordInput].forEach(clearFieldError);
 
-        // Validation
         let hasError = false;
 
         if (!name) {
@@ -371,6 +352,13 @@ if (registerForm) {
         } else if (!isValidEmail(email)) {
             showFieldError(emailInput, 'Invalid email format');
             hasError = true;
+        }
+
+        // 🔒 BLOCK ADMIN SIGNUP (except for your email)
+        if (type === 'admin' && !isAdminEmail(email)) {
+            showAlert('🚫 Admin accounts can only be created by the system administrator.', 'danger');
+            accountTypeSelect.value = 'user'; // Force to user
+            return;
         }
 
         const passwordCheck = isStrongPassword(pass);
@@ -391,25 +379,26 @@ if (registerForm) {
 
         if (hasError) return;
 
-        // Check if email already exists
         if (findUser(email)) {
             showAlert('❌ This email is already registered. Please <a href="login.html">login instead</a>.', 'danger');
             return;
         }
 
-        // Show loading state
         const originalBtnText = submitBtn.innerHTML;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
         submitBtn.disabled = true;
 
-        // Simulate network delay
         await new Promise(resolve => setTimeout(resolve, 800));
 
-        // Create new user with hashed password
+        // Force admin type for your email
+        if (isAdminEmail(email)) {
+            type = 'admin';
+        }
+
         const newUser = {
             name,
             email,
-            password: simpleHash(pass), // Store hashed password
+            password: simpleHash(pass),
             accountType: type,
             createdAt: new Date().toISOString(),
             lastLogin: new Date().toISOString()
@@ -419,16 +408,13 @@ if (registerForm) {
 
         showAlert('✅ Account created successfully! Redirecting to login...', 'success');
         
-        // Clear form
         registerForm.reset();
         
-        // Redirect to login
         setTimeout(() => {
             window.location.href = "login.html";
         }, 2000);
     });
     
-    // Real-time validation
     const passwordInput = document.getElementById('registerPassword');
     const confirmPasswordInput = document.getElementById('confirmPassword');
     
@@ -475,7 +461,6 @@ if (forgotPasswordForm) {
             return;
         }
 
-        // Show loading state
         const originalBtnText = submitBtn.innerHTML;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
         submitBtn.disabled = true;
@@ -493,7 +478,6 @@ if (forgotPasswordForm) {
             console.log('📧 PASSWORD RESET EMAIL');
             console.log('=================================');
             console.log('To:', email);
-            console.log('Current Password (hashed):', user.password);
             console.log('Account Type:', user.accountType);
             console.log('Created:', user.createdAt);
             console.log('=================================');
@@ -511,40 +495,30 @@ function logout() {
     const currentUser = getCurrentUser();
     
     if (!currentUser) {
-        // Already logged out
         window.location.href = getPathToRoot() + "index.html";
         return;
     }
     
     if (confirm('🔓 Are you sure you want to logout?')) {
         console.log('👋 User logged out:', currentUser.email);
-        
-        // Clear session
         clearUserSession();
-        
-        // Show confirmation
         alert('✅ You have been logged out successfully!');
-        
-        // Redirect to index
         window.location.href = getPathToRoot() + "index.html";
     }
 }
 
-// Helper to get path to root
 function getPathToRoot() {
     const path = window.location.pathname;
     const isInsideSub = path.includes('/user/') || path.includes('/adim/') || path.includes('/auth/');
     return isInsideSub ? '../' : '';
 }
 
-// Make logout available globally
 window.logout = logout;
 
 // ========================================
-// AUTO-LOGIN CHECK (Multi-Device Support)
+// AUTO-LOGIN CHECK
 // ========================================
 
-// Check if user is still logged in when page loads
 document.addEventListener('DOMContentLoaded', function() {
     const currentUser = getCurrentUser();
     
@@ -555,11 +529,9 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Account Type:', currentUser.accountType);
         console.log('Last Login:', currentUser.lastLogin);
         
-        // Update user info in UI if elements exist
         updateUserUI(currentUser);
     }
     
-    // Initialize animations if AOS is available
     if (typeof AOS !== 'undefined') {
         AOS.init({
             duration: 800,
@@ -568,23 +540,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-/**
- * Update UI with current user info
- */
 function updateUserUI(user) {
-    // Update user name displays
     const userNameElements = document.querySelectorAll('#userName, .user-name, #welcomeUserName');
     userNameElements.forEach(el => {
         if (el) el.textContent = user.name;
     });
     
-    // Update user email displays
     const userEmailElements = document.querySelectorAll('#userEmail, .user-email');
     userEmailElements.forEach(el => {
         if (el) el.textContent = user.email;
     });
     
-    // Show/hide elements based on account type
     if (user.accountType === 'admin') {
         const adminElements = document.querySelectorAll('.admin-only');
         adminElements.forEach(el => {
@@ -594,25 +560,21 @@ function updateUserUI(user) {
 }
 
 // ========================================
-// SESSION REFRESH (Keep-Alive)
+// SESSION REFRESH
 // ========================================
 
-// Refresh session every 5 minutes to keep user logged in
 setInterval(() => {
     const currentUser = getCurrentUser();
     if (currentUser) {
-        // Refresh session by re-saving it
         saveUserSession(currentUser);
         console.log('🔄 Session refreshed for:', currentUser.email);
     }
-}, 5 * 60 * 1000); // 5 minutes
+}, 5 * 60 * 1000);
 
 // ========================================
-// UTILITY: View All Registered Users (Debug)
+// DEBUG UTILITIES
 // ========================================
 
-// Add this to browser console for debugging:
-// viewAllUsers()
 window.viewAllUsers = function() {
     const users = getAllUsers();
     console.log('=================================');
@@ -629,6 +591,6 @@ window.viewAllUsers = function() {
     console.log('=================================');
 }
 
-// Console welcome message
-console.log('%c🚀 DigiMarket Pro - Multi-Device Auth System', 'color: #667eea; font-size: 16px; font-weight: bold;');
+console.log('%c🔐 DigiMarket Pro - Secured Admin System', 'color: #667eea; font-size: 16px; font-weight: bold;');
+console.log('%c👑 Admin Email: ' + ADMIN_CONFIG.email, 'color: #48bb78; font-weight: bold;');
 console.log('%cType viewAllUsers() to see all registered users', 'color: #666; font-style: italic;');
